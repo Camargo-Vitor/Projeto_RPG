@@ -7,29 +7,37 @@ class Especie():
         self.__habilidades = []
 
 
-        @property
-        def nome(self):     
-            return self.__nome
+    @property
+    def nome(self):     
+        return self.__nome
 
-        @nome.setter
-        def nome(self, nome):
-            if isinstance(nome, str):
-                self.__nome = nome
+    @nome.setter
+    def nome(self, nome):
+        if isinstance(nome, str):
+            self.__nome = nome
 
-        @property
-        def deslocamento(self):
-            return self.__deslocamento 
-
-        @deslocamento.setter
-        def deslocamento(self, deslocamento):
-            if isinstance(deslocamento, float):
-                self.__deslocamento = deslocamento
-
-
-        @property
-        def habilidades(self):
-            return self.__habilidades
+    @property
+    def altura(self):
+        return self.__altura
+    
+    @altura.setter
+    def altura(self, altura):
+        self.__altura = altura
         
-        #def add_hab isso aqui vai virar da classe Habilidade ne?
+    @property
+    def deslocamento(self):
+        return self.__deslocamento 
+
+    @deslocamento.setter
+    def deslocamento(self, deslocamento):
+        if isinstance(deslocamento, float):
+            self.__deslocamento = deslocamento
+
+
+    @property
+    def habilidades(self):
+        return self.__habilidades
+    
+    #def add_hab isso aqui vai virar da classe Habilidade ne?
 
         

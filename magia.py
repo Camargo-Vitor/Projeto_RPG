@@ -11,7 +11,6 @@ class Magia():
     def nome(self, nome):
         if isinstance(nome, str):
             self.__nome = nome
-
     
     @property
     def pagina(self):
@@ -21,4 +20,3 @@ class Magia():
     def pagina(self, pagina):
             if isinstance(pagina,int):
                  self.__pagina = pagina
-    

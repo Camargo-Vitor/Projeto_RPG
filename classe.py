@@ -6,6 +6,10 @@ class Classe:
         self.__nivel = nivel
 
     @property
+    def nome(self):
+        return self.__nome
+    
+    @property
     def dado_vida(self):
         return self.__dado_vida
 
