@@ -7,10 +7,11 @@ from random import randint
 
 class Ficha:
     def __init__(self, nome: str, fisico: str, historia: str, \
-                classe: Classe, especie: Especie):
+                classe: Classe, especie: Especie, pericias_treinadas: list):
         self.__nome = nome
         self.__fisico = fisico
         self.__historia = historia
+        self.__pericias_treinadas = pericias_treinadas ###########
         self.__atributos = {
             'forca': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
             'destreza': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
@@ -23,11 +24,48 @@ class Ficha:
             self.__classe = classe
             self.__especie = especie
 
-        self.__vida = classe.dado_vida + self.__atributos['constituicao'] // 5
+
+        self.__vida = classe.dado_vida + (self.__atributos['constituicao'] - 10) // 2
         self.__nivel = 1
+        self.__bonus_pericia = 2 + (self.__nivel - 1)//4 ###################
         self.__inventario = []
         self.__lista_magias = []
         self.__habilidades = []
+
+        self.__dic_pericias = { ################
+            'forca':{
+                'atletismo': False},
+
+            'destreza':{
+                'prestidigitacao': False,
+                'acrobacia': False,
+                'furtividade': False},
+
+            'inteligencia':{
+                'arcanismo': False,
+                'historia': False,
+                'investigacao': False,
+                'natureza': False,
+                'religiao': False},
+
+            'sabedoria':{
+                'percepcao': False,
+                'lidar_animais': False,
+                'intuicao': False,
+                'sobrevivencia': False,
+                'medicina': False},
+
+            'carisma':{
+                'persuasao': False,
+                'intimidacao': False,
+                'performance': False,
+                'intimidacao': False}
+            }
+
+        for dic in self.__dic_pericias.values():
+            for chave in dic.keys():
+                if chave in self.__pericias_treinadas:
+                    dic[chave] = True
 
     @property
     def nome(self):
@@ -119,4 +157,3 @@ class Ficha:
         for hab, niv in self.classe.habilidades.items():
             if nome == hab and self.nivel >= niv:
                 self.habilidades.append(self.classe.habilidades[nome])
-
