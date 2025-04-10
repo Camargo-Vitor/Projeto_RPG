@@ -10,6 +10,7 @@ class Ficha:
                 classe: Classe, especie: Especie, pericias_treinadas: list):
         self.__nome = nome
         self.__fisico = fisico
+        self.__altura = especie.altura
         self.__historia = historia
         self.__pericias_treinadas = pericias_treinadas ###########
         self.__atributos = {
@@ -34,38 +35,38 @@ class Ficha:
 
         self.__dic_pericias = { ################
             'forca':{
-                'atletismo': False},
+                'atletismo': [(self.atributos["forca"] - 10) // 2, False]},
 
             'destreza':{
-                'prestidigitacao': False,
-                'acrobacia': False,
-                'furtividade': False},
+                'prestidigitacao': [(self.atributos["destreza"] -10) //2, False],
+                'acrobacia': [(self.atributos["destreza"] -10) //2, False],
+                'furtividade': [(self.atributos["destreza"] -10) //2, False]},
 
             'inteligencia':{
-                'arcanismo': False,
-                'historia': False,
-                'investigacao': False,
-                'natureza': False,
-                'religiao': False},
+                'arcanismo': [(self.atributos["inteligencia"] -10) //2, False],
+                'historia': [(self.atributos["inteligencia"] -10) //2, False],
+                'investigacao': [(self.atributos["inteligencia"] -10) //2, False],
+                'natureza': [(self.atributos["inteligencia"] -10) //2, False],
+                'religiao': [(self.atributos["inteligencia"] -10) //2, False]},
 
             'sabedoria':{
-                'percepcao': False,
-                'lidar_animais': False,
-                'intuicao': False,
-                'sobrevivencia': False,
-                'medicina': False},
+                'percepcao': [(self.atributos["sabedoria"] -10) //2, False],
+                'lidar_animais': [(self.atributos["sabedoria"] -10) //2, False],
+                'intuicao': [(self.atributos["sabedoria"] -10) //2, False],
+                'sobrevivencia': [(self.atributos["sabedoria"] -10) //2, False],
+                'medicina': [(self.atributos["sabedoria"] -10) //2, False],},
 
             'carisma':{
-                'persuasao': False,
-                'intimidacao': False,
-                'performance': False,
-                'intimidacao': False}
+                'persuasao': [(self.atributos["carisma"] -10) //2, False],
+                'intimidacao': [(self.atributos["carisma"] -10) //2, False],
+                'performance': [(self.atributos["carisma"] -10) //2, False],
+                'intimidacao': [(self.atributos["carisma"] -10) //2, False]}
             }
 
         for dic in self.__dic_pericias.values():
             for chave in dic.keys():
                 if chave in self.__pericias_treinadas:
-                    dic[chave] = True
+                    dic[chave][1] = True
 
     @property
     def nome(self):
@@ -76,12 +77,28 @@ class Ficha:
         self.__nome = nome
 
     @property
+    def pericias_treinadas(self):
+        return self.__pericias_treinadas
+    
+    @property
+    def bonus_pericia(self):
+        return self.__bonus_pericia
+    
+    @property
     def fisico(self):
         return self.__fisico
     
     @fisico.setter
     def fisico(self, fisico: str):
         self.__fisico = fisico
+
+    @property
+    def altura(self):
+        return self.__altura
+    
+    @altura.setter
+    def altura(self, altura: int):
+        self.__altura = altura
 
     @property
     def historia(self):
@@ -157,3 +174,26 @@ class Ficha:
         for hab, niv in self.classe.habilidades.items():
             if nome == hab and self.nivel >= niv:
                 self.habilidades.append(self.classe.habilidades[nome])
+
+    def __str__(self):
+        return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
+        f'\nNome: {self.nome}\
+        \nVida: {self.vida}\
+        \nNível: {self.nivel}\
+        \nDeslocamento: {self.especie.deslocamento}\
+        \nFisico: {self.fisico}\
+        \nAltura: {self.altura}cm\
+        \nHistória: {self.historia}\
+        \nClasse: {self.classe.nome}\
+        \nEspecie: {self.especie.nome}\n' + \
+        '><' * 8 + 'Atributos' + '><' * 8 + f'\
+        \nForça: {self.atributos["forca"]} ({(self.atributos["forca"] - 10) // 2})\
+        \nDestreza: {self.atributos["destreza"]} ({(self.atributos["destreza"] - 10) // 2})\
+        \nConstituição: {self.atributos["constituicao"]} ({(self.atributos["constituicao"] - 10) // 2})\
+        \nInteligencia: {self.atributos["inteligencia"]} ({(self.atributos["inteligencia"] - 10) // 2})\
+        \nSabedoria: {self.atributos["sabedoria"]} ({(self.atributos["sabedoria"] - 10) // 2})\
+        \nCarisma: {self.atributos["carisma"]} ({(self.atributos["carisma"] - 10) // 2})\n' + \
+        '><' * 8 + 'Utilitários' + '><' * 8 + f'\
+        \nInventário: {"vazio" if self.inventario == [] else self.inventario}\
+        \nMagias: {"Nenhuma magia" if self.lista_magias == [] else self.lista_magias}\
+        \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else self.habilidades}'
