@@ -66,6 +66,7 @@ class Ficha:
         for dic in self.__dic_pericias.values():
             for chave in dic.keys():
                 if chave in self.__pericias_treinadas:
+                    dic[chave][0] = self.__bonus_pericia + dic[chave][0]
                     dic[chave][1] = True
 
     @property
