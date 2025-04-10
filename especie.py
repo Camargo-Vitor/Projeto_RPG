@@ -1,6 +1,9 @@
-class Especie():
+from abc import ABC, abstractclassmethod
+
+class Especie(ABC):
     def __init__(self, nome: str, deslocamento: float, \
                   altura: int, habilidades: list):
+        abstractclassmethod
         self.__nome = nome
         self.__deslocamento = deslocamento
         self.__altura = altura
