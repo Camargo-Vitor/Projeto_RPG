@@ -19,3 +19,4 @@ class Classe:
 
     def add_hab(self, nome: str, nivel_necessario: int):
         self.__habilidades[nome] = nivel_necessario    
+    #def add_hab isso aqui vai virar da classe Habilidade ne?
