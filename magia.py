@@ -1,8 +1,8 @@
 class Magia():
-    def __init__(self, nome: str, pagina: int):
+    def __init__(self, nome: str, nivel: int, pagina: int):
         self.__nome = nome
         self.__pagina = pagina
-
+        self.__nivel = nivel
     @property
     def nome(self):
         return self.__nome
@@ -20,3 +20,13 @@ class Magia():
     def pagina(self, pagina):
             if isinstance(pagina,int):
                  self.__pagina = pagina
+
+
+
+    @property
+    def nivel(self):
+         return self.__nivel
+    
+    @nivel.setter
+    def nivel(self, nivel):
+         self.__nivel = nivel
