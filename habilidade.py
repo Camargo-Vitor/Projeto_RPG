@@ -35,8 +35,7 @@ class Habilidade():
             self.__origem = origem
 
     def __str__(self):
-        return f'><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
-        f'\nHablidade noca criada:\
-        \nNome da Habilidade: {self.__nome}\
+        return f'><' * 8 + 'Habilidade nova criada' + '><' * 8 + \
+        f'\nNome da Habilidade: {self.__nome}\
         \nOrigem: {self.__origem}\
         \nPágina: {self.__pagina}'
