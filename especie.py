@@ -1,10 +1,10 @@
 from abc import ABC, abstractclassmethod
-
+ 
 class Especie(ABC):
+    abstractclassmethod
     def __init__(self, nome: str, deslocamento: float, \
                   altura: int, habilidades: list):
-        abstractclassmethod
-        self.__nome = nome
+        self.__nome = nome.strip().lower()
         self.__deslocamento = deslocamento
         self.__altura = altura
         self.__habilidades = []
@@ -17,7 +17,7 @@ class Especie(ABC):
     @nome.setter
     def nome(self, nome):
         if isinstance(nome, str):
-            self.__nome = nome
+            self.__nome = nome.strip().lower()
 
     @property
     def altura(self):
@@ -25,7 +25,8 @@ class Especie(ABC):
     
     @altura.setter
     def altura(self, altura):
-        self.__altura = altura
+        if isinstance(altura, int):
+            self.__altura = altura
         
     @property
     def deslocamento(self):
@@ -41,6 +42,6 @@ class Especie(ABC):
     def habilidades(self):
         return self.__habilidades
     
-    #def add_hab isso aqui vai virar da classe Habilidade ne?
+
 
         
