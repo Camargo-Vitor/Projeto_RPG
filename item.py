@@ -1,8 +1,8 @@
 class Item():
     def __init__(self, nome: str, valor: int, raridade: str, pagina: int):
-        self.__nome = nome
+        self.__nome = nome.strip().lower()
         self.__valor = valor
-        self.__raridade = raridade
+        self.__raridade = raridade.strip().lower()
         self.__pagina = pagina
 
 
@@ -13,7 +13,7 @@ class Item():
     @nome.setter
     def nome(self, nome):
         if isinstance(nome, str):
-            self.__nome = nome
+            self.__nome = nome.strip().lower()
     
 
     @property
@@ -33,7 +33,7 @@ class Item():
     @raridade.setter
     def raridade(self, raridade):
         if isinstance(raridade, str):
-            self.__raridade = raridade
+            self.__raridade = raridade.strip().lower()
 
     @property
     def pagina(self):

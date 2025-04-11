@@ -1,6 +1,6 @@
 class Habilidade():
     def __init__(self, nome: str, pagina: int, origem: str):
-        self.__nome = nome
+        self.__nome = nome.strip().lower()
         self.__pagina = pagina
         self.__origem = origem
 
@@ -12,7 +12,7 @@ class Habilidade():
     @nome.setter
     def nome(self, nome):
         if isinstance(nome, str):
-            self.__nome = nome
+            self.__nome = nome.strip().lower()
 
 
     @property
@@ -31,7 +31,12 @@ class Habilidade():
     
     @origem.setter
     def origem(self, origem):
-        if isinstance(origem, str):
+        if isinstance(origem, str).strip.lower:
             self.__origem = origem
 
-    #essa aqui que vai fazer o add habilidades com lista de tupla
+    def __str__(self):
+        return f'><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
+        f'\nHablidade noca criada:\
+        \nNome da Habilidade: {self.__nome}\
+        \nOrigem: {self.__origem}\
+        \nPágina: {self.__pagina}'
