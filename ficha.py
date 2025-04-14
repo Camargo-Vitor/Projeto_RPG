@@ -8,10 +8,10 @@ from random import randint
 class Ficha:
     def __init__(self, nome: str, fisico: str, historia: str, \
                 classe: Classe, especie: Especie, pericias_treinadas: list):
-        self.__nome = nome
-        self.__fisico = fisico
+        self.__nome = nome.strip().lower()
+        self.__fisico = fisico.strip().lower()
         self.__altura = especie.altura
-        self.__historia = historia
+        self.__historia = historia.strip().lower()
         self.__pericias_treinadas = pericias_treinadas 
         if isinstance(classe, Classe) and isinstance(especie, Especie):
             self.__classe = classe
@@ -87,7 +87,7 @@ class Ficha:
     
     @nome.setter
     def nome(self, nome: str):
-        self.__nome = nome
+        self.__nome = nome.strip().lower()
 
     @property
     def pericias_treinadas(self):
@@ -103,7 +103,7 @@ class Ficha:
     
     @fisico.setter
     def fisico(self, fisico: str):
-        self.__fisico = fisico
+        self.__fisico = fisico.strip().lower()
 
     @property
     def altura(self):
@@ -115,7 +115,7 @@ class Ficha:
 
     @historia.setter
     def historia(self, historia: str):
-        self.__historia = historia
+        self.__historia = historia.strip().lower()
 
     @property
     def atributos(self):

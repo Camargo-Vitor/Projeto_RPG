@@ -6,7 +6,7 @@ class Subespecie(Especie):
                 altura: int, habilidades = [],
                 hab_especificas = []):
         super().__init__(nome, deslocamento, altura, habilidades)
-        self.__nome = nome + ' ' + nome_sub
+        self.__nome = nome.strip().lower() + ' ' + nome_sub.strip().lower()
         self.__hab_especificas = hab_especificas
 
     @property

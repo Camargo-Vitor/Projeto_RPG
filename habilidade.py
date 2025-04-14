@@ -3,7 +3,7 @@ class Habilidade():
         self.__nome = nome.strip().lower()
         self.__nivel = nivel
         self.__pagina = pagina
-        self.__origem = origem
+        self.__origem = origem.strip().lower()
 
     @property
     def nome(self):
