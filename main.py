@@ -10,13 +10,15 @@ from jogador import Jogador
 if __name__ == '__main__':
     lista_todas_habilidades = []
     lista_todos_itens = []
-    lista_todas_magias =[]
+    lista_todas_magias = []
 
     # Habilidades de teste
     habilidade_teste_especie = Habilidade('Correr', 1, 78, 'especie')
     habilidade_teste_subespecie = Habilidade('visão noturna', 1, 145, 'subespecie')
     habilidade_teste_classe = Habilidade('passos furtivos', 1, 176, 'classe')
     habilidade_teste_subclasse = Habilidade('camuflagem', 1, 201, 'subclasse')
+
+    habilidade_teste_classe_nivel_2 = Habilidade('Ação ardilosa', 2, 177, 'classe')
 
     lista_todas_habilidades.append(habilidade_teste_especie)
     lista_todas_habilidades.append(habilidade_teste_subespecie)
@@ -38,6 +40,7 @@ if __name__ == '__main__':
     classe_teste = Classe('Ranger', 6)
     tiro_preciso = Habilidade('Tiro preciso', 1, 56, 'classe')
     classe_teste.add_hab(tiro_preciso)
+    classe_teste.add_hab(habilidade_teste_classe_nivel_2)
 
     # subclasse teste
 
@@ -62,4 +65,6 @@ if __name__ == '__main__':
     classe_teste.rm_hab(tiro_preciso)
     ficha_teste.rm_magia(magia_teste)
     ficha_teste.rm_item_inventario(item_teste)
+    print(ficha_teste)
+    ficha_teste.subir_nivel()
     print(ficha_teste)
