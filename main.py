@@ -5,6 +5,7 @@ from habilidade import Habilidade
 from magia import Magia
 from item import Item
 from subespecie import Subespecie
+from jogador import Jogador
 
 if __name__ == '__main__':
     lista_todas_habilidades = []
@@ -47,6 +48,11 @@ if __name__ == '__main__':
 
     ficha_teste = Ficha('Roger', 'Comum', 'Caça e tem um passarinho chamado Xavier', classe_teste, sub_especie_teste, ['furtividade'])
     ficha_teste2 = Ficha('Jurandir', 'Robusto', 'pinga!', subclasse_teste, sub_especie_teste, ['intimidacao'])
+
+    # teste pessoa
+    eu = Jogador('Victor', 923450145, 'Rua Cristóvão Colombo', ['Terça'])
+    eu.add_ficha(ficha_teste)
+    print(eu)
 
     #### Playground ####
 
