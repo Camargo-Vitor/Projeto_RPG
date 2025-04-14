@@ -1,5 +1,6 @@
 from habilidade import Habilidade
 
+
 class Classe:
     def __init__(self, nome: str, dado_vida: int):
         self.__nome = nome.strip().lower()

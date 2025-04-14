@@ -1,6 +1,7 @@
 from classe import Classe
 from habilidade import Habilidade
 
+
 class Subclasse(Classe):
     def __init__(self, nome: str, nome_sub: str, dado_vida: int, hab_especificas: list = []):
         super().__init__(nome, dado_vida)

@@ -1,6 +1,7 @@
 from especie import Especie
 from habilidade import Habilidade
 
+
 class Subespecie(Especie):
     def __init__(self, nome: str, nome_sub:str, deslocamento: float,
                 altura: int, habilidades = [],
