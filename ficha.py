@@ -22,7 +22,17 @@ class Ficha:
         self.__bonus_pericia = 2 + (self.__nivel - 1)//4 
         self.__inventario = []
         self.__lista_magias = []
-        self.__habilidades = self.classe.habilidades + self.especie.habilidades
+        self.__habilidades = []
+
+        for hab in self.classe.habilidades:
+            if hab.nivel <= self.__nivel:
+                self.__habilidades.append(hab)
+
+        for hab in self.especie.habilidades:
+            if hab.nivel <= self.__nivel:
+                self.__habilidades.append(hab)
+
+
         self.__atributos = {
             'forca': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
             'destreza': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
@@ -33,6 +43,7 @@ class Ficha:
         }
 
         self.__vida = classe.dado_vida + (self.__atributos['constituicao'] - 10) // 2
+        self.__vida_atual = self.__vida
         self.__dic_pericias = { 
             'forca':{
                 'atletismo': [(self.atributos["forca"] - 10) // 2, False]},
@@ -141,6 +152,14 @@ class Ficha:
             self.__vida = vida
 
     @property
+    def vida_atual(self):
+        return self.__vida_atual
+
+    @vida_atual.setter
+    def vida_atual(self, nova_vida: int):
+        self.__vida_atual = nova_vida
+
+    @property
     def nivel(self):
         return self.__nivel
 
@@ -152,6 +171,10 @@ class Ficha:
         if isinstance(item, Item):
             self.__inventario.append(item)
 
+    def rm_item_inventario(self, item: Item):
+        if item in self.inventario:
+            self.inventario.remove(item)
+
     @property
     def lista_magias(self):
         return self.__lista_magias
@@ -159,6 +182,10 @@ class Ficha:
     def add_magia(self, magia: Magia):
         if isinstance(magia, Magia):
             self.lista_magias.append(magia)
+
+    def rm_magia(self, magia: Magia):
+        if magia in self.__lista_magias:
+            self.__lista_magias.remove(magia)
 
     @property
     def habilidades(self):
@@ -186,3 +213,4 @@ class Ficha:
         \nInventário: {"vazio" if self.inventario == [] else [str(x) for x in self.inventario]}\
         \nMagias: {"Nenhuma magia" if self.lista_magias == [] else [str(x) for x in self.lista_magias]}\
         \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else [str(x) for x in self.habilidades]}'
+    
