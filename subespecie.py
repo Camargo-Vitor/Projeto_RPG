@@ -2,14 +2,23 @@ from especie import Especie
 from habilidade import Habilidade
 
 class Subespecie(Especie):
-    def __init__(self, nome: str, nome_sub:str, deslocamento: float,\
-                altura: int, especificacao: str, habilidades: list = [] ,\
-                hab_especificas: list = []):
+    def __init__(self, nome: str, nome_sub:str, deslocamento: float,
+                altura: int, especificacao: str, habilidades = [],
+                hab_especificas = []):
         super().__init__(nome, deslocamento, altura, habilidades)
-        self.nome = nome + ' ' + nome_sub
+        self.__nome = nome + ' ' + nome_sub
         self.__especificao = especificacao.strip().lower()
         self.__hab_especificas = hab_especificas
 
+    @property
+    def nome(self):
+        return self.__nome
+
+    @nome.setter
+    def nome_sub(self, nome: str, nome_sub: str):
+        if isinstance(nome_sub, str):
+            self.__nome = nome.strip().lower() + nome_sub.strip().lower
+            
     @property
     def especificao(self):
         return self.__especificao
