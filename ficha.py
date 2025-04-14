@@ -12,7 +12,17 @@ class Ficha:
         self.__fisico = fisico
         self.__altura = especie.altura
         self.__historia = historia
-        self.__pericias_treinadas = pericias_treinadas ###########
+        self.__pericias_treinadas = pericias_treinadas 
+        if isinstance(classe, Classe) and isinstance(especie, Especie):
+            self.__classe = classe
+            self.__especie = especie
+
+
+        self.__nivel = 1
+        self.__bonus_pericia = 2 + (self.__nivel - 1)//4 
+        self.__inventario = []
+        self.__lista_magias = []
+        self.__habilidades = self.classe.habilidades + self.especie.habilidades
         self.__atributos = {
             'forca': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
             'destreza': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
@@ -21,19 +31,9 @@ class Ficha:
             'sabedoria': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
             'carisma': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:])
         }
-        if isinstance(classe, Classe) and isinstance(especie, Especie):
-            self.__classe = classe
-            self.__especie = especie
-
 
         self.__vida = classe.dado_vida + (self.__atributos['constituicao'] - 10) // 2
-        self.__nivel = 1
-        self.__bonus_pericia = 2 + (self.__nivel - 1)//4 ###################
-        self.__inventario = []
-        self.__lista_magias = []
-        self.__habilidades = []
-
-        self.__dic_pericias = { ################
+        self.__dic_pericias = { 
             'forca':{
                 'atletismo': [(self.atributos["forca"] - 10) // 2, False]},
 
@@ -112,8 +112,6 @@ class Ficha:
     @property
     def atributos(self):
         return self.__atributos
-    
-    #precisa de setter?
 
     @property
     def classe(self):
@@ -137,44 +135,34 @@ class Ficha:
     def vida(self):
         return self.__vida
     
-    #precisa de setter?
+    @vida.setter
+    def vida(self, vida: int):
+        if isinstance(vida, int):
+            self.__vida = vida
 
     @property
     def nivel(self):
         return self.__nivel
-    
-    #precisa de setter?
 
     @property
     def inventario(self):
         return self.__inventario
-    
-    #precisa de setter?
-
-    @property
-    def lista_magias(self):
-        return self.__lista_magias
-    
-    #precisa de setter?
-
-    @property
-    def habilidades(self):
-        return self.__habilidades
-    
-    #precisa de setter?
 
     def add_item_inventario(self, item: Item):
         if isinstance(item, Item):
             self.__inventario.append(item)
 
+    @property
+    def lista_magias(self):
+        return self.__lista_magias
+
     def add_magia(self, magia: Magia):
         if isinstance(magia, Magia):
             self.lista_magias.append(magia)
 
-    def add_hab(self, nome: str):
-        for hab, niv in self.classe.habilidades.items():
-            if nome == hab and self.nivel >= niv:
-                self.habilidades.append(self.classe.habilidades[nome])
+    @property
+    def habilidades(self):
+        return self.__habilidades
 
     def __str__(self):
         return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
@@ -195,6 +183,6 @@ class Ficha:
         \nSabedoria: {self.atributos["sabedoria"]} ({(self.atributos["sabedoria"] - 10) // 2})\
         \nCarisma: {self.atributos["carisma"]} ({(self.atributos["carisma"] - 10) // 2})\n' + \
         '><' * 8 + 'Utilitários' + '><' * 8 + f'\
-        \nInventário: {"vazio" if self.inventario == [] else self.inventario}\
-        \nMagias: {"Nenhuma magia" if self.lista_magias == [] else self.lista_magias}\
-        \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else self.habilidades}'
+        \nInventário: {"vazio" if self.inventario == [] else [str(x) for x in self.inventario]}\
+        \nMagias: {"Nenhuma magia" if self.lista_magias == [] else [str(x) for x in self.lista_magias]}\
+        \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else [str(x) for x in self.habilidades]}'
