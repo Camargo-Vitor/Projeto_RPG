@@ -1,9 +1,9 @@
 class Habilidade():
-    def __init__(self, nome: str, pagina: int, origem: str):
+    def __init__(self, nome: str, nivel: int, pagina: int, origem: str):
         self.__nome = nome.strip().lower()
+        self.__nivel = nivel
         self.__pagina = pagina
         self.__origem = origem
-
 
     @property
     def nome(self):
@@ -13,6 +13,14 @@ class Habilidade():
     def nome(self, nome):
         if isinstance(nome, str):
             self.__nome = nome.strip().lower()
+
+    @property
+    def nivel(self):
+        return self.__nivel
+
+    @nivel.setter
+    def nivel(self, nivel: int):
+        self.__nivel = nivel
 
     @property
     def pagina(self):
@@ -33,4 +41,4 @@ class Habilidade():
             self.__origem = origem.strip().lower()
 
     def __str__(self):
-        return self.nome
+        return self.nome + ', pag: ' + str(self.pagina)
