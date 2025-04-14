@@ -1,9 +1,10 @@
+from habilidade import Habilidade
+
 class Classe:
-    def __init__(self, nome: str, dado_vida: int, nivel = 1):
+    def __init__(self, nome: str, dado_vida: int):
         self.__nome = nome.strip().lower()
         self.__dado_vida = dado_vida
-        self.__habilidades = dict()
-        self.__nivel = nivel
+        self.__habilidades = []
 
     @property
     def nome(self):
@@ -26,6 +27,12 @@ class Classe:
     def habilidades(self):
         return self.__habilidades
 
-    def add_hab(self, nome: str, nivel_necessario: int):
-        self.__habilidades[nome] = nivel_necessario    
+    def add_hab(self, habilidade: Habilidade):
+        if isinstance(habilidade, Habilidade) and habilidade.origem == 'classe':
+            self.__habilidades.append(habilidade)
 
+    def rm_hab(self, habilidade: Habilidade):
+        if habilidade in self.habilidades:
+            self.habilidades.remove(habilidade)
+        else:
+            return('Habilidade não encontrada')

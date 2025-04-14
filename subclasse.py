@@ -1,26 +1,20 @@
 from classe import Classe
 
 class Subclasse(Classe):
-    def __init__(self, nome: str, nome_sub: str, hab_especifica: list, nivel=1):
-        super().__init__(nome, nivel)
-        self.__nome_sub = nome_sub.strip().lower()
-        self.__hab_espeficica = hab_especifica
-
-
-    @property
-    def nome_sub(self):
-        return self.__nome_sub
-
-    @nome_sub.setter
-    def nome_sub(self,nome_sub):
-        if isinstance(nome_sub, int):
-            self.__nome_sub = nome_sub.strip().lower()
-
+    def __init__(self, nome: str, nome_sub: str, dado_vida: int, hab_especificas: list = []):
+        super().__init__(nome, dado_vida)
+        self.__nome = nome.strip().lower() + ' ' + nome_sub.strip().lower()
+        self.__hab_espeficicas = hab_especificas
 
     @property
-    def hab_especifica(self):
-        return self.__hab_espeficica
+    def nome(self):
+        return self.__nome
 
+    @nome.setter
+    def nome_sub(self, nome: str, nome_sub: str):
+        if isinstance(nome_sub, str):
+            self.__nome = nome.strip().lower() + nome_sub.strip().lower
 
-
-    
+    @property
+    def hab_especificas(self):
+        return self.__hab_espeficicas
