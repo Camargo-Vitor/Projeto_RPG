@@ -43,7 +43,7 @@ if __name__ == '__main__':
     subclasse_teste = Subclasse('Guerreiro', 'Mestre de batalha', 8)
     # teste especie
 
-    sub_especie_teste = Subespecie('Elfo', 'das montanhas', 10, 133, 'entende a lingua dos elfos')
+    sub_especie_teste = Subespecie('Elfo', 'das montanhas', 10, 133)
 
     ficha_teste = Ficha('Roger', 'Comum', 'Caça e tem um passarinho chamado Xavier', classe_teste, sub_especie_teste, ['furtividade'])
     ficha_teste2 = Ficha('Jurandir', 'Robusto', 'pinga!', subclasse_teste, sub_especie_teste, ['intimidacao'])

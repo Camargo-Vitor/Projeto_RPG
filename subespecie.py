@@ -3,11 +3,10 @@ from habilidade import Habilidade
 
 class Subespecie(Especie):
     def __init__(self, nome: str, nome_sub:str, deslocamento: float,
-                altura: int, especificacao: str, habilidades = [],
+                altura: int, habilidades = [],
                 hab_especificas = []):
         super().__init__(nome, deslocamento, altura, habilidades)
         self.__nome = nome + ' ' + nome_sub
-        self.__especificao = especificacao.strip().lower()
         self.__hab_especificas = hab_especificas
 
     @property
@@ -18,15 +17,6 @@ class Subespecie(Especie):
     def nome_sub(self, nome: str, nome_sub: str):
         if isinstance(nome_sub, str):
             self.__nome = nome.strip().lower() + nome_sub.strip().lower
-            
-    @property
-    def especificao(self):
-        return self.__especificao
-
-    @especificao.setter
-    def especificao(self, especificao: str):
-        if isinstance(self.especificao, str):
-            self.__especificao = especificao.strip().lower()
 
     @property
     def hab_especificas(self):
