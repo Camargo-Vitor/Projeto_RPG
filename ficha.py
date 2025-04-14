@@ -140,7 +140,7 @@ class Ficha:
             self.__especie = especie
 
     @property
-    def deslogamento(self):
+    def deslocamento(self):
         return self.__deslocamento
 
     @property
