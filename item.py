@@ -14,7 +14,6 @@ class Item():
     def nome(self, nome):
         if isinstance(nome, str):
             self.__nome = nome.strip().lower()
-    
 
     @property
     def valor(self):
@@ -24,7 +23,6 @@ class Item():
     def valor(self, valor):
         if isinstance(valor, int):    
             self.__valor = valor
-
 
     @property
     def raridade(self):
@@ -43,10 +41,4 @@ class Item():
     def pagina(self, pagina):
         if isinstance(pagina, int):
             self.__pagina = pagina
-
-    
-   
-
-
-    
       

@@ -3,6 +3,8 @@ class Magia():
         self.__nome = nome.strip().lower()
         self.__pagina = pagina
         self.__nivel = nivel
+
+
     @property
     def nome(self):
         return self.__nome
@@ -20,7 +22,6 @@ class Magia():
     def pagina(self, pagina):
             if isinstance(pagina,int):
                  self.__pagina = pagina
-
 
     @property
     def nivel(self):
