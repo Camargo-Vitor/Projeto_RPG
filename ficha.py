@@ -29,9 +29,19 @@ class Ficha:
             if hab.nivel <= self.__nivel:
                 self.__habilidades.append(hab)
 
+        if type(classe) == 'subclasse':
+            for hab in self.classe.hab_especificas:
+                if hab.nivel <= self.__nivel:
+                    self.__habilidades.append(hab)
+
         for hab in self.especie.habilidades:
             if hab.nivel <= self.__nivel:
                 self.__habilidades.append(hab)
+        
+        for hab in self.especie.hab_especificas:
+            if hab.nivel <= self.__nivel:
+                self.__habilidades.append(hab)
+
 
 
         self.__atributos = {
@@ -192,6 +202,30 @@ class Ficha:
     def habilidades(self):
         return self.__habilidades
 
+    def subir_nivel(self):
+        self.__nivel += 1
+        self.__bonus_pericia = 2 + (self.__nivel - 1)//4 
+        vida_adicional = randint(1, self.classe.dado_vida) + ((self.atributos['constituicao'] - 10 ) // 2)
+        self.__vida += vida_adicional
+        self.__vida_atual += vida_adicional
+
+        for hab in self.classe.habilidades:
+            if hab.nivel == self.__nivel:
+                self.__habilidades.append(hab)
+
+        if type(self.classe) == 'subclasse':
+            for hab in self.classe.hab_especificas:
+                if hab.nivel <= self.__nivel:
+                    self.__habilidades.append(hab)
+
+        for hab in self.especie.habilidades:
+            if hab.nivel == self.__nivel:
+                self.__habilidades.append(hab)
+        
+        for hab in self.especie.hab_especificas:
+            if hab.nivel == self.__nivel:
+                self.__habilidades.append(hab)
+
     def __str__(self):
         return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
         f'\nNome: {self.nome}\
@@ -214,4 +248,3 @@ class Ficha:
         \nInventário: {"vazio" if self.inventario == [] else [str(x) for x in self.inventario]}\
         \nMagias: {"Nenhuma magia" if self.lista_magias == [] else [str(x) for x in self.lista_magias]}\
         \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else [str(x) for x in self.habilidades]}'
-    
