@@ -37,8 +37,11 @@ class Item():
     def pagina(self):
         return self.__pagina        
 
-    @nome.setter
+    @pagina.setter
     def pagina(self, pagina):
         if isinstance(pagina, int):
             self.__pagina = pagina
+
+    def __str__(self):
+        return self.nome + ', pag: ' + str(self.pagina)
       

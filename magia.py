@@ -30,3 +30,6 @@ class Magia():
     @nivel.setter
     def nivel(self, nivel):
          self.__nivel = nivel
+
+    def __str__(self):
+        return self.nome + ', pag: ' + str(self.pagina)
