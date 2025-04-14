@@ -20,6 +20,7 @@ class Ficha:
 
         self.__nivel = 1
         self.__bonus_pericia = 2 + (self.__nivel - 1)//4 
+        self.__deslocamento = especie.deslocamento
         self.__inventario = []
         self.__lista_magias = []
         self.__habilidades = []
@@ -108,10 +109,6 @@ class Ficha:
     def altura(self):
         return self.__altura
     
-    @altura.setter
-    def altura(self, altura: int):
-        self.__altura = altura
-
     @property
     def historia(self):
         return self.__historia
@@ -141,6 +138,10 @@ class Ficha:
     def especie(self, especie: Especie):
         if isinstance(especie, Especie):
             self.__especie = especie
+
+    @property
+    def deslogamento(self):
+        return self.__deslocamento
 
     @property
     def vida(self):
