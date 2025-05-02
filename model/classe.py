@@ -1,4 +1,4 @@
-from habilidade import Habilidade
+from model.habilidade import Habilidade
 
 
 class Classe:

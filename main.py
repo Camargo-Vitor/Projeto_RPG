@@ -1,11 +1,11 @@
-from ficha import Ficha
-from classe import Classe
-from subclasse import Subclasse
-from habilidade import Habilidade
-from magia import Magia
-from item import Item
-from subespecie import Subespecie
-from jogador import Jogador
+from model.ficha import Ficha
+from model.classe import Classe
+from model.subclasse import Subclasse
+from model.habilidade import Habilidade
+from model.magia import Magia
+from model.item import Item
+from model.subespecie import Subespecie
+from model.jogador import Jogador
 
 if __name__ == '__main__':
     lista_todas_habilidades = []
@@ -67,4 +67,3 @@ if __name__ == '__main__':
     ficha_teste.rm_item_inventario(item_teste)
     print(ficha_teste)
     ficha_teste.subir_nivel()
-    print(ficha_teste)

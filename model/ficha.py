@@ -1,7 +1,7 @@
-from classe import Classe
-from especie import Especie
-from item import Item
-from magia import Magia
+from model.classe import Classe
+from model.especie import Especie
+from model.item import Item
+from model.magia import Magia
 from random import randint
 
 

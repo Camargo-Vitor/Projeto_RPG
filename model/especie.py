@@ -1,5 +1,5 @@
 from abc import ABC, abstractclassmethod
-from habilidade import Habilidade
+from model.habilidade import Habilidade
 
 
 class Especie(ABC):

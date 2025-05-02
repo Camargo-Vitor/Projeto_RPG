@@ -1,5 +1,5 @@
-from classe import Classe
-from habilidade import Habilidade
+from model.classe import Classe
+from model.habilidade import Habilidade
 
 
 class Subclasse(Classe):

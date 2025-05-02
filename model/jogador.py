@@ -1,5 +1,5 @@
-from pessoa import Pessoa
-from ficha import Ficha
+from model.pessoa import Pessoa
+from model.ficha import Ficha
 
 
 class Jogador(Pessoa):

@@ -1,5 +1,5 @@
-from especie import Especie
-from habilidade import Habilidade
+from model.especie import Especie
+from model.habilidade import Habilidade
 
 
 class Subespecie(Especie):
