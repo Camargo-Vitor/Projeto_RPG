@@ -1,3 +1,4 @@
+'''
 from model.ficha import Ficha
 from model.classe import Classe
 from model.subclasse import Subclasse
@@ -67,3 +68,8 @@ if __name__ == '__main__':
     ficha_teste.rm_item_inventario(item_teste)
     print(ficha_teste)
     ficha_teste.subir_nivel()
+    '''
+from controller.controlador_sistema import ControladorSistema
+
+if __name__ == '__main__':
+    ControladorSistema().abre_tela()

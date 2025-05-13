@@ -1,10 +1,20 @@
 class Item():
-    def __init__(self, nome: str, valor: int, raridade: str, pagina: int):
+    def __init__(
+                 self,
+                 id: int,
+                 nome: str,
+                 valor: int,
+                 raridade: str,
+                 pagina: int):
+        self.__id = id
         self.__nome = nome.strip().lower()
         self.__valor = valor
         self.__raridade = raridade.strip().lower()
         self.__pagina = pagina
 
+    @property
+    def id(self):
+        return self.__id
 
     @property
     def nome(self):
@@ -39,8 +49,10 @@ class Item():
 
     @pagina.setter
     def pagina(self, pagina):
-        if isinstance(pagina, int):
-            self.__pagina = pagina
+        self.__pagina = int(pagina)
+        if pagina < 0:
+            raise Exception() # adicionar exception para valores negativos
+    
 
     def __str__(self):
         return self.nome + ', pag: ' + str(self.pagina)
