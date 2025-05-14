@@ -4,12 +4,12 @@ from model.item import Item
 class ControladorItem:
     def __init__(self, controlador_sistema):
         self.__controlador_sistema = controlador_sistema
-        self.__lista_item = []
+        self.__dict_item = dict()
         self.__tela_item = TelaItem()
         self.__cod = 1
 
     def pega_item_por_nome(self, nome: str):
-        for item in self.__lista_item:
+        for item in self.__dict_item.values():
             if item.nome == nome:
                 return item
         return None
@@ -19,37 +19,23 @@ class ControladorItem:
         i = self.pega_item_por_nome(dados_item['nome'])
         if i is None:
             item = Item(
-                        self.__cod,
                         dados_item['nome'],
                         dados_item['valor'],
                         dados_item['raridade'],
                         dados_item['pagina']
                         )
+            self.__dict_item[self.__cod] = item
             self.__cod += 1
-            self.__lista_item.append(item)
             self.__tela_item.mensagem('Item criado com sucesso!')
         else:
-            self.__tela_item.mensagem('ATENÇÃO: O item já existe')
-
-    def excluir_item(self):
-        try:
-            identificador = int(self.tela_item.selecionar_item_por_id())
-            for item in self.__lista_item:
-                if item.id == identificador:
-                    self.__lista_item.remove(item)
-                    self.tela_item.mensagem('Item removido!')
-                    return True
-                else:
-                    return False
-        except:
-            return False
+            self.__tela_item.mensagem(f'ATENÇÃO: O item "{dados_item["nome"]}" já existe')
 
     def listar_itens(self):
-        self.tela_item.mensagem(f'{"id":^4} | {"nome":^16} | {"Raridade":^10} | {"Pag":^5} | {"valor":^9}')
-        for item in self.__lista_item:
+        self.tela_item.mensagem(f'{"Id":^4} | {"Nome":^16} | {"Raridade":^10} | {"Pag":^5} | {"Valor":^9}')
+        for key, item in self.__dict_item.items():
             self.tela_item.mostra_item(
                 {
-                    'id': item.id,
+                    'id': key,
                     'nome': item.nome,
                     'raridade': item.raridade,
                     'pagina': item.pagina,
@@ -57,19 +43,36 @@ class ControladorItem:
                 }
             )
 
+    def excluir_item(self):
+        try:
+            self.listar_itens()
+            ids_validos = list(self.__dict_item.keys()) + [0]
+            identificador = self.tela_item.selecionar_item_por_id(ids_validos)
+            if identificador == 0:
+                return
+            del self.__dict_item[identificador]
+            self.tela_item.mensagem('Item removido!')
+            return True
+        except:
+            return False
+
     def alterar_item_por_id(self):
         self.listar_itens()
-        identificador = int(self.tela_item.selecionar_item_por_id())
-        for item in self.__lista_item:
-            if item.id == identificador:
-                dados_novos = self.tela_item.pegar_dados_item()
-                item.nome = dados_novos['nome']
-                item.raridade = dados_novos['raridade']
-                item.pagina = dados_novos['pagina']
-                item.valor = dados_novos['valor']
-                return True
-            else:
-                return False
+        try:
+            ids_validos = list(self.__dict_item.keys()) + [0]
+            identificador = self.tela_item.selecionar_item_por_id(ids_validos)
+            if identificador == 0: 
+                return
+            item = self.__dict_item[identificador]
+            dados_novos = self.tela_item.pegar_dados_item()
+            item.nome = dados_novos['nome']
+            item.raridade = dados_novos['raridade']
+            item.pagina = dados_novos['pagina']
+            item.valor = dados_novos['valor']
+            return True
+        except:
+            return False
+
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()
@@ -92,6 +95,6 @@ class ControladorItem:
         return self.__tela_item
 
     @property
-    def lista_item(self):
-        return self.__lista_item
+    def dict_item(self):
+        return self.__dict_item
  
