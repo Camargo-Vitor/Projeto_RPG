@@ -1,5 +1,9 @@
 import os
-class TelaItem():
+from views.tela_abstrata import TelaAbstrata
+class TelaItem(TelaAbstrata):
+    def le_int(self, mensagem, conjunto_alvo = None, positivo = False):
+        return super().le_int(mensagem, conjunto_alvo, positivo)
+
     def mostra_tela(self):
         print('===== Item =====')
         print('1. Criar Item')
@@ -8,10 +12,13 @@ class TelaItem():
         print('4. Modificar Item')
         print('0. Retornar')
 
-        opc = int(input('Opção escolhida: '))
+        opc = self.le_int(
+                    'Digite a opção: ',
+                    conjunto_alvo = (0, 1, 2, 3, 4)
+                    )
 
         if os.name == 'posix':
-            os.system('clea')  
+            os.system('clear')  
         else:
             os.system('cls')
 
@@ -19,20 +26,23 @@ class TelaItem():
 
     def pegar_dados_item(self):
         print('===== Dados Item =====')
-        nome = input('Nome: ')
-        rariradade = input('Raridade: ')
-        pagina = input('Página: ')
-        valor = input('Valor: ')
+        nome = input('Nome: ').strip().title()
+        raridade = input('Raridade: ').strip().title()
+        pagina = self.le_int('Página: ', positivo=True)
+        valor = self.le_int('Valor: ', positivo=True)
 
         return {
                 'nome': nome,
-                'raridade': rariradade,
+                'raridade': raridade,
                 'pagina': pagina,
-                'valor': valor}        
+                'valor': valor
+                }        
 
-    def selecionar_item_por_id(self):
+    def selecionar_item_por_id(self, total_ids: list):
         print('===== Busca Item =====')
-        identificador = input('Digite o Identificador do Item desejado: ')
+        identificador = self.le_int('Digite o Identificador do Item desejado (0 para cancelar): ',
+                                    conjunto_alvo = total_ids
+                                    )
         return identificador
 
     def mostra_item(self, dados_item: dict):
