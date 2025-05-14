@@ -48,11 +48,10 @@ class Item():
         return self.__pagina        
 
     @pagina.setter
-    def pagina(self, pagina):
+    def pagina(self, pagina: int):
         self.__pagina = int(pagina)
-        if pagina < 0:
+        if int(pagina) < 0:
             raise Exception() # adicionar exception para valores negativos
-    
 
     def __str__(self):
         return self.nome + ', pag: ' + str(self.pagina)
