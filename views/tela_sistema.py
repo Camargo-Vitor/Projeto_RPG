@@ -1,3 +1,4 @@
+import os
 class TelaSistema:
     def mostra_tela(self):
         print('===== Sistema =====')
@@ -11,4 +12,10 @@ class TelaSistema:
         print('0. sair')
 
         opc = int(input('Digite a opção escolhida: '))
+
+        if os.name == 'posix':
+            os.system('clear')  
+        else:
+            os.system('cls')
+
         return opc

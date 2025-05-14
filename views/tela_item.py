@@ -1,3 +1,4 @@
+import os
 class TelaItem():
     def mostra_tela(self):
         print('===== Item =====')
@@ -8,6 +9,12 @@ class TelaItem():
         print('0. Retornar')
 
         opc = int(input('Opção escolhida: '))
+
+        if os.name == 'posix':
+            os.system('clea')  
+        else:
+            os.system('cls')
+
         return opc
 
     def pegar_dados_item(self):
@@ -29,12 +36,11 @@ class TelaItem():
         return identificador
 
     def mostra_item(self, dados_item: dict):
-        print(
-            dados_item['id'], '|',
-            dados_item['nome'], '|',
-            dados_item['raridade'], '|',
-            dados_item['pagina'], '|',
-            dados_item['valor']) 
+        print(f"{dados_item['id']:^4}", end=' | ')
+        print(f"{dados_item['nome']:^16}", end=' | ')
+        print(f"{dados_item['raridade']:^10}", end=' | ')
+        print(f"{dados_item['pagina']:^5}", end=' | ')
+        print(f"{dados_item['valor']:^9}")
 
     def mensagem(self, msg):
         print(msg)
