@@ -14,6 +14,17 @@ class TelaEspecies(TelaAbstrata):
         print('4. Modificar Especie')
         print('0. Retornar')
  
+        opc = self.le_int(
+            'Digite a opção: ',
+            conjunto_alvo = (0, 1, 2, 3, 4)
+                    )
+
+        if os.name == 'posix':
+            os.system('clear')  
+        else:
+            os.system('cls')
+
+        return opc
     
     def pegar_especie_dados(self):
         print('===== dados especie =====')
@@ -24,21 +35,22 @@ class TelaEspecies(TelaAbstrata):
         print('===== insira "0" quando não desejar inserir mais habilidades =====')
         while True:
             habilidade = input('Habilidade: ')
-            if habilidade == 0:
-                return None
-            habilidades.append(habilidade)
-            return {
-                'nome': nome, 
-                'deslocamento': deslocamento,
-                'altura': altura,
-                'habilidade(s)': habilidades  
+            if not habilidade == '0':
+                habilidades.append(habilidade)
+            else:
+                break
+        return{
+            'nome': nome, 
+            'deslocamento': deslocamento,
+            'altura': altura,
+            'habilidade(s)': habilidades  
             }
         
     def selecionar_obj_por_cod(self, obj, total_codigos):
         return super().selecionar_obj_por_cod(obj, total_codigos)
     
     def mostra_especie(self, dados_especie: dict):
-        print(f"{dados_especie['id']:^4}", end=' | ')
+        print(f"{dados_especie['cod']:^4}", end=' | ')
         print(f"{dados_especie['nome']:^16}", end=' | ')
         print(f"{dados_especie['deslocamento']:^10}", end=' | ')
         print(f"{dados_especie['altura']:^5}", end=' | ')
