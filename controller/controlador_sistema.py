@@ -1,6 +1,7 @@
 from controller.controlador_item import ControladorItem
 from views.tela_sistema import TelaSistema
 
+
 class ControladorSistema:
     def __init__(self):
         self.__controlador_item = ControladorItem(self)

@@ -1,10 +1,15 @@
 from views.tela_item import TelaItem
 from model.item import Item
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from controller.controlador_sistema import ControladorSistema
+
 
 class ControladorItem:
-    def __init__(self, controlador_sistema):
+    def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
-        self.__dict_item = dict()
+        self.__dict_item: dict[int, Item] = dict()
         self.__tela_item = TelaItem()
         self.__cod = 1
 
@@ -73,7 +78,6 @@ class ControladorItem:
         except:
             return False
 
-
     def retornar(self):
         self.__controlador_sistema.abre_tela()
 
@@ -97,4 +101,3 @@ class ControladorItem:
     @property
     def dict_item(self):
         return self.__dict_item
- 

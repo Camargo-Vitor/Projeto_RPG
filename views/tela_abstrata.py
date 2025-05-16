@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+
+
 class TelaAbstrata(ABC):
     @abstractmethod
     def le_int(self, mensagem: str, conjunto_alvo: list=None, positivo: bool=False):
