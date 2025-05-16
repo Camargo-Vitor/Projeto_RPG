@@ -1,9 +1,7 @@
-from abc import ABC, abstractclassmethod
 from model.habilidade import Habilidade
 
 
-class Especie(ABC):
-    @abstractclassmethod
+class Especie():
     def __init__(self, nome: str, deslocamento: float, \
                 altura: int, habilidades: list = []):
         self.__nome = nome.strip().lower()
