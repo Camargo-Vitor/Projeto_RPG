@@ -14,3 +14,10 @@ class TelaAbstrata(ABC):
                 return num
             except ValueError:
                 print('O valor digitado não é um inteiro válido. Tente novamente')
+
+    def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
+        print(f'===== Busca {obj} =====')
+        identificador = self.le_int('Digite o Identificador desejado (0 para cancelar): ',
+                                    conjunto_alvo = total_codigos
+                                    )
+        return identificador

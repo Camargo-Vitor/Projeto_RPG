@@ -40,12 +40,8 @@ class TelaItem(TelaAbstrata):
                 'valor': valor
                 }        
 
-    def selecionar_item_por_id(self, total_ids: list):
-        print('===== Busca Item =====')
-        identificador = self.le_int('Digite o Identificador do Item desejado (0 para cancelar): ',
-                                    conjunto_alvo = total_ids
-                                    )
-        return identificador
+    def selecionar_obj_por_cod(self, obj, total_codigos):
+        return super().selecionar_obj_por_cod(obj, total_codigos)
 
     def mostra_item(self, dados_item: dict):
         print(f"{dados_item['id']:^4}", end=' | ')

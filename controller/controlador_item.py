@@ -51,8 +51,8 @@ class ControladorItem:
     def excluir_item(self):
         try:
             self.listar_itens()
-            ids_validos = list(self.__dict_item.keys()) + [0]
-            identificador = self.tela_item.selecionar_item_por_id(ids_validos)
+            cod_validos = list(self.__dict_item.keys()) + [0]
+            identificador = self.tela_item.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0:
                 return
             del self.__dict_item[identificador]
@@ -61,11 +61,11 @@ class ControladorItem:
         except:
             return False
 
-    def alterar_item_por_id(self):
+    def alterar_item_por_cod(self):
         self.listar_itens()
         try:
-            ids_validos = list(self.__dict_item.keys()) + [0]
-            identificador = self.tela_item.selecionar_item_por_id(ids_validos)
+            cod_validos = list(self.__dict_item.keys()) + [0]
+            identificador = self.tela_item.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0: 
                 return
             item = self.__dict_item[identificador]
@@ -86,7 +86,7 @@ class ControladorItem:
             1: self.incluir_item,
             2: self.excluir_item,
             3: self.listar_itens,
-            4: self.alterar_item_por_id,
+            4: self.alterar_item_por_cod,
             0: self.retornar
         }
         while True:
