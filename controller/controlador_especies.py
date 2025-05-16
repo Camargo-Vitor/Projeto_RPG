@@ -8,10 +8,10 @@ if TYPE_CHECKING:
 
 
 class ControladorEspecies:
-    def __init__(self, controlador_sistema: ControladorSistema):
+    def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
-        self.__dict_especie = dict[int, Especie] = dict()
-        self.__dict_subespecie = dict[int, Subespecie] = dict()
+        self.__dict_especie: dict[int, Especie] = dict()
+        self.__dict_subespecie: dict[int, Subespecie] = dict()
         self.__tela_especies = TelaEspecies()
         self.__cod_esp = 1
 
@@ -42,3 +42,7 @@ class ControladorEspecies:
             self.__tela_especies.mensagem('Espécie criada com sucesso!')
         else:
             self.__tela_especies.mensagem('A espécie criada já existe')
+
+    @property
+    def controlador_sistema(self):
+        return self.__controlador_sistema
