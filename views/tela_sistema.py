@@ -1,8 +1,8 @@
 import os
 from views.tela_abstrata import TelaAbstrata
 class TelaSistema(TelaAbstrata):
-    def le_int(self, mensagem, conjunto_alvo = None, positivo = False):
-        return super().le_int(mensagem, conjunto_alvo, positivo)
+    def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
+        return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
 
     def mostra_tela(self):
         print('===== Sistema =====')
@@ -15,7 +15,7 @@ class TelaSistema(TelaAbstrata):
         print('7. Pessoa')
         print('0. sair')
 
-        opc = self.le_int(
+        opc = self.le_int_ou_float(
                           'Digite a opção: ',
                           conjunto_alvo = (0, 1, 2, 3, 4, 5, 6, 7)
                           )

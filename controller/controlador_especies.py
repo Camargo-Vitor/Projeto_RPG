@@ -28,7 +28,7 @@ class ControladorEspecies:
         return None
     
     def incluir_especie(self):
-        dados_especie = self.__tela_especies.pegar_especie_dados()
+        dados_especie = self.__tela_especies.pegar_dados_especie()
         e = self.pega_especie_por_nome(dados_especie['nome'])
         if e is None:
             especie = Especie(
@@ -44,7 +44,7 @@ class ControladorEspecies:
             self.__tela_especies.mensagem('A espécie criada já existe')
 
     def listar_especies(self):
-        self.__tela_especies.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^10} | {"Altura":^5} | {"Habilidade(s)":^9}')
+        self.__tela_especies.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura(cm)":^12} | {"Habilidade(s)":^9}')
         for key, especie in self.__dict_especie.items():
             self.__tela_especies.mostra_especie(
                 {

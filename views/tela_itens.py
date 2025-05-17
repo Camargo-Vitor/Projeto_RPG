@@ -3,8 +3,8 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaItens(TelaAbstrata):
-    def le_int(self, mensagem, conjunto_alvo = None, positivo = False):
-        return super().le_int(mensagem, conjunto_alvo, positivo)
+    def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
+        return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
 
     def mostra_tela(self):
         print('===== Item =====')
@@ -14,7 +14,7 @@ class TelaItens(TelaAbstrata):
         print('4. Modificar Item')
         print('0. Retornar')
 
-        opc = self.le_int(
+        opc = self.le_int_ou_float(
                     'Digite a opção: ',
                     conjunto_alvo = (0, 1, 2, 3, 4)
                     )
@@ -30,8 +30,8 @@ class TelaItens(TelaAbstrata):
         print('===== Dados Item =====')
         nome = input('Nome: ').strip().title()
         raridade = input('Raridade: ').strip().title()
-        pagina = self.le_int('Página: ', positivo=True)
-        valor = self.le_int('Valor: ', positivo=True)
+        pagina = self.le_int_ou_float('Página: ', positivo=True)
+        valor = self.le_int_ou_float('Valor: ', positivo=True)
 
         return {
                 'nome': nome,

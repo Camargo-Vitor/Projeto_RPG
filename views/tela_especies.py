@@ -3,8 +3,8 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaEspecies(TelaAbstrata):
-    def le_int(self, mensagem, conjunto_alvo = None, positivo = False):
-        return super().le_int(mensagem, conjunto_alvo, positivo)
+    def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
+        return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
 
     def mostra_tela(self):
         print('===== Especie =====')
@@ -14,7 +14,7 @@ class TelaEspecies(TelaAbstrata):
         print('4. Modificar Especie')
         print('0. Retornar')
  
-        opc = self.le_int(
+        opc = self.le_int_ou_float(
             'Digite a opção: ',
             conjunto_alvo = (0, 1, 2, 3, 4)
                     )
@@ -26,11 +26,11 @@ class TelaEspecies(TelaAbstrata):
 
         return opc
     
-    def pegar_especie_dados(self):
+    def pegar_dados_especie(self):
         print('===== dados especie =====')
-        nome = input('Nome:')
-        deslocamento = input('Deslocamento: ')
-        altura = self.le_int('Altura: ', positivo= True)
+        nome = input('Nome: ')
+        deslocamento = self.le_int_ou_float('Deslocamento : ', tipo= 'float')
+        altura = self.le_int_ou_float('Altura(cm): ', positivo= True)
         habilidades = []
         print('===== insira "0" quando não desejar inserir mais habilidades =====')
         while True:
@@ -53,7 +53,7 @@ class TelaEspecies(TelaAbstrata):
         print(f"{dados_especie['cod']:^4}", end=' | ')
         print(f"{dados_especie['nome']:^16}", end=' | ')
         print(f"{dados_especie['deslocamento']:^16}", end=' | ')
-        print(f"{dados_especie['altura']:^5}", end=' | ')
+        print(f"{dados_especie['altura']:^12}", end=' | ')
         print(f"{str(dados_especie['habilidade(s)']):^9}")
 
     def mensagem(self, msg):
