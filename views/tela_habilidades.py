@@ -26,19 +26,46 @@ class TelaHabilidades(TelaAbstrata):
         return opc
 
     def pegar_dados_habilidade(self):
+        print('===== Dados Habilidades =====')
         nome = input('Digite o nome da habilidade: ').strip().title()
-        nivel = self.le_int_ou_float('Digite o nivel necessário: ', conjunto_alvo=[1, 2, 3])
+        nivel = self.le_int_ou_float('Digite o nivel necessário: ', positivo= True)
         pagina = self.le_int_ou_float('Digite a página da habilidade: ', positivo=True)
 
-        while True:
-            origem = input('Digite o tipo da habilidade) (Classe, subclasse, especie ou subespecie): ').strip().capitalize()
-            if origem.lower() in ('classe', 'subclasse', 'especie', 'subespecie'):
-                break
-            print('Opção inválida.')
 
-        return {
+        while True:
+            print('1. Classe')
+            print('2. Subclasse')
+            print('3. Especie')
+            print('4. Subespecie')
+
+            opc = self.le_int_ou_float(
+                'Digite o tipo da habilidade: ',
+                conjunto_alvo = (1, 2, 3, 4)
+            )
+            opcoes = {1: 'classe',
+                      2: 'subclasse',
+                      3: 'especie',
+                      4: 'subespecie'}
+            
+            origem = opcoes[opc]
+
+            return {
             'nome': nome,
             'nivel': nivel,
             'pagina': pagina,
             'origem': origem
         }
+
+    def selecionar_obj_por_cod(self, obj, total_codigos):
+        return super().selecionar_obj_por_cod(obj, total_codigos)
+    
+    def mostra_habilidade(self, dados_habilidade: dict):
+        print(f"{dados_habilidade['cod']:^4}", end= ' | ')
+        print(f"{dados_habilidade['nome']:^16}", end = ' | ')
+        print(f"{dados_habilidade['nivel']:^5}", end= ' | ')
+        print(f"{dados_habilidade['pagina']:^6}", end= ' | ')
+        print(f"{dados_habilidade['origem']:^10}")
+
+    def mensagem(self, msg):
+        print(msg)
+
