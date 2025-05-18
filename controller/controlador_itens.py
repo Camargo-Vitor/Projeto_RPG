@@ -2,7 +2,6 @@ from views.tela_itens import TelaItens
 from model.item import Item
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
 
@@ -37,11 +36,11 @@ class ControladorItens:
             self.__tela_itens.mensagem(f'ATENÇÃO: O item "{dados_item["nome"]}" já existe')
 
     def listar_itens(self):
-        self.tela_itens.mensagem(f'{"Id":^4} | {"Nome":^16} | {"Raridade":^10} | {"Pag":^5} | {"Valor":^9}')
+        self.tela_itens.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Raridade":^10} | {"Pag":^5} | {"Valor":^9}')
         for key, item in self.__dict_item.items():
             self.tela_itens.mostra_item(
                 {
-                    'id': key,
+                    'cod': key,
                     'nome': item.nome,
                     'raridade': item.raridade,
                     'pagina': item.pagina,
@@ -50,8 +49,8 @@ class ControladorItens:
             )
 
     def excluir_item(self):
+        self.listar_itens()
         try:
-            self.listar_itens()
             cod_validos = list(self.__dict_item.keys()) + [0]
             identificador = self.tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0:

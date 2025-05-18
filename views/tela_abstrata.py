@@ -21,7 +21,7 @@ class TelaAbstrata(ABC):
                 print('O valor digitado não é um número válido. Tente novamente')
 
     def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
-        print(f'===== Busca {obj} =====')
+        print(f'===== Busca {obj.title()} =====')
         identificador = self.le_int_ou_float('Digite o Identificador desejado (0 para cancelar): ',
                                     conjunto_alvo = total_codigos
                                     )

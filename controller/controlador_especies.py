@@ -14,6 +14,7 @@ class ControladorEspecies:
         self.__dict_subespecie: dict[int, Subespecie] = dict()
         self.__tela_especies = TelaEspecies()
         self.__cod_esp = 1
+        self.__cod_sub_esp = 1
 
     def pega_especie_por_nome(self, nome: str):
         for especie in self.__dict_especie.values():
@@ -77,7 +78,7 @@ class ControladorEspecies:
             if identificador == 0:
                 return
             especie = self.dict_especie[identificador]
-            dados_novos = self.tela_especie.pegar_especie_dados()
+            dados_novos = self.tela_especie.pegar_dados_especie()
             especie.nome = dados_novos['nome']
             especie.deslocamento = dados_novos['deslocamento']
             especie.altura = dados_novos['altura']
@@ -101,8 +102,6 @@ class ControladorEspecies:
             opc = self.tela_especie.mostra_tela()
             metodo = opcoes[opc]
             metodo()
-
-
 
     @property
     def controlador_sistema(self):

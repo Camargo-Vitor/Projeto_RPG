@@ -5,6 +5,7 @@ from views.tela_magias import TelaMagias
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
 
+
 class ControladorMagias:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema

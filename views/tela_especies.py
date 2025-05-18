@@ -27,7 +27,7 @@ class TelaEspecies(TelaAbstrata):
         return opc
     
     def pegar_dados_especie(self):
-        print('===== dados especie =====')
+        print('===== Dados Especie =====')
         nome = input('Nome: ')
         deslocamento = self.le_int_ou_float('Deslocamento : ', tipo= 'float')
         altura = self.le_int_ou_float('Altura(cm): ', positivo= True)
