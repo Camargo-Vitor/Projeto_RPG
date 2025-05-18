@@ -77,7 +77,7 @@ class ControladorHabilidades:
                 habilidade.nome = dados_novos['nome']
                 habilidade.nivel = dados_novos['nivel']
                 habilidade.pagina = dados_novos['pagina']
-                habilidade.pagina = dados_novos['origem']
+                habilidade.origem = dados_novos['origem']
                 return True
         except:
             return False
