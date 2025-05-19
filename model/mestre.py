@@ -2,5 +2,12 @@ from model.pessoa import Pessoa
 
 
 class Mestre(Pessoa):
-    def __init__(self, nome: str, telefone: int, endereco: str, disponibilidade: list):
-        super().__init__(nome, telefone, endereco, disponibilidade)
+    def __init__(self,
+                 nome: str,
+                 telefone: int,
+                 cidade: str,
+                 bairro: str,
+                 numero: int,
+                 cep: int, 
+                 disponibilidade: list):
+        super().__init__(nome, telefone, cidade, bairro, numero, cep, disponibilidade)

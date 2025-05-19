@@ -1,10 +1,19 @@
+from model.endereco import Endereco
 from abc import ABC, abstractclassmethod
+
 
 class Pessoa(ABC):
     @abstractclassmethod
-    def __init__(self, nome: str, telefone: int,  endereco: str, disponibilidade: list):
-        self.__nome = nome.strip().lower()
-        self.__endereco = endereco.strip().lower()
+    def __init__(self,
+                 nome: str,
+                 telefone: int,
+                 cidade: str,
+                 bairro: str,
+                 numero: int,
+                 cep: int,
+                 disponibilidade: list):
+        self.__nome = nome
+        self.__endereco = Endereco(cidade, bairro, numero, cep)
         self.__telefone = telefone
         self.__disponibilidade = disponibilidade
 
@@ -12,32 +21,46 @@ class Pessoa(ABC):
     def nome(self):
         return self.__nome
 
-    @nome.setter
-    def nome(self, nome):
-        self.__nome = nome
-
     @property
     def telefone(self):
         return self.__telefone
-
-    @telefone.setter
-    def telefone(self, telefone):
-        self.__telefone = telefone
 
     @property 
     def endereco(self):
         return self.__endereco
 
-    @endereco.setter
-    def endereco(self, endereco):
-        self.__endereco = endereco
-
     @property
     def disponibilidade(self):
         return self.__disponibilidade
     
-    def __str__(self):
-        return f'nome: {self.nome} \
-        \ntelefone: {self.telefone} \
-        \nendereco: {self.endereco} \
-        \ndias disponíveis: {self.disponibilidade}'
+    @nome.setter
+    def nome(self, nome: str):
+        if isinstance(nome, str):
+            self.__nome = nome
+        else:
+            raise ValueError()
+
+    @telefone.setter
+    def telefone(self, telefone: int):
+        if isinstance(telefone, int):
+            self.__telefone = telefone
+        else:
+            raise ValueError()
+
+    @endereco.setter
+    def endereco(self,
+                 cidade: str, 
+                 bairro: str,
+                 numero: int,
+                 cep: int):
+        try:
+            self.__endereco = Endereco(cidade, bairro, numero, cep)
+        except:
+            raise ValueError()
+
+    @disponibilidade.setter
+    def disponibilidade(self, disponibilidade: list[str]):
+        if isinstance(disponibilidade, list[str]):
+            self.__disponibilidade = disponibilidade
+        else:
+            raise ValueError()
