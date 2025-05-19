@@ -44,7 +44,7 @@ class TelaItens(TelaAbstrata):
         return super().selecionar_obj_por_cod(obj, total_codigos)
 
     def mostra_item(self, dados_item: dict):
-        print(f"{dados_item['id']:^4}", end=' | ')
+        print(f"{dados_item['cod']:^4}", end=' | ')
         print(f"{dados_item['nome']:^16}", end=' | ')
         print(f"{dados_item['raridade']:^10}", end=' | ')
         print(f"{dados_item['pagina']:^5}", end=' | ')

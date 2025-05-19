@@ -41,7 +41,7 @@ class TelaMagias(TelaAbstrata):
         return super().selecionar_obj_por_cod(obj, total_codigos)   
 
     def mostra_magia(self, dados_magia: dict):
-        print(f"{dados_magia['codigo']:^4}", end=' | ')
+        print(f"{dados_magia['cod']:^4}", end=' | ')
         print(f"{dados_magia['nome']:^16}", end=' | ')
         print(f"{dados_magia['nivel']:^5}", end=' | ')
         print(f"{dados_magia['pagina']:^5}")
