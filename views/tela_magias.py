@@ -1,30 +1,18 @@
 from views.tela_abstrata import TelaAbstrata
-import os
 
 
 class TelaMagias(TelaAbstrata):
     def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
         return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
 
-    def mostra_tela(self):
+    def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
         print('==== Magias ====')
         print('1. Criar Magia')
         print('2. Excluir Magia')
         print('3. Listar Magias')
         print('4. Modificar Magia')
         print('0. Retornar')
-
-        opc = self.le_int_ou_float(
-                    'Digite a opção: ',
-                    conjunto_alvo = (0, 1, 2, 3, 4)
-                    )
-
-        if os.name == 'posix':
-            os.system('clear')  
-        else:
-            os.system('cls')
-
-        return opc
+        return super().mostra_tela(opcoes)
 
     def pegar_dados_magia(self):
         print('==== Dados Magia ====')
@@ -45,6 +33,3 @@ class TelaMagias(TelaAbstrata):
         print(f"{dados_magia['nome']:^16}", end=' | ')
         print(f"{dados_magia['nivel']:^5}", end=' | ')
         print(f"{dados_magia['pagina']:^5}")
-
-    def mensagem(self, msg):
-        print(msg)

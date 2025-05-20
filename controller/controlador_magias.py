@@ -26,7 +26,7 @@ class ControladorMagias:
         self.__tela_magias.mensagem(f"{'Cod':^4} | {'Nome':^16} | {'Nivel':^5} | {'Pagina':^5}")
         for cod, magia in self.__dict_magias.items():
             self.__tela_magias.mostra_magia({
-                'codigo': cod,
+                'cod': cod,
                 'nome': magia.nome,
                 'nivel': magia.nivel,
                 'pagina': magia.pagina

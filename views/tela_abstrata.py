@@ -1,7 +1,21 @@
 from abc import ABC, abstractmethod
-
+import os
 
 class TelaAbstrata(ABC):
+    @abstractmethod
+    def mostra_tela(self, opcoes=[]):
+        opc = self.le_int_ou_float(
+            'Digite a opção: ',
+            conjunto_alvo = opcoes
+                    )
+
+        if os.name == 'posix':
+            os.system('clear')  
+        else:
+            os.system('cls')
+
+        return opc
+
     @abstractmethod
     def le_int_ou_float(self, mensagem: str, conjunto_alvo: list=None, positivo: bool=False, tipo: str='int'):
         while True:
@@ -26,3 +40,6 @@ class TelaAbstrata(ABC):
                                     conjunto_alvo = total_codigos
                                     )
         return identificador
+
+    def mensagem(self, msg):
+        print(msg)

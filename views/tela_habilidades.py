@@ -1,29 +1,18 @@
 from views.tela_abstrata import TelaAbstrata
-import os
+
 
 class TelaHabilidades(TelaAbstrata):
     def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
         return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
 
-    def mostra_tela(self):
+    def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
         print('==== Habilidades ====')
         print('1. Criar Habilidade')
         print('2. Excluir Habilidade')
         print('3. Listar Habilidades')
         print('4. Modificar Habilidade')
         print('0. Retornar')
-        
-        opc = self.le_int_ou_float(
-                    'Digite a opção: ',
-                    conjunto_alvo = (0, 1, 2, 3, 4)
-                    )
-
-        if os.name == 'posix':
-            os.system('clear')  
-        else:
-            os.system('cls')
-
-        return opc
+        return super().mostra_tela(opcoes)
 
     def pegar_dados_habilidade(self):
         print('===== Dados Habilidades =====')
@@ -65,7 +54,3 @@ class TelaHabilidades(TelaAbstrata):
         print(f"{dados_habilidade['nivel']:^5}", end= ' | ')
         print(f"{dados_habilidade['pagina']:^6}", end= ' | ')
         print(f"{dados_habilidade['origem']:^10}")
-
-    def mensagem(self, msg):
-        print(msg)
-

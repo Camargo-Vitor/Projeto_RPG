@@ -1,4 +1,3 @@
-import os
 from views.tela_abstrata import TelaAbstrata
 
 
@@ -6,25 +5,14 @@ class TelaEspecies(TelaAbstrata):
     def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
         return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
 
-    def mostra_tela(self):
+    def mostra_tela(self, opcoes = [1, 2, 3, 4, 0]):
         print('===== Especie =====')
         print('1. Criar Especie')
         print('2. Excluir Especie')
         print('3. Listar Especies')
         print('4. Modificar Especie')
         print('0. Retornar')
- 
-        opc = self.le_int_ou_float(
-            'Digite a opção: ',
-            conjunto_alvo = (0, 1, 2, 3, 4)
-                    )
-
-        if os.name == 'posix':
-            os.system('clear')  
-        else:
-            os.system('cls')
-
-        return opc
+        return super().mostra_tela(opcoes)
     
     def pegar_dados_especie(self):
         print('===== Dados Especie =====')
@@ -55,7 +43,3 @@ class TelaEspecies(TelaAbstrata):
         print(f"{dados_especie['deslocamento']:^16}", end=' | ')
         print(f"{dados_especie['altura']:^12}", end=' | ')
         print(f"{str(dados_especie['habilidade(s)']):^9}")
-
-    def mensagem(self, msg):
-        print(msg)
-            
