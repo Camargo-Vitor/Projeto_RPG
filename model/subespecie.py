@@ -5,10 +5,10 @@ from model.habilidade import Habilidade
 class Subespecie(Especie):
     def __init__(self, nome: str, nome_sub:str, deslocamento: float,
                 altura: int, habilidades = [],
-                hab_especificas = []):
+                ):
         super().__init__(nome, deslocamento, altura, habilidades)
-        self.__nome = nome.strip().lower() + ' ' + nome_sub.strip().lower()
-        self.__hab_especificas = hab_especificas
+        self.__nome = nome + ' ' + nome_sub
+        self.__hab_especificas = []
 
     @property
     def nome(self):

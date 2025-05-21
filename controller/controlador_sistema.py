@@ -50,3 +50,7 @@ class ControladorSistema:
             opc_escolhida = self.__tela_sistema.mostra_tela()
             funcao_escolhida = opcoes[opc_escolhida]
             funcao_escolhida()
+    
+    @property
+    def controlador_habilidades(self):
+        return self.__controlador_habilidades
