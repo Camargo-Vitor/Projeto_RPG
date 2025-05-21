@@ -4,13 +4,29 @@ from views.tela_abstrata import TelaAbstrata
 class TelaEspecies(TelaAbstrata):
     def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
         return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
-
-    def mostra_tela(self, opcoes = [1, 2, 3, 4, 0]):
+    
+    def mostra_tela(self, opcoes = [1, 2, 0]):
+        print('===== Especie/Subespecie =====')
+        print('1. Gerir Especie')
+        print('2. Gerir Subespecie')
+        print('0. Retornar')
+        return super().mostra_tela(opcoes)
+    
+    def mostra_tela_especie(self, opcoes = [1, 2, 3, 4, 0]):
         print('===== Especie =====')
         print('1. Criar Especie')
         print('2. Excluir Especie')
         print('3. Listar Especies')
         print('4. Modificar Especie')
+        print('0. Retornar')
+        return super().mostra_tela(opcoes)
+    
+    def mostra_tela_subespecie(self, opcoes = [1, 2, 3, 4, 0]):
+        print('===== Subespecie =====')
+        print('1. Criar Subespecie')
+        print('2. Excluir Subespecie')
+        print('3. Listar Subespecie')
+        print('4. Modidicar Subespecie')    
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
@@ -20,19 +36,17 @@ class TelaEspecies(TelaAbstrata):
         deslocamento = self.le_int_ou_float('Deslocamento : ', tipo= 'float')
         altura = self.le_int_ou_float('Altura(cm): ', positivo= True)
         habilidades = []
-        print('===== insira "0" quando não desejar inserir mais habilidades =====')
-        while True:
-            habilidade = input('Habilidade: ')
-            if not habilidade == '0':
-                habilidades.append(habilidade)
-            else:
-                break
-        return{
+        return {
             'nome': nome, 
             'deslocamento': deslocamento,
             'altura': altura,
-            'habilidade(s)': habilidades  
+            'habilidades': habilidades
             }
+    
+    def pegar_dados_subespecie(self, especie: str):
+        print('===== Dados Subespecie =====')
+        nome = input('Nome: ')
+        return {'nome': nome}
         
     def selecionar_obj_por_cod(self, obj, total_codigos):
         return super().selecionar_obj_por_cod(obj, total_codigos)
@@ -42,4 +56,9 @@ class TelaEspecies(TelaAbstrata):
         print(f"{dados_especie['nome']:^16}", end=' | ')
         print(f"{dados_especie['deslocamento']:^16}", end=' | ')
         print(f"{dados_especie['altura']:^12}", end=' | ')
-        print(f"{str(dados_especie['habilidade(s)']):^9}")
+        print(f"{str(dados_especie['habilidades']):^9}")
+
+    def mostra_subespecie(self, dados_subespecie: dict):
+        print(f"{dados_subespecie['cod']:^4}", end=' | ')
+        print(f"{dados_subespecie['nome']:^16}", end= ' | ')
+        print(f"{dados_subespecie['habilidades']:^9}")
