@@ -27,3 +27,39 @@ class TelaPessoas(TelaAbstrata):
         print('3. Listar Jogadores')
         print('4. Alterar Jogador')
         return super().mostra_tela(opcoes)
+
+    def pegar_dados_pessoa(self):
+        print('==== Dados Pessoa ====')
+        nome = input('Digite o nome: ').strip().title()
+        while True:
+            telefone = self.le_int_ou_float(
+                'Digite o número de telefone (com DDD, tudo junto): ', positivo=True)
+            if len(str(telefone)) == 11:
+                break
+            else:
+                print('Formato inválido')
+        cidade = input('Digite a cidade: ')
+        bairro = input('Digite o bairro: ')
+        numero = self.le_int_ou_float('Digite o número do endereço: ', positivo=True)
+        cep = self.le_int_ou_float('Digite o cep (somente numeros)', positivo=True)
+        return {
+            'nome': nome,
+            'telefone': telefone,
+            'cidade': cidade,
+            'bairro': bairro,
+            'numero': numero,
+            'cep': cep
+        }
+
+    def mostra_pessoa(self, dados_pessoa: dict):
+        print(f"\n{dados_pessoa['cod']:^4}", end=' | ')
+        print(f"{dados_pessoa['nome']:^16}", end=' | ')
+        print(f"{dados_pessoa['telefone']:^13}", end=' | ')
+        print(f"{dados_pessoa['cidade']:^16}", end=' | ')
+        print(f"{dados_pessoa['bairro']:^12}", end=' | ')
+        print(f"{dados_pessoa['numero']:^6}", end=' | ')
+        print(f"{dados_pessoa['cep']:^10}", end=' |')
+
+    def mostra_jogador(self, dados_jogador: dict):
+        self.mostra_pessoa(dados_jogador)
+        print(f"{dados_jogador["personagens"]}", end=' |')
