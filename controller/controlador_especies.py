@@ -138,13 +138,19 @@ class ControladorEspecies:
                 self.controlador_sistema.controlador_habilidades.listar_habilidades()
                 cod_validos_hab = list(self.controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
                 identificador_hab = self.tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
-                if identificador_hab == 0:
-                    return
+                habilidade = self.controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab]
+                if habilidade.origem == 'especie':
+                    if identificador_hab == 0:
+                        return
+                    else:
+                        especie = self.dict_especie[identificador_esp]
+                        [habilidade.nome for hab in especie.habilidades]
+                        especie.habilidades.append(habilidade.nome, habilidade.nivel, habilidade.pagina)
+                        self.tela_especies.mensagem('Hablidade adicionada!')
+                        return True
                 else:
-                    especie = self.dict_especie[identificador_esp]
-                    especie.habilidades.append(self.controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab].nome)
-                    self.tela_especies.mensagem('Hablidade adicionada!')
-                    return True
+                    self.tela_especies.mensagem('Origem invalida')
+                    return
         except:
             return False
         
@@ -163,7 +169,7 @@ class ControladorEspecies:
                     return
                 else:
                     especie = self.dict_especie[identificador_esp]
-                    especie.habilidades(self.controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab])
+                    especie.habilidades(self.controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab].nome)
                     self.tela_especies.mensagem('Habilidade Removida!')
                     return True
         except:
