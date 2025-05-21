@@ -62,4 +62,4 @@ class TelaPessoas(TelaAbstrata):
 
     def mostra_jogador(self, dados_jogador: dict):
         self.mostra_pessoa(dados_jogador)
-        print(f"{dados_jogador["personagens"]}", end=' |')
+        print(f"{dados_jogador['personagens']}", end=' |')
