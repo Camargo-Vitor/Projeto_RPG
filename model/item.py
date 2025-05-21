@@ -14,39 +14,42 @@ class Item():
     def nome(self):
         return self.__nome
 
-    @nome.setter
-    def nome(self, nome):
-        if isinstance(nome, str):
-            self.__nome = nome.strip().lower()
-
     @property
     def valor(self):
         return self.__valor
-
-    @valor.setter
-    def valor(self, valor):
-        if isinstance(valor, int):    
-            self.__valor = valor
 
     @property
     def raridade(self):
         return self.__raridade
 
-    @raridade.setter
-    def raridade(self, raridade):
-        if isinstance(raridade, str):
-            self.__raridade = raridade.strip().lower()
-
     @property
     def pagina(self):
         return self.__pagina        
 
+    @nome.setter
+    def nome(self, nome):
+        if isinstance(nome, str):
+            self.__nome = nome
+        else:
+            raise ValueError()
+
+    @valor.setter
+    def valor(self, valor):
+        if isinstance(valor, int):    
+            self.__valor = valor
+        else:
+            raise ValueError()
+
+    @raridade.setter
+    def raridade(self, raridade):
+        if isinstance(raridade, str):
+            self.__raridade = raridade
+        else:
+            raise ValueError()
+
     @pagina.setter
     def pagina(self, pagina: int):
-        self.__pagina = pagina
-        if pagina < 0:
-            raise Exception() # adicionar exception para valores negativos
-
-    def __str__(self):
-        return self.nome + ', pag: ' + str(self.pagina)
-      
+        if isinstance(pagina, int): 
+            self.__pagina = pagina
+        else:
+            raise ValueError()
