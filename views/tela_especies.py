@@ -12,12 +12,14 @@ class TelaEspecies(TelaAbstrata):
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
-    def mostra_tela_especie(self, opcoes = [1, 2, 3, 4, 0]):
+    def mostra_tela_especie(self, opcoes = [1, 2, 3, 4, 5, 6, 0]):
         print('===== Especie =====')
         print('1. Criar Especie')
         print('2. Excluir Especie')
         print('3. Listar Especies')
         print('4. Modificar Especie')
+        print('5. Adicionar Habilidade')
+        print('6. Remover Habilidade')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
@@ -45,7 +47,7 @@ class TelaEspecies(TelaAbstrata):
     
     def pegar_dados_subespecie(self, especie: str):
         print('===== Dados Subespecie =====')
-        nome = input('Nome: ')
+        nome = input(f'Nome: {especie} ').strip()
         return {'nome': nome}
         
     def selecionar_obj_por_cod(self, obj, total_codigos):
@@ -55,10 +57,9 @@ class TelaEspecies(TelaAbstrata):
         print(f"{dados_especie['cod']:^4}", end=' | ')
         print(f"{dados_especie['nome']:^16}", end=' | ')
         print(f"{dados_especie['deslocamento']:^16}", end=' | ')
-        print(f"{dados_especie['altura']:^12}", end=' | ')
+        print(f"{dados_especie['altura']:^18}", end=' | ')
         print(f"{str(dados_especie['habilidades']):^9}")
 
     def mostra_subespecie(self, dados_subespecie: dict):
-        print(f"{dados_subespecie['cod']:^4}", end=' | ')
-        print(f"{dados_subespecie['nome']:^16}", end= ' | ')
+        self.mostra_especie()
         print(f"{dados_subespecie['habilidades']:^9}")
