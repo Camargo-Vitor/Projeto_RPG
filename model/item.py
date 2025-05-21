@@ -31,25 +31,25 @@ class Item():
         if isinstance(nome, str):
             self.__nome = nome
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Nome não alterado, valor inválido")
 
     @valor.setter
     def valor(self, valor):
         if isinstance(valor, int):    
             self.__valor = valor
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Valor/Preço não alterado, valor inválido")
 
     @raridade.setter
     def raridade(self, raridade):
         if isinstance(raridade, str):
             self.__raridade = raridade
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Raridade não alterada, valor inválido")
 
     @pagina.setter
     def pagina(self, pagina: int):
         if isinstance(pagina, int): 
             self.__pagina = pagina
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Pagina não alterada, valor inválido")

@@ -4,7 +4,7 @@ class Endereco:
         self.__bairro = bairro
         self.__numero = numero
         self.__cep = cep
-        
+
     @property
     def cidade(self):
         return self.__cidade
@@ -26,25 +26,25 @@ class Endereco:
         if isinstance(cidade, str):
             self.__cidade = cidade.strip().title()
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Cidade não alterada, valor inválido")
 
     @bairro.setter
     def bairro(self, bairro: str):
         if isinstance(bairro, str):
             self.__bairro = bairro.strip().title()
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Bairro não alterado, valor inválido")
 
     @numero.setter
     def numero(self, numero: int):
         if isinstance(numero, int):
             self.__numero = numero
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Número não alterado, valor inválido")
 
     @cep.setter
     def cep(self, cep):
         if isinstance(cep, int):
             self.__cep = cep
         else:
-            raise ValueError
+            raise ValueError("[ERRO] Cep não alterado, valor inválido")

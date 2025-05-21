@@ -21,7 +21,11 @@ class Jogador(Pessoa):
     def add_ficha(self, ficha: Ficha):
         if isinstance(ficha, Ficha):
             self.__personagens.append(ficha)
+        else:
+            raise ValueError("[ERRO] Ficha não adicionada, valor inválido")
 
     def rm_ficha(self, ficha: Ficha):
-            if ficha in self.__personagens:
-                 self.__personagens.remove(ficha)   
+        if ficha in self.__personagens:
+            self.__personagens.remove(ficha)
+        else:
+            raise KeyError("[ERRO] Ficha não encontrada")

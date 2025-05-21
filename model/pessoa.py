@@ -38,14 +38,14 @@ class Pessoa(ABC):
         if isinstance(nome, str):
             self.__nome = nome
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Nome não alterado, valor inválido")
 
     @telefone.setter
     def telefone(self, telefone: int):
         if isinstance(telefone, int):
             self.__telefone = telefone
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Telefone não alterado, valor inválido")
 
     @endereco.setter
     def endereco(self,
@@ -56,11 +56,11 @@ class Pessoa(ABC):
         try:
             self.__endereco = Endereco(cidade, bairro, numero, cep)
         except:
-            raise ValueError()
+            raise ValueError("[ERRO] Endereço não alterado, valor inválido")
 
     @disponibilidade.setter
     def disponibilidade(self, disponibilidade: list[str]):
         if isinstance(disponibilidade, list[str]):
             self.__disponibilidade = disponibilidade
         else:
-            raise ValueError()
+            raise ValueError("[ERRO] Disponibilidade não alterada, valor inválido")

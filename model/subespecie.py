@@ -3,10 +3,12 @@ from model.habilidade import Habilidade
 
 
 class Subespecie(Especie):
-    def __init__(self, nome: str, nome_sub:str, deslocamento: float,
-                altura: int, habilidades = [],
-                ):
-        super().__init__(nome, deslocamento, altura, habilidades)
+    def __init__(self,
+                 nome: str,
+                 nome_sub:str,
+                 deslocamento: float,
+                 altura: int):
+        super().__init__(nome, deslocamento, altura)
         self.__nome = nome + ' ' + nome_sub
         self.__hab_especificas = []
 
