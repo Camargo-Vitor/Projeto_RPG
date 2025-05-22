@@ -5,21 +5,31 @@ from model.habilidade import Habilidade
 class Subespecie(Especie):
     def __init__(self,
                  nome: str,
-                 nome_sub:str,
+                 nome_sub: str,
                  deslocamento: float,
-                 altura: int):
-        super().__init__(nome, deslocamento, altura)
-        self.__nome = nome + ' ' + nome_sub
+                 altura: int,
+                 habilidades: list[Habilidade]):
+        super().__init__(nome, deslocamento, altura, habilidades)
+        self.__nome_sub = nome_sub
+        self.__habilidades = habilidades
         self.__hab_especificas = []
 
     @property
     def nome(self):
-        return self.__nome
+        return f'{super().nome} {self.__nome_sub}'
+    
+    @property
+    def nome_sub(self):
+        return self.__nome_sub
 
-    @nome.setter
-    def nome_sub(self, nome: str, nome_sub: str):
+    @property
+    def habilidades(self):
+        return self.__habilidades
+
+    @nome_sub.setter
+    def nome_sub(self, nome_sub: str):
         if isinstance(nome_sub, str):
-            self.__nome = nome.strip().lower() + nome_sub.strip().lower
+            self.__nome_sub = nome_sub
 
     @property
     def hab_especificas(self):
