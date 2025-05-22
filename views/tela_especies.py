@@ -23,12 +23,14 @@ class TelaEspecies(TelaAbstrata):
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
-    def mostra_tela_subespecie(self, opcoes = [1, 2, 3, 4, 0]):
+    def mostra_tela_subespecie(self, opcoes = [1, 2, 3, 4, 5, 6, 0]):
         print('===== Subespecie =====')
         print('1. Criar Subespecie')
         print('2. Excluir Subespecie')
         print('3. Listar Subespecie')
         print('4. Modidicar Subespecie')    
+        print('5. Adicionar Habilidade')
+        print('6. Remover Habilidade')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
@@ -60,6 +62,7 @@ class TelaEspecies(TelaAbstrata):
         print(f"{dados_especie['altura']:^18}", end=' | ')
         print(f"{str(dados_especie['habilidades']):^9}")
 
+    #Não sei como arrumar mostra_especie
     def mostra_subespecie(self, dados_subespecie: dict):
         self.mostra_especie()
-        print(f"{dados_subespecie['habilidades']:^9}")
+        print(f"{dados_subespecie['habilidades']:^25}")
