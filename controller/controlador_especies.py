@@ -228,13 +228,13 @@ class ControladorEspecies:
                 return
             else:
                 habilidade = self.controlador_sistema.controlador_habilidades.dict_habilidades
+                subespecie = self.dict_subespecie[identificador_sub]
                 cod_validos_hab = list(habilidade.keys())
                 self.tela_especies.mensagem(f'Lista de habilidades: {subespecie.habilidades}')
                 identificador_hab = self.tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
                 if identificador_hab == 0:
                     return
                 else:
-                    subespecie = self.dict_subespecie[identificador_sub]
                     subespecie.rm_hab_sub(habilidade[identificador_hab])
                     self.tela_especies.mensagem('Habilidade Removida!')
                     return True
@@ -269,7 +269,7 @@ class ControladorEspecies:
             3: self.listar_subespecies,
             4: self.alterar_subespecie_por_cod,
             5: self.add_habilidade_subespecie,
-            6:self.remove_habilidade_subespecie,
+            6: self.remove_habilidade_subespecie,
             0: self.abre_tela
         }
         while True:
