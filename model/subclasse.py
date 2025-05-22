@@ -30,6 +30,7 @@ class Subclasse(Classe):
 
     def add_hab(self, habilidade: Habilidade):
         if isinstance(habilidade, Habilidade) and habilidade.origem == 'subclasse':
-            self.__habilidades.append(habilidade)
+            self.__hab_espeficicas.append(habilidade)
         else:
             raise ValueError("[ERRO] Habilidade não adicionada, valor inválido")
+    
