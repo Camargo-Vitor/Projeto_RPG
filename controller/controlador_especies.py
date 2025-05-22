@@ -160,8 +160,7 @@ class ControladorEspecies:
                         return
                     else:
                         especie = self.dict_especie[identificador_esp]
-#Printar/Excluir nome e código(nesse e nos 3 abaixo)
-                        especie.habilidades.append(habilidade[identificador_hab].nome)
+                        especie.add_habilidade(habilidade[identificador_hab])
                         self.tela_especies.mensagem('Hablidade adicionada!')
                         return True
                 else:
@@ -188,7 +187,8 @@ class ControladorEspecies:
                         return
                     else:
                         subespecie = self.dict_especie[identificador_sub]
-                        subespecie.habilidades.append(habilidade[identificador_hab].nome)
+#isso era para ser um add_hab_sub, mas to fazendo algo errado acho. ou to mlk?
+                        subespecie.add_habilidade(habilidade[identificador_hab])
                         self.tela_especies.mensagem('Hablidade adicionada!')
                         return True
                 else:
@@ -213,7 +213,7 @@ class ControladorEspecies:
                 if identificador_hab == 0:
                     return
                 else:
-                    especie.habilidades.remove(habilidade[identificador_hab].nome)
+                    especie.rm_hab(habilidade[identificador_hab])
                     self.tela_especies.mensagem('Habilidade Removida!')
                     return True
         except:
@@ -235,7 +235,7 @@ class ControladorEspecies:
                     return
                 else:
                     subespecie = self.dict_subespecie[identificador_sub]
-                    subespecie.habilidades.remove(habilidade[identificador_hab].nome)
+                    subespecie.rm_hab_sub(habilidade[identificador_hab])
                     self.tela_especies.mensagem('Habilidade Removida!')
                     return True
         except:

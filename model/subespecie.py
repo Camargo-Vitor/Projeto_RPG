@@ -25,11 +25,11 @@ class Subespecie(Especie):
     def hab_especificas(self):
         return self.__hab_especificas
     
-    def add_hab(self, habilidade: Habilidade):
+    def add_hab_sub(self, habilidade: Habilidade):
         if isinstance(habilidade, Habilidade) and habilidade.origem == 'subespecie':
             self.__hab_especificas.append(habilidade)
 
-    def rm_hab_esp(self, habilidade: Habilidade):
+    def rm_hab_sub(self, habilidade: Habilidade):
         if habilidade in self.hab_especificas:
             self.hab_especificas.remove(habilidade)
         else:
