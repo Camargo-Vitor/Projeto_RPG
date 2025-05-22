@@ -17,19 +17,19 @@ class ControladorEspecies:
         self.__cod_sub_esp = 1
 
     def pega_especie_por_nome(self, nome: str):
-        for especie in self.dict_especie.values():
+        for especie in self.__dict_especie.values():
             if especie.nome == nome:
                 return especie
         return None
     
     def pega_subespecie_por_nome(self, nome: str):
-        for subespecie in self.dict_subespecie.values():
+        for subespecie in self.__dict_subespecie.values():
             if subespecie.nome == nome:
                 return nome
         return None
     
     def incluir_especie(self):
-        dados_especie = self.tela_especies.pegar_dados_especie()
+        dados_especie = self.__tela_especies.pegar_dados_especie()
         e = self.pega_especie_por_nome(dados_especie['nome'])
         if e is None:
             especie = Especie(
@@ -37,18 +37,20 @@ class ControladorEspecies:
                 dados_especie['deslocamento'],
                 dados_especie['altura'],
                     )
-            self.dict_especie[self.__cod_esp] = especie
+            self.__dict_especie[self.__cod_esp] = especie
             self.__cod_esp +=1
-            self.tela_especies.mensagem('Espécie criada com sucesso!')
+            self.__tela_especies.mensagem('Espécie criada com sucesso!')
         else:
-            self.tela_especies.mensagem('A espécie criada já existe.')
+            self.__tela_especies.mensagem('A espécie criada já existe.')
 
     def incluir_subespecie(self):
         self.listar_especies()
-        cod_validos = list(self.dict_especie.keys()) + [0]
-        identificador = self.tela_especies.selecionar_obj_por_cod('especie', cod_validos)
-        especie = self.dict_especie[identificador]
-        dados_subespecie = self.tela_especies.pegar_dados_subespecie(especie.nome)
+        cod_validos = list(self.__dict_especie.keys()) + [0]
+        identificador = self.__tela_especies.selecionar_obj_por_cod('especie', cod_validos)
+        if identificador == 0:
+            return False
+        especie = self.__dict_especie[identificador]
+        dados_subespecie = self.__tela_especies.pegar_dados_subespecie(especie.nome)
         s = self.pega_subespecie_por_nome(dados_subespecie['nome'])
         if s is None:
             subespecie = Subespecie(
@@ -56,45 +58,54 @@ class ControladorEspecies:
                 dados_subespecie['nome'],
                 especie.deslocamento,
                 especie.altura,
+                especie.habilidades
             )
-            self.dict_subespecie[self.__cod_sub_esp] = subespecie
+            self.__dict_subespecie[self.__cod_sub_esp] = subespecie
             self.__cod_sub_esp += 1
-            self.tela_especies.mensagem('Subespecie criada com sucesso!')
+            self.__tela_especies.mensagem('Subespecie criada com sucesso!')
         else:
-            self.tela_especies.mensagem('A subespecie criada ja existe!')
+            self.__tela_especies.mensagem('A subespecie criada ja existe!')
 
     def listar_especies(self):
-        self.tela_especies.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média(cm)":^18} | {"Habilidade(s)":^9}')
-        for key, especie in self.dict_especie.items():
-            self.tela_especies.mostra_especie(
+        self.__tela_especies.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média(cm)":^18} | {"Habilidade(s)":^9}')
+        for key, especie in self.__dict_especie.items():
+            self.__tela_especies.mostra_especie(
                 {
                     'cod': key,
                     'nome': especie.nome,
                     'deslocamento': especie.deslocamento,
                     'altura': especie.altura,
-                    'habilidades': especie.habilidades                 
+                    'habilidades': [hab.nome for hab in especie.habilidades]             
                 }
             )
-    #Arrumar isso aqui junto
+
     def listar_subespecies(self):
         self.__tela_especies.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média":^18} | {"Habilidade(s)":^9} | {"Habilidades(s) específicas":^25}')
-        for key, subespecie in self.dict_subespecie.items():
-            self.tela_especies.mostra_subespecie(
+        for key, subespecie in self.__dict_subespecie.items():
+            self.__tela_especies.mostra_subespecie(
                 {
-                    'habilidades' : subespecie.habilidades
+                    'cod': key,
+                    'nome': subespecie.nome,
+                    'deslocamento': subespecie.deslocamento,
+                    'altura': subespecie.altura,
+                    'habilidades' : [hab.nome for hab in subespecie.habilidades],
+                    'habilidades_esp' : [hab.nome for hab in subespecie.hab_especificas]
                 }
             )
-        
+
     def excluir_especie(self):
         self.listar_especies()
         try:
-            cod_validos = list(self.dict_especie.keys()) + [0]
-            identificador = self.tela_especies.selecionar_obj_por_cod('especie', cod_validos)
+            cod_validos = list(self.__dict_especie.keys()) + [0]
+            identificador = self.__tela_especies.selecionar_obj_por_cod('especie', cod_validos)
             if identificador == 0:
                 return
             else:
-                del self.dict_especie[identificador]
-                self.tela_especies.mensagem('Especie removida!')
+                for key, subespecie in self.__dict_subespecie.items():
+                    if super(Subespecie, subespecie).nome == self.__dict_especie[identificador].nome:
+                        del self.dict_subespecie[key]
+                del self.__dict_especie[identificador]
+                self.__tela_especies.mensagem('Especie removida!')
             return True
         except:
             return False
@@ -102,13 +113,13 @@ class ControladorEspecies:
     def excluir_subsespecie(self):
         self.listar_subespecies()
         try:
-            cod_validos = list(self.dict_subespecie.keys()) + [0]
-            identificador = self.tela_especies.selecionar_obj_por_cod('subespecie', cod_validos)
+            cod_validos = list(self.__dict_subespecie.keys()) + [0]
+            identificador = self.__tela_especies.selecionar_obj_por_cod('subespecie', cod_validos)
             if identificador == 0:
                 return
             else:
-                del self.dict_subespecie[identificador]
-                self.tela_especies.mensagem('Subespecie removida!')
+                del self.__dict_subespecie[identificador]
+                self.__tela_especies.mensagem('Subespecie removida!')
             return True
         except:
             return False
@@ -116,12 +127,12 @@ class ControladorEspecies:
     def alterar_especie_por_cod(self):
         self.listar_especies()
         try:
-            cod_validos = list(self.dict_especie.keys()) + [0]
+            cod_validos = list(self.__dict_especie.keys()) + [0]
             identificador = self.__tela_especies.selecionar_obj_por_cod('especie', cod_validos)
             if identificador == 0:
                 return
-            especie = self.dict_especie[identificador]
-            dados_novos = self.tela_especies.pegar_dados_especie()
+            especie = self.__dict_especie[identificador]
+            dados_novos = self.__tela_especies.pegar_dados_especie()
             especie.nome = dados_novos['nome']
             especie.deslocamento = dados_novos['deslocamento']
             especie.altura = dados_novos['altura']
@@ -129,16 +140,18 @@ class ControladorEspecies:
             return True
         except:
             return False
+
     def alterar_subespecie_por_cod(self):
         self.listar_subespecies()
         try:
-            cod_validos = list(self.dict_especie.keys()) + [0]
-            identificador = self.tela_especies.selecionar_obj_por_cod('subespecie', cod_validos)
+            cod_validos = list(self.__dict_subespecie.keys()) + [0]
+            identificador = self.__tela_especies.selecionar_obj_por_cod('subespecie', cod_validos)
             if identificador == 0:
                 return
-            subespecie = self.dict_subespecie[identificador]
-            dados_novos = self.tela_especies.pegar_dados_subespecie()
-            subespecie.habilidades = dados_novos['habilidades']
+            subespecie = self.__dict_subespecie[identificador]
+            dados_novos = self.__tela_especies.pegar_dados_subespecie(super(Subespecie, subespecie).nome)
+            self.dict_subespecie[identificador].nome_sub = dados_novos['nome']
+            self.__tela_especies.mensagem('Alterado com sucesso!')
             return True
         except:
             return False
@@ -146,25 +159,25 @@ class ControladorEspecies:
     def add_habilidade_especie(self):
         self.listar_especies()
         try:
-            cod_validos_esp = list(self.dict_especie.keys()) + [0]
-            identificador_esp = self.tela_especies.selecionar_obj_por_cod('especie', cod_validos_esp)
+            cod_validos_esp = list(self.__dict_especie.keys()) + [0]
+            identificador_esp = self.__tela_especies.selecionar_obj_por_cod('especie', cod_validos_esp)
             if identificador_esp == 0:
                 return
             else:
-                habilidade = self.controlador_sistema.controlador_habilidades.dict_habilidades
-                self.controlador_sistema.controlador_habilidades.listar_habilidades()
+                habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                self.__controlador_sistema.controlador_habilidades.listar_habilidades()
                 cod_validos_hab = list(habilidade.keys()) + [0]
-                identificador_hab = self.tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
+                identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
                 if habilidade[identificador_hab].origem == 'especie':
                     if identificador_hab == 0:
                         return
                     else:
-                        especie = self.dict_especie[identificador_esp]
+                        especie = self.__dict_especie[identificador_esp]
                         especie.add_habilidade(habilidade[identificador_hab])
-                        self.tela_especies.mensagem('Hablidade adicionada!')
+                        self.__tela_especies.mensagem('Hablidade adicionada!')
                         return True
                 else:
-                    self.tela_especies.mensagem('Origem invalida')
+                    self.__tela_especies.mensagem('Origem invalida')
                     return
         except:
             return False
@@ -173,26 +186,24 @@ class ControladorEspecies:
     def add_habilidade_subespecie(self):
         self.listar_subespecies()
         try:
-            cod_validos_sub = list(self.dict_subespecie.keys()) + [0]
-            identificador_sub = self.tela_especies.selecionar_obj_por_cod('subespecie', cod_validos_sub)
+            cod_validos_sub = list(self.__dict_subespecie.keys()) + [0]
+            identificador_sub = self.__tela_especies.selecionar_obj_por_cod('subespecie', cod_validos_sub)
             if identificador_sub == 0:
                 return
             else:
-                habilidade = self.controlador_sistema.controlador_habilidades.dict_habilidades
-                cod_validos_hab = list(habilidade.keys()) + [0]
-                identificador_hab = self.tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
-                self.controlador_sistema.controlador_habilidades.listar_habilidades()
-                if habilidade[identificador_hab].origem == 'subespecie':
-                    if identificador_hab == 0:
-                        return
-                    else:
-                        subespecie = self.dict_especie[identificador_sub]
-#isso era para ser um add_hab_sub, mas to fazendo algo errado acho. ou to mlk?
-                        subespecie.add_habilidade(habilidade[identificador_hab])
-                        self.tela_especies.mensagem('Hablidade adicionada!')
-                        return True
+                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                cod_validos_hab = list(habilidades.keys()) + [0]
+                self.__controlador_sistema.controlador_habilidades.listar_habilidades()
+                identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
+                if identificador_hab == 0:
+                    return
+                elif habilidades[identificador_hab].origem == 'subespecie':
+                    subespecie = self.__dict_subespecie[identificador_sub]
+                    subespecie.add_hab_sub(habilidades[identificador_hab])
+                    self.__tela_especies.mensagem('Hablidade adicionada!')
+                    return True
                 else:
-                    self.tela_especies.mensagem('Origem invalida')
+                    self.__tela_especies.mensagem('Origem invalida')
                     return
         except:
             return False
@@ -200,21 +211,21 @@ class ControladorEspecies:
     def remove_habilidade_especie(self):
         self.listar_especies()
         try:
-            cod_valido_esp = list(self.dict_especie.keys()) + [0]
-            identificador_esp = self.tela_especies.selecionar_obj_por_cod('especie', cod_valido_esp)
-            especie = self.dict_especie[identificador_esp]
+            cod_valido_esp = list(self.__dict_especie.keys()) + [0]
+            identificador_esp = self.__tela_especies.selecionar_obj_por_cod('especie', cod_valido_esp)
+            especie = self.__dict_especie[identificador_esp]
             if identificador_esp == 0:
                 return
             else:
-                habilidade = self.controlador_sistema.controlador_habilidades.dict_habilidades
+                habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 cod_valido_hab = list(habilidade.keys()) + [0]
-                self.tela_especies.mensagem(f'Lista de habilidades: {especie.habilidades}')
-                identificador_hab = self.tela_especies.selecionar_obj_por_cod('habilidade', cod_valido_hab)
+                self.__controlador_sistema.controlador_habilidades.listar_habilidades()
+                identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_valido_hab)
                 if identificador_hab == 0:
                     return
                 else:
                     especie.rm_hab(habilidade[identificador_hab])
-                    self.tela_especies.mensagem('Habilidade Removida!')
+                    self.__tela_especies.mensagem('Habilidade Removida!')
                     return True
         except:
             return False
@@ -222,27 +233,27 @@ class ControladorEspecies:
     def remove_habilidade_subespecie(self):
         self.listar_subespecies()
         try:
-            cod_validos_sub = list(self.dict_subespecie.keys()) + [0]
-            identificador_sub = self.tela_especies.selecionar_obj_por_cod('subespecie', cod_validos_sub)
+            cod_validos_sub = list(self.__dict_subespecie.keys()) + [0]
+            identificador_sub = self.__tela_especies.selecionar_obj_por_cod('subespecie', cod_validos_sub)
             if identificador_sub == 0:
                 return
             else:
-                habilidade = self.controlador_sistema.controlador_habilidades.dict_habilidades
-                subespecie = self.dict_subespecie[identificador_sub]
+                habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                subespecie = self.__dict_subespecie[identificador_sub]
                 cod_validos_hab = list(habilidade.keys())
-                self.tela_especies.mensagem(f'Lista de habilidades: {subespecie.habilidades}')
-                identificador_hab = self.tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
+                self.__controlador_sistema.__controlador_habilidades.listar_habilidades()
+                identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
                 if identificador_hab == 0:
                     return
                 else:
                     subespecie.rm_hab_sub(habilidade[identificador_hab])
-                    self.tela_especies.mensagem('Habilidade Removida!')
+                    self.__tela_especies.mensagem('Habilidade Removida!')
                     return True
         except:
             return False
 
     def retornar(self):
-        self.controlador_sistema.abre_tela()
+        self.__controlador_sistema.abre_tela()
     
     def retornar_tela_especie(self):
         self.abre_tela()
@@ -258,7 +269,7 @@ class ControladorEspecies:
             0: self.abre_tela
         }
         while True:
-            opc = self.tela_especies.mostra_tela_especie()
+            opc = self.__tela_especies.mostra_tela_especie()
             metodo = opcoes[opc]
             metodo()
 
@@ -273,7 +284,7 @@ class ControladorEspecies:
             0: self.abre_tela
         }
         while True:
-            opc = self.tela_especies.mostra_tela_subespecie()
+            opc = self.__tela_especies.mostra_tela_subespecie()
             metodo = opcoes[opc]
             metodo()
 
@@ -284,7 +295,7 @@ class ControladorEspecies:
             0: self.retornar
         }
         while True:
-            opc = self.tela_especies.mostra_tela()
+            opc = self.__tela_especies.mostra_tela()
             metodo = opcoes[opc]
             metodo()
 

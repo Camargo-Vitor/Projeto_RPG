@@ -60,7 +60,6 @@ class TelaEspecies(TelaAbstrata):
         print(f"{dados_especie['altura']:^18}", end=' | ')
         print(f"{str(dados_especie['habilidades']):^9}")
 
-    #Não sei como arrumar mostra_especie
     def mostra_subespecie(self, dados_subespecie: dict):
-        self.mostra_especie()
-        print(f"{dados_subespecie['habilidades']:^25}")
+        self.mostra_especie(dados_subespecie)
+        print(f"{str(dados_subespecie['habilidades_esp']):^25}")

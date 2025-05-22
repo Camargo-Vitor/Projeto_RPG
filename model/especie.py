@@ -5,11 +5,12 @@ class Especie():
     def __init__(self,
                  nome: str,
                  deslocamento: float,
-                 altura: int):
+                 altura: int,
+                 habilidades = []):
         self.__nome = nome
         self.__deslocamento = deslocamento
         self.__altura = altura
-        self.__habilidades = []
+        self.__habilidades = habilidades
 
     @property
     def nome(self):     
