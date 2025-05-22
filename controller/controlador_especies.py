@@ -144,8 +144,7 @@ class ControladorEspecies:
                         return
                     else:
                         especie = self.dict_especie[identificador_esp]
-                        [habilidade.nome for hab in especie.habilidades]
-                        especie.habilidades.append(habilidade.nome, habilidade.nivel, habilidade.pagina)
+                        especie.habilidades.append(habilidade.nome)
                         self.tela_especies.mensagem('Hablidade adicionada!')
                         return True
                 else:
