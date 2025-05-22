@@ -2,8 +2,6 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaMagias(TelaAbstrata):
-    def le_int_ou_float(self, mensagem, conjunto_alvo = None, positivo = False, tipo = 'int'):
-        return super().le_int_ou_float(mensagem, conjunto_alvo, positivo, tipo)
 
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
         print('==== Magias ====')

@@ -16,7 +16,6 @@ class TelaAbstrata(ABC):
 
         return opc
 
-    @abstractmethod
     def le_int_ou_float(self, mensagem: str, conjunto_alvo: list=None, positivo: bool=False, tipo: str='int'):
         while True:
             try:
