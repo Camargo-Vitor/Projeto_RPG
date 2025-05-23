@@ -3,6 +3,7 @@ from controller.controlador_especies import ControladorEspecies
 from controller.controlador_magias import ControladorMagias
 from controller.controlador_habilidades import ControladorHabilidades
 from controller.controlador_pessoas import ControladorPessoas
+from controller.controlador_classses import ControladorClasses
 from views.tela_sistema import TelaSistema
 
 
@@ -13,6 +14,7 @@ class ControladorSistema:
         self.__controlador_magias = ControladorMagias(self)
         self.__controlador_habilidades = ControladorHabilidades(self)
         self.__controlador_pessoas = ControladorPessoas(self)
+        self.__controlador_classes = ControladorClasses(self)
         self.__tela_sistema = TelaSistema()
 
     def inicializa_sistema(self):
@@ -33,6 +35,9 @@ class ControladorSistema:
     def chama_pessoas(self):
         self.__controlador_pessoas.abre_tela()
 
+    def chama_classe(self):
+        self.__controlador_classes.abre_tela()
+
     def encerra_sistema(self):
         exit(0)
 
@@ -42,7 +47,8 @@ class ControladorSistema:
             2: self.chama_magia,
             3: self.chama_habilidade,
             4: self.chama_especie,
-            7: self.chama_pessoas,
+            5: self.chama_classe,
+            6: self.chama_pessoas,
             0: self.encerra_sistema
         }
 
