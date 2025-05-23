@@ -15,17 +15,20 @@ class ControladorItens:
         self.__cod = 1
 
     def pega_item_por_nome(self, nome: str):
-        for item in self.__dict_item.values():
-            if item.nome == nome:
-                return item
-        return None
+        try:
+            for item in self.__dict_item.values():
+                if item.nome == nome:
+                    return item
+            return None
+        except Exception as e:
+            raise Exception(f"[ERRO INESPERADO] Erro ao buscar item por nome: {e}")
 
     def incluir_item(self):
         try:
             dados_item = self.__tela_itens.pegar_dados_item()
             i = self.pega_item_por_nome(dados_item['nome'])
             if i:
-                raise ItemJahExisteException()
+                raise ItemJahExisteException(dados_item['nome'])
             else:
                 item = Item(
                             dados_item['nome'],
@@ -42,7 +45,7 @@ class ControladorItens:
         except KeyError as e:
             self.__tela_itens.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
-            self.__tela_itens.mensagem(f"[ERRO INESPERADO] Ocorreu um erro inesperado: {str(e)}")
+            self.__tela_itens.mensagem(f"[ERRO INESPERADO] Erro ao incluir Item: {str(e)}")
 
     def listar_itens(self):
         try:
@@ -59,11 +62,11 @@ class ControladorItens:
                 )
 
         except Exception as e:
-            self.__tela_itens.mensagem(f"Ocorreu um erro ao listar os itens: {str(e)}")
+            self.__tela_itens.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens: {str(e)}")
 
     def excluir_item(self):
-        self.listar_itens()
         try:
+            self.listar_itens()
             cod_validos = list(self.__dict_item.keys()) + [0]
             identificador = self.__tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0:

@@ -39,6 +39,7 @@ class ControladorSistema:
         self.__controlador_classes.abre_tela()
 
     def encerra_sistema(self):
+        self.__tela_sistema.mensagem('A aplicação falhou com sucesso!')
         exit(0)
 
     def abre_tela(self):
@@ -53,10 +54,33 @@ class ControladorSistema:
         }
 
         while True:
-            opc_escolhida = self.__tela_sistema.mostra_tela()
-            funcao_escolhida = opcoes[opc_escolhida]
-            funcao_escolhida()
-    
+            try:
+                opc_escolhida = self.__tela_sistema.mostra_tela()
+                funcao_escolhida = opcoes[opc_escolhida]
+                funcao_escolhida()
+            except Exception as e:
+                self.__tela_sistema.mensagem(f'[ERRO INESPERADO] Erro interno: {e}')
+
+    @property
+    def controlador_itens(self):
+        return self.__controlador_itens
+
+    @property
+    def controlador_especies(self):
+        return self.__controlador_especies
+
+    @property
+    def controlador_magias(self):
+        return self.__controlador_magias
+
     @property
     def controlador_habilidades(self):
         return self.__controlador_habilidades
+
+    @property
+    def controlador_pessoas(self):
+        return self.__controlador_pessoas
+
+    @property
+    def controlador_classes(self):
+        return self.__controlador_classes

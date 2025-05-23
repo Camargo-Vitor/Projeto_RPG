@@ -45,11 +45,14 @@ class TelaAbstrata(ABC):
                 print(f'[ERRO INESPERADO] Ocorreu um erro inesperado: {str(e)}')
 
     def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
-        print(f'===== Busca {obj.title()} =====')
-        identificador = self.le_int_ou_float('Digite o Identificador desejado (0 para cancelar): ',
-                                    conjunto_alvo = total_codigos
-                                    )
-        return identificador
+        try:
+            print(f'===== Busca {obj.title()} =====')
+            identificador = self.le_int_ou_float('Digite o Identificador desejado (0 para cancelar): ',
+                                        conjunto_alvo = total_codigos
+                                        )
+            return identificador
+        except Exception as e:
+            print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')
 
     def mensagem(self, msg):
         print(msg)

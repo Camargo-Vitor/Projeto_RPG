@@ -1,4 +1,5 @@
 from model.habilidade import Habilidade
+from model.exceptions.excpetion_habilidades import *
 from views.tela_habilidades import TelaHabilidades
 from typing import TYPE_CHECKING
 
@@ -11,48 +12,61 @@ class ControladorHabilidades:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_habilidades = TelaHabilidades()
-        self.__dict_habilidades: dict[int, Habilidade] = dict()
+        self.__dict_habilidades: dict[int, Habilidade] = {1: Habilidade('Hab_especie', 1, 45, 'especie'), 2: Habilidade('Hab_subespecie', 2, 46, 'subespecie')}# ALTERAR, DADOS PARA TESTE
         self.__cod = 1
 
     def pega_habilidade_por_nome(self, nome: str):
-        for hab in self.__dict_habilidades.values():
-            if hab.nome == nome:
-                return hab
-        return None
+        try:
+            for hab in self.__dict_habilidades.values():
+                if hab.nome == nome:
+                    return hab
+            return None
+        except Exception as e:
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao selecionar habilidade: {e}')
     
     def incluir_habilidade(self):
-        dados_hab = self.__tela_habilidades.pegar_dados_habilidade()
-        hab = self.pega_habilidade_por_nome(dados_hab['nome'])
-        if hab == None:
-            nova_habilidade = Habilidade(
-                dados_hab['nome'],
-                dados_hab['nivel'],
-                dados_hab['pagina'],
-                dados_hab['origem']
-            )
-            self.__dict_habilidades[self.__cod] = nova_habilidade
-            self.__cod += 1
-            self.__tela_habilidades.mensagem('Habilidade criada com sucesso!')
-        else:
-            self.tela_habilidade.mensagem(f'ATENÇÃO: A habilidade "{dados_hab["nome"]}" já existe')
-        return False
+        try:
+            dados_hab = self.__tela_habilidades.pegar_dados_habilidade()
+            hab = self.pega_habilidade_por_nome(dados_hab['nome'])
+            if hab == None:
+                nova_habilidade = Habilidade(
+                    dados_hab['nome'],
+                    dados_hab['nivel'],
+                    dados_hab['pagina'],
+                    dados_hab['origem']
+                )
+                self.__dict_habilidades[self.__cod] = nova_habilidade
+                self.__cod += 1
+                self.__tela_habilidades.mensagem('Habilidade criada com sucesso!')
+                return True
+            else:
+                raise HabilidadeJahExiste(dados_hab['nome'])
+        
+        except HabilidadeJahExiste as e:
+            self.__tela_habilidades.mensagem(e)
+        except Exception as e:
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao incluir habilidade: {e}')
     
     def listar_habilidades(self):
-        self.__tela_habilidades.mensagem(f"{'cod':^4} | {'nome':^16} | {'nível':^5} | {'pagina':^6} | {'origem':^10}")
-        for key, habilidade in self.__dict_habilidades.items():
-            self.__tela_habilidades.mostra_habilidade(
-                {
-                'cod': key ,
-                'nome': habilidade.nome,
-                'nivel': habilidade.nivel,
-                'pagina': habilidade.pagina,
-                'origem': habilidade.origem
-                }
-            )
+        try:
+            self.__tela_habilidades.mensagem(f"{'cod':^4} | {'nome':^16} | {'nível':^5} | {'pagina':^6} | {'origem':^10}")
+            for key, habilidade in self.__dict_habilidades.items():
+                self.__tela_habilidades.mostra_habilidade(
+                    {
+                    'cod': key ,
+                    'nome': habilidade.nome,
+                    'nivel': habilidade.nivel,
+                    'pagina': habilidade.pagina,
+                    'origem': habilidade.origem
+                    }
+                )
+
+        except Exception as e:
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao listar habilidades: {e}')
     
     def excluir_habilidade(self):
-        self.listar_habilidades()
         try:
+            self.listar_habilidades()
             cod_validos = list(self.__dict_habilidades.keys()) + [0]
             identificador = self.__tela_habilidades.selecionar_obj_por_cod('habilidade', cod_validos)
             if identificador == 0:
@@ -61,16 +75,16 @@ class ControladorHabilidades:
                 del self.__dict_habilidades[identificador]
                 self.__tela_habilidades.mensagem('Habilidade removida!')
                 return True
-        except:
-            return False
+        except Exception as e:
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade: {e}')
 
     def alterar_habilidade_por_cod(self):
-        self.listar_habilidades()
         try:
+            self.listar_habilidades()
             cod_validos = list(self.__dict_habilidades.keys()) + [0]
             identificador = self.__tela_habilidades.selecionar_obj_por_cod('habilidades', cod_validos)
             if identificador == 0:
-                return
+                return False
             else:
                 habilidade = self.__dict_habilidades[identificador]
                 dados_novos = self.__tela_habilidades.pegar_dados_habilidade()
@@ -78,9 +92,10 @@ class ControladorHabilidades:
                 habilidade.nivel = dados_novos['nivel']
                 habilidade.pagina = dados_novos['pagina']
                 habilidade.origem = dados_novos['origem']
+                self.__tela_habilidades.mensagem(f'Habilidade de código {identificador} alterada com sucesso!')
                 return True
-        except:
-            return False
+        except Exception as e:
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao alterar habilidade: {e}')
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()
@@ -105,3 +120,7 @@ class ControladorHabilidades:
     @property
     def dict_habilidades(self):
         return self.__dict_habilidades
+
+    @property
+    def cod(self):
+        return self.__cod
