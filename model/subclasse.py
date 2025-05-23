@@ -1,15 +1,11 @@
-from model.classe import Classe
 from model.habilidade import Habilidade
 
 
-class Subclasse(Classe):
+class Subclasse():
     def __init__(self,
-                 nome: str,
                  nome_sub: str,
-                 dado_vida: int,
                  hab_especificas: list = []):
-        super().__init__(nome, dado_vida)
-        self.__nome = nome + ' ' + nome_sub
+        self.__nome = nome_sub
         self.__hab_espeficicas = hab_especificas
 
     @property
