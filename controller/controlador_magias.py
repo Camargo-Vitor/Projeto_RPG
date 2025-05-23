@@ -10,7 +10,13 @@ if TYPE_CHECKING:
 class ControladorMagias:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
-        self.__dict_magias: dict[int, Magia] = dict()
+        # O dicionário de "Magias" iniciaria normalmente vazio, porém
+        # para demonstração, utilzaremos alguns objetos já instanciados. 
+        # Estes objetos receberão códigos acima de 999.
+        self.__dict_magias: dict[int, Magia] = {
+            1000: Magia('Bola de fogo', 1, 134),
+            1001: Magia('Congelar', 2, 134)
+        }
         self.__tela_magias = TelaMagias()
         self.__cod = 1
 

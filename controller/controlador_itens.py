@@ -10,7 +10,14 @@ if TYPE_CHECKING:
 class ControladorItens:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
-        self.__dict_item: dict[int, Item] = dict()
+        # O dicionário de "Itens" iniciaria normalmente vazio, porém
+        # para demonstração, utilzaremos alguns objetos já instanciados. 
+        # Estes objetos receberão códigos acima de 999.
+        self.__dict_item: dict[int, Item] = {
+            1000: Item('Flecha', 1, 'comum', 40),
+            1001: Item('Capacete', 10, 'raro', 45),
+            1002: Item('Mapa', 5, 'comum', 70)
+        }
         self.__tela_itens = TelaItens()
         self.__cod = 1
 

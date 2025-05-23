@@ -11,8 +11,17 @@ class ControladorHabilidades:
 
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
+        # O dicionário de "Habilidades" iniciaria normalmente vazio, porém
+        # para demonstração, utilzaremos alguns objetos já instanciados. 
+        # Estes objetos receberão códigos acima de 999.
+        self.__dict_habilidades: dict[int, Habilidade] = {
+            1000: Habilidade('Hab_especie', 1, 45, 'especie'),
+            1001: Habilidade('Hab_subespecie', 2, 46, 'subespecie'),
+            1002: Habilidade('Hab_classe', 1, 67, 'classe'),
+            1003: Habilidade('Hab_subclasse', 1, 68, 'subclasse')
+        }
+
         self.__tela_habilidades = TelaHabilidades()
-        self.__dict_habilidades: dict[int, Habilidade] = {1: Habilidade('Hab_especie', 1, 45, 'especie'), 2: Habilidade('Hab_subespecie', 2, 46, 'subespecie')}# ALTERAR, DADOS PARA TESTE
         self.__cod = 1
 
     def pega_habilidade_por_nome(self, nome: str):
