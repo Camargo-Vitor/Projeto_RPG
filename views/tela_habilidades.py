@@ -4,7 +4,7 @@ from views.tela_abstrata import TelaAbstrata
 class TelaHabilidades(TelaAbstrata):
 
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
-        print('==== Habilidades ====')
+        print('===== Habilidades =====')
         print('1. Criar Habilidade')
         print('2. Excluir Habilidade')
         print('3. Listar Habilidades')

@@ -4,7 +4,7 @@ from views.tela_abstrata import TelaAbstrata
 class TelaMagias(TelaAbstrata):
 
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
-        print('==== Magias ====')
+        print('===== Magias =====')
         print('1. Criar Magia')
         print('2. Excluir Magia')
         print('3. Listar Magias')
