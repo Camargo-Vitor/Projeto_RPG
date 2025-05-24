@@ -5,7 +5,8 @@ class TelaFichas(TelaAbstrata):
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
         print('===== Fichas =====')
         print('1. Incluir Ficha')
-        print
+        print('2. Listar Ficha')
+        
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
@@ -93,3 +94,48 @@ class TelaFichas(TelaAbstrata):
             valores_sorteados.remove(num_escolhido)
 
         return sequencia_escolhida
+    
+    def mostra_ficha(self, dados_ficha: dict):
+        print(f"{dados_ficha['cod']:^4}", end= ' | ')
+        print(f"{dados_ficha['nome']:^16}")
+        
+    def mostra_ficha_inteira(self, dados_ficha: dict):
+        self.mostra_ficha()
+        print(f"{dados_ficha['nivel']:^4}")
+        print(f"{dados_ficha['vida']}")
+        print(f"{dados_ficha['vida_atual']}")
+        print(f"{dados_ficha['deslocamento']}")
+        print(f"{dados_ficha['fisíco']}")
+        print(f"{dados_ficha['altura']}")
+        print(f"{dados_ficha['historia']}")
+        print(f"{dados_ficha['classe']}")
+        print(f"{dados_ficha['especie']}")
+        print('><' * 8 + 'Utilitários' + '><' * 8)
+        print(f"{dados_ficha['inventario']}")
+        print(f"{dados_ficha['magias']}")
+        print(f"{dados_ficha['habilidades']}")
+
+
+        '''
+        return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
+        f'\nNome: {self.nome}\
+        \nVida: {self.vida}\
+        \nNível: {self.nivel}\
+        \nDeslocamento: {self.especie.deslocamento}\
+        \nFisico: {self.fisico}\
+        \nAltura: {self.altura}cm\
+        \nHistória: {self.historia}\
+        \nClasse: {self.classe.nome}\
+        \nEspecie: {self.especie.nome}\n' + \
+        '><' * 8 + 'Atributos' + '><' * 8 + f'\
+        \nForça: {self.__atributos["forca"]} ({(self.__atributos["forca"] - 10) // 2})\
+        \nDestreza: {self.__atributos["destreza"]} ({(self.__atributos["destreza"] - 10) // 2})\
+        \nConstituição: {self.__atributos["constituicao"]} ({(self.__atributos["constituicao"] - 10) // 2})\
+        \nInteligencia: {self.__atributos["inteligencia"]} ({(self.__atributos["inteligencia"] - 10) // 2})\
+        \nSabedoria: {self.__atributos["sabedoria"]} ({(self.__atributos["sabedoria"] - 10) // 2})\
+        \nCarisma: {self.__atributos["carisma"]} ({(self.__atributos["carisma"] - 10) // 2})\n' + \
+        '><' * 8 + 'Utilitários' + '><' * 8 + f'\
+        \nInventário: {"vazio" if self.inventario == [] else [str(x) for x in self.inventario]}\
+        \nMagias: {"Nenhuma magia" if self.lista_magias == [] else [str(x) for x in self.lista_magias]}\
+        \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else [str(x) for x in self.habilidades]}'
+        '''

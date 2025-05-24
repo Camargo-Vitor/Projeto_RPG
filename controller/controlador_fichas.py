@@ -22,7 +22,7 @@ class ControladorFichas:
             dados__basicos_ficha = self.__tela_fichas.pegar_dados_basicos_ficha()
 
             #classe
-            self.__controlador_sistema.controlador_classes.listar_classes()
+            self.__controlador_sistema.controlador_classes.listar_classes_e_subclasses()
             codigos_validos = list(self.__controlador_sistema.controlador_classes.dict_classes.keys()) + [0]
             codigo_classe = self.__tela_fichas.le_int_ou_float(
                 'Digite o código da classe (0 para cancelar): ',
@@ -65,7 +65,39 @@ class ControladorFichas:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao criar Ficha: {e} ({type(e).__name__})')
 
     def listar_ficha(self):
-        pass
+        try:
+            cod_validos = list(self.dict_fichas.keys()) + [0]
+            self.__tela_fichas.mensagem(f"{'Cod':^4} | {'Nome':^16}")
+            for key, ficha_cod in self.__dict_fichas.items():
+                self.__tela_fichas.mostra_ficha(
+                    {
+                        'cod': key,
+                        'nome': ficha_cod.nome
+                    }
+                )
+                identificador = self.tela_fichas.selecionar_obj_por_cod(f'fichas', cod_validos)
+                if identificador == 0:
+                    return False
+                else:
+                    ficha = self.dict_fichas[identificador]
+                    self.__tela_fichas.mostra_ficha_inteira(
+                        {
+                            ficha.nivel,
+                            ficha.vida,
+                            ficha.vida_atual,
+                            ficha.deslocamento,
+                            ficha.fisico,
+                            ficha.altura,
+                            ficha.historia,
+                            ficha.classe,
+                            ficha.especie,
+                            ficha.inventario,
+                            ficha.lista_magias
+                        }
+                    )
+        except Exception as e:
+            self.tela_fichas.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens: {str(e)}")
+
 
     def adicionar_item_ficha(self):
         try:
@@ -174,7 +206,9 @@ class ControladorFichas:
             1: self.incluir_ficha,
             2: self.listar_ficha,
             3: self.adicionar_item_ficha,
-            4: self.adicionar_magia_ficha,
+            4: self.remover_item_ficha,
+            5: self.adicionar_magia_ficha,
+            6: self.remover_magia_ficha,
             0: self.retornar
         }
         opc = self.__tela_fichas.mostra_tela()
