@@ -3,8 +3,9 @@ from random import randint
 
 class TelaFichas(TelaAbstrata):
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
-        print('==== Fichas ====')
+        print('===== Fichas =====')
         print('1. Incluir Ficha')
+        print
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
@@ -65,7 +66,7 @@ class TelaFichas(TelaAbstrata):
         }
         pericias_treinadas = []
         for i in range(5):
-            num_pericia = self.le_int_ou_float(f'Selecione uma pericia ({i+1}/5): ', conjunto_alvo=list(range(19)) - [0])
+            num_pericia = self.le_int_ou_float(f'Selecione uma pericia ({i+1}/5): ', conjunto_alvo=list(range(1, 19)))
             pericias_treinadas.append(dic_num_pericias[num_pericia])
         return pericias_treinadas
 

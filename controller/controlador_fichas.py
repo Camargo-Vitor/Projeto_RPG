@@ -64,12 +64,117 @@ class ControladorFichas:
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao criar Ficha: {e} ({type(e).__name__})')
 
+    def listar_ficha(self):
+        pass
+
+    def adicionar_item_ficha(self):
+        try:
+            self.listar_ficha()
+            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
+            if identificador_ficha == 0:
+                return False
+            else:
+                item = self.__controlador_sistema.controlador_itens.dict_item
+                self.__controlador_sistema.controlador_itens.listar_itens()
+                codigos_validos_item = list(item.keys()) + [0]
+                identificador_item = self.__tela_fichas.selecionar_obj_por_cod('item', codigos_validos_item)
+                if identificador_item == 0:
+                    return False
+                else:
+                    ficha = self.dict_fichas[identificador_ficha]
+                    ficha.add_item_inventario(item[identificador_item])
+                    self.__tela_fichas.mensagem('Item adicionada ao inventário!')
+                    return True
+        except KeyError as e:
+            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+        except Exception as e:
+            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Item: {e}')
+            
+    def adicionar_magia_ficha(self):
+        try:
+            self.listar_ficha()
+            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
+            if identificador_ficha == 0:
+                return False
+            else:
+                magia = self.__controlador_sistema.controlador_magias.__dict_magias
+                self.__controlador_sistema.controlador_magias.listar_magias()
+                codigos_validos_magia = list(magia.keys()) + [0]
+                identificador_magia = self.__tela_fichas.selecionar_obj_por_cod('magia', codigos_validos_magia)
+                if identificador_magia == 0:
+                    return False
+                else:
+                    ficha = self.dict_fichas[identificador_ficha]
+                    ficha.add_magia(magia[identificador_magia])
+                    self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
+                    return True
+        except KeyError as e:
+            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+        except Exception as e:
+            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Magia: {e}')
+
+    def remover_item_ficha(self):
+        try:
+            self.listar_ficha()
+            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
+            if identificador_ficha == 0:
+                return False
+            else:
+                item = self.__controlador_sistema.controlador_itens.dict_item
+                self.__controlador_sistema.controlador_itens.listar_itens()
+                codigos_validos_item = list(item.keys()) + [0]
+                identificador_item = self.__tela_fichas.selecionar_obj_por_cod('item', codigos_validos_item)
+                if identificador_item == 0:
+                    return False
+                else: 
+                    ficha = self.dict_fichas[identificador_ficha]
+                    ficha.rm_item_inventario(item[identificador_item])
+                    self.__tela_fichas.mensagem('Item removido do inventário!')
+                    return True
+                
+                
+        except KeyError as e:
+            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+        except Exception as e:
+            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Item: {e}')
+            
+    def remover_magia_ficha(self):
+        try:
+            self.listar_ficha()
+            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
+            if identificador_ficha == 0:
+                return False
+            else:
+                magia = self.__controlador_sistema.controlador_magias.__dict_magias
+                self.__controlador_sistema.controlador_magias.listar_magias()
+                codigos_validos_magia = list(magia.keys()) + [0]
+                identificador_magia = self.__tela_fichas.selecionar_obj_por_cod('magia', codigos_validos_magia)
+                if identificador_magia == 0:
+                    return False
+                else:
+                    ficha = self.dict_fichas[identificador_ficha]
+                    ficha.rm_magia(magia[identificador_magia])
+                    self.__tela_fichas.mensagem('Magia removida!')
+                    return True
+        except KeyError as e:
+            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+        except Exception as e:
+            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Magia: {e}')
+
+
     def retornar(self):
         self.__controlador_sistema.abre_tela()
 
     def abre_tela(self):
         opcoes = {
             1: self.incluir_ficha,
+            2: self.listar_ficha,
+            3: self.adicionar_item_ficha,
+            4: self.adicionar_magia_ficha,
             0: self.retornar
         }
         opc = self.__tela_fichas.mostra_tela()
