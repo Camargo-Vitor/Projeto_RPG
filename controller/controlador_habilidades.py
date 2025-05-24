@@ -56,10 +56,33 @@ class ControladorHabilidades:
         except Exception as e:
             self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao incluir habilidade: {e}')
     
-    def listar_habilidades(self):
+    def listar_habilidades(self, origem='todas'):
         try:
             self.__tela_habilidades.mensagem(f"{'cod':^4} | {'nome':^16} | {'nível':^5} | {'pagina':^6} | {'origem':^10}")
-            for key, habilidade in self.__dict_habilidades.items():
+            if origem == 'todas':
+                habilidades_filtradas = {
+                    k: h for k, h in self.__dict_habilidades.items()
+                }
+            elif origem == 'classe':
+                habilidades_filtradas = {
+                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'classe'
+                }
+            elif origem == 'subclasse':
+                habilidades_filtradas = {
+                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'subclasse'
+                }
+            elif origem == 'especie':
+                habilidades_filtradas = {
+                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'especie'
+                }
+            elif origem == 'subespecie':
+                habilidades_filtradas = {
+                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'subespecie'
+                }
+            else:
+                raise ValueError("[ERRO] Origem inválida")
+
+            for key, habilidade in habilidades_filtradas.items():
                 self.__tela_habilidades.mostra_habilidade(
                     {
                     'cod': key ,
