@@ -4,9 +4,9 @@ from model.subclasse import Subclasse
 
 class Classe():
     def __init__(self, nome: str, dado_vida: int, nomes_sub: list[str], habilidades = [], hab_especificas = []):
-        self.__nome = nome
-        self.__dado_vida = dado_vida
-        self.__habilidades = habilidades
+        self.__nome: str = nome
+        self.__dado_vida: int = dado_vida
+        self.__habilidades: list[Habilidade] = habilidades
         self.__subclasses: list[Subclasse] = []
         for a in range(3):
             self.__subclasses.append(Subclasse(nomes_sub[a], hab_especificas))
@@ -24,9 +24,8 @@ class Classe():
         return self.__habilidades
     
     @property
-    def subclasse(self):
+    def subclasses(self):
         return self.__subclasses
-        
 
     @nome.setter
     def nome(self, nome):
@@ -50,6 +49,6 @@ class Classe():
 
     def rm_hab(self, habilidade: Habilidade):
         if habilidade in self.habilidades:
-            self.habilidades.remove(habilidade)
+            self.__habilidades.remove(habilidade)
         else:
             raise KeyError("[ERRO] Habilidade não encontrada")

@@ -27,41 +27,37 @@ class ControladorClasses:
                 classe = Classe(
                     dados_classe['nome'],
                     dados_classe['dado'],
-                    dados_classe['nomes sub']
+                    dados_classe['nomes_sub']
                 )
                 self.__dict__classes[self.__cod] = classe
                 self.__cod += 1
                 self.__tela_classes.mensagem('Classe criada com sucesso!')
                 print(classe)
-                print(classe.__subclasses)
+                print(classe.subclasses)
         else:
             self.__tela_classes.mensagem('A classe criada ja existe!')
     
-    def listar_classes(self):
+    def listar_classes_e_subclasses(self, classes=True, subclasses=True):
         try:
-            self.__tela_classes.mensagem(f"{'Cod':^4} | {'Nome':^10} | {'Dado':^5}")
             for key, classe in self.__dict__classes.items():
-                self.__tela_classes.mostra_classe(
+                self.__tela_classes.mostra_classe_e_subclasse(
                     {
                         'cod': key,
                         'nome': classe.nome,
                         'dado': classe.dado_vida,
                         'habilidades': [hab.nome for hab in classe.habilidades],
-                    }
+                        'nomes_sub': [sub.nome for sub in classe.subclasses],
+                        'habilidades_sub': [subclasse.hab_especificas for subclasse in classe.subclasses]
+                    }, 
+                    classe=classes, subclasse=subclasses
                 )
-                for a in range(3):
-                    self.__tela_classes.mostra_classe(
-                        {
-                            'nomes sub': str([sub.nome for sub in classe.subclasse]),
-                            'habilidades sub': str([sub_hab.nome for sub_hab in classe])
-                        }
-                    )
+
         except Exception as e:
-            self.tela_classes.mensagem(f'ERRO INESPERADO Erro ao listar classe: {e}')
+            self.__tela_classes.mensagem(f'ERRO INESPERADO Erro ao listar classe: {e}')
 
     def excluir_classe(self):
         try:
-            self.listar_classes()
+            self.listar_classes_e_subclasses(subclasses=False)
             cod_validos = list(self.__dict__classes.keys()) + [0]
             identificador = self.__tela_classes.selecionar_obj_por_cod('classe', cod_validos)
             if identificador == 0:
@@ -72,7 +68,53 @@ class ControladorClasses:
                 return True
         except Exception as e:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao excluir classe: {e}') 
-            
+
+    def alterar_dados_base_classe(self):
+        try:
+            self.listar_classes_e_subclasses(subclasses=False)
+            codigos_validos = list(self.__dict__classes.keys()) + [0]
+            identificador = self.__tela_classes.le_int_ou_float(
+                'Digite o código da classe: (0 para cancelar) ',
+                conjunto_alvo=codigos_validos
+            )
+            if identificador == 0:
+                return False
+            else:
+                classe = self.__dict__classes[identificador]
+                novos_dados = self.__tela_classes.pegar_dados_classes(basico=True)
+                classe.nome = novos_dados['nome']
+                classe.dado_vida = novos_dados['dado']
+        except Exception as e:
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao modificar dados base de classe: {e}') 
+
+    def adiciona_hab_classe(self):
+            try:
+                self.listar_classes_e_subclasses(subclasses=False)
+                codigos_validos = list(self.__dict__classes.keys()) + [0]
+                identificador = self.__tela_classes.le_int_ou_float(
+                    'Digite o código da classe: (0 para cancelar) ',
+                    conjunto_alvo=codigos_validos
+                )
+                if identificador == 0:
+                    return False
+                else:
+                    classe = self.__dict__classes[identificador]
+                    self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='classe')
+                    codigos_validos = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
+                    identificador = self.__tela_classes.le_int_ou_float(
+                        'Digite o código da classe: (0 para cancelar) ',
+                        conjunto_alvo=codigos_validos
+                    )
+                    if identificador == 0:
+                        return False
+                    else:
+                        habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador]
+                        classe.add_hab(habilidade)
+                        return True
+            except Exception as e:
+                self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em classe: {e}')
+                    
+        
     def retornar(self):
         self.__controlador_sistema.abre_tela()
 
@@ -80,7 +122,9 @@ class ControladorClasses:
         opcoes = {
             1: self.incluir_classe,
             2: self.excluir_classe,
-            3: self.listar_classes,
+            3: self.listar_classes_e_subclasses,
+            4: self.alterar_dados_base_classe,
+            5: self.adiciona_hab_classe,
             0: self.retornar
         }
 
