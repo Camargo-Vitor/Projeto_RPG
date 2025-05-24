@@ -24,32 +24,40 @@ class ControladorClasses:
         dados_classe = self.__tela_classes.pegar_dados_classes()
         c = self.pega_classe_por_nome(dados_classe['nome'])
         if c is None:
-            for a in range(3):
                 classe = Classe(
                     dados_classe['nome'],
                     dados_classe['dado'],
-                    dados_classe['nome sub'][a]
+                    dados_classe['nome sub']
                 )
-            self.__dict__classes[self.__cod] = classe
-            self.__cod += 1
-            self.__tela_classes.mensagem('Classe criada com sucesso!')
+                self.__dict__classes[self.__cod] = classe
+                self.__cod += 1
+                self.__tela_classes.mensagem('Classe criada com sucesso!')
+                print(classe)
+                print(classe.__subclasses)
         else:
             self.__tela_classes.mensagem('A classe criada ja existe!')
     
     def listar_classes(self):
         try:
-            self.__tela_classes.mensagem(f"{'Cod':^4} | {'Nome':^10} | {'Dado':^5} | {'Nome sub':^13} | {'Habilidades':^9} | {'Habilidades sub':^13}")
+            self.__tela_classes.mensagem(f"{'Cod':^4} | {'Nome':^10} | {'Dado':^5}")
             for key, classe in self.__dict__classes.items():
-                self.__tela_classes.mostra_classes(
+                self.__tela_classes.mostra_classe(
                     {
                         'cod': key,
                         'nome': classe.nome,
                         'dado': classe.dado_vida,
-                        'nome sub': [clas.nome for clas in classe.subclasse],
                         'habilidades': [hab.nome for hab in classe.habilidades],
  
                     }
                 )
+           # self.__tela_classes.mensagem(f"{'Nome sub':^13} | {'Habilidades':^9}")
+           # for sub_classe in self.__dict__classes.items():
+                #self.__tela_classes.mostra_subclasse(
+                        #{
+                        #    'nomes sub': sub_classe,
+                        #    'habilidades_sub':  sub_classe
+                        #    }
+               # )
         except Exception as e:
             self.tela_classes.mensagem(f'ERRO INESPERADO Erro ao listar classe: {e}')
 
@@ -73,6 +81,8 @@ class ControladorClasses:
     def abre_tela(self):
         opcoes = {
             1: self.incluir_classe,
+            2: self.listar_classes,
+            3: self.excluir_classe,
             0: self.retornar
         }
 
