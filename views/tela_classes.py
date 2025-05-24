@@ -39,11 +39,9 @@ class TelaClasses(TelaAbstrata):
         print(f"{dados_classe['nome']:^10}", end = ' | ')
         print(f"{dados_classe['dado']:^5}", end= ' | ')
         print(f"{str(dados_classe['habilidades']):^ 9}")
-
-    def mostra_subclasse(self, dados_subclasse: dict):
         for a in range(3):
-            print(f"{str(dados_subclasse['nomes sub'][a]):^13}", end= ' | ')
-            print(f"{str(dados_subclasse['habilidades sub'][a]):^13}")
+                print(f"{str(dados_classe['nomes sub']):^13}", end= ' | ')
+                print(f"{str(dados_classe['habilidades sub']):^13}")
 
 
 

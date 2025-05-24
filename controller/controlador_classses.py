@@ -27,7 +27,7 @@ class ControladorClasses:
                 classe = Classe(
                     dados_classe['nome'],
                     dados_classe['dado'],
-                    dados_classe['nome sub']
+                    dados_classe['nomes sub']
                 )
                 self.__dict__classes[self.__cod] = classe
                 self.__cod += 1
@@ -47,17 +47,15 @@ class ControladorClasses:
                         'nome': classe.nome,
                         'dado': classe.dado_vida,
                         'habilidades': [hab.nome for hab in classe.habilidades],
- 
                     }
                 )
-           # self.__tela_classes.mensagem(f"{'Nome sub':^13} | {'Habilidades':^9}")
-           # for sub_classe in self.__dict__classes.items():
-                #self.__tela_classes.mostra_subclasse(
-                        #{
-                        #    'nomes sub': sub_classe,
-                        #    'habilidades_sub':  sub_classe
-                        #    }
-               # )
+                for a in range(3):
+                    self.__tela_classes.mostra_classe(
+                        {
+                            'nomes sub': str([sub.nome for sub in classe.subclasse]),
+                            'habilidades sub': str([sub_hab.nome for sub_hab in classe])
+                        }
+                    )
         except Exception as e:
             self.tela_classes.mensagem(f'ERRO INESPERADO Erro ao listar classe: {e}')
 
@@ -81,8 +79,8 @@ class ControladorClasses:
     def abre_tela(self):
         opcoes = {
             1: self.incluir_classe,
-            2: self.listar_classes,
-            3: self.excluir_classe,
+            2: self.excluir_classe,
+            3: self.listar_classes,
             0: self.retornar
         }
 
