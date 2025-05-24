@@ -3,13 +3,13 @@ from model.subclasse import Subclasse
 
 
 class Classe():
-    def __init__(self, nome: str, dado_vida: int, nomes_sub: list[str], habilidades = [], hab_especificas = []):
+    def __init__(self, nome: str, dado_vida: int, nomes_sub: list[str], habilidades = []):
         self.__nome: str = nome
         self.__dado_vida: int = dado_vida
         self.__habilidades: list[Habilidade] = habilidades
         self.__subclasses: list[Subclasse] = []
         for a in range(3):
-            self.__subclasses.append(Subclasse(nomes_sub[a], hab_especificas))
+            self.__subclasses.append(Subclasse(nomes_sub[a]))
                  
     @property
     def nome(self):

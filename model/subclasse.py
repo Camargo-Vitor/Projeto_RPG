@@ -3,10 +3,9 @@ from model.habilidade import Habilidade
 
 class Subclasse():
     def __init__(self,
-                 nome_sub: str,
-                 hab_especificas: list = []):
+                 nome_sub: str):
         self.__nome = nome_sub
-        self.__hab_espeficicas = hab_especificas
+        self.__hab_espeficicas = []
 
     @property
     def nome(self):
@@ -29,4 +28,9 @@ class Subclasse():
             self.__hab_espeficicas.append(habilidade)
         else:
             raise ValueError("[ERRO] Habilidade não adicionada, valor inválido")
-    
+
+    def rm_hab(self, habilidade: Habilidade):
+        if habilidade in self.__hab_espeficicas:
+            self.__hab_espeficicas.remove(habilidade)
+        else:
+            raise KeyError("[ERRO] Habilidade não encontrada")

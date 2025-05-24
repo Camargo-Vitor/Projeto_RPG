@@ -3,7 +3,7 @@ from controller.controlador_especies import ControladorEspecies
 from controller.controlador_magias import ControladorMagias
 from controller.controlador_habilidades import ControladorHabilidades
 from controller.controlador_pessoas import ControladorPessoas
-from controller.controlador_classses import ControladorClasses
+from controller.controlador_classes import ControladorClasses
 from controller.controlador_fichas import ControladorFichas
 from views.tela_sistema import TelaSistema
 
