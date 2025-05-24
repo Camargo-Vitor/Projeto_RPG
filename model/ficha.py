@@ -6,12 +6,18 @@ from random import randint
 
 
 class Ficha:
-    def __init__(self, nome: str, fisico: str, historia: str, \
-                classe: Classe, especie: Especie, pericias_treinadas: list):
-        self.__nome = nome.strip().lower()
-        self.__fisico = fisico.strip().lower()
+    def __init__(self,
+                 nome_personagem: str,
+                 descricao_fisica: str,
+                 historia: str,
+                 classe: Classe,
+                 especie: Especie,
+                 pericias_treinadas: list[str],
+                 atributos: list[int]):
+        self.__nome = nome_personagem
+        self.__fisico = descricao_fisica
         self.__altura = especie.altura
-        self.__historia = historia.strip().lower()
+        self.__historia = historia
         self.__pericias_treinadas = pericias_treinadas 
         if isinstance(classe, Classe) and isinstance(especie, Especie):
             self.__classe = classe
@@ -45,44 +51,44 @@ class Ficha:
 
 
         self.__atributos = {
-            'forca': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
-            'destreza': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
-            'constituicao': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
-            'inteligencia': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
-            'sabedoria': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:]),
-            'carisma': sum(sorted(([int(randint(1, 6)) for x in range(4)]))[1:])
+            'forca': atributos[0],
+            'destreza': atributos[1],
+            'constituicao': atributos[2],
+            'inteligencia': atributos[3],
+            'sabedoria': atributos[4],
+            'carisma': atributos[5]
         }
 
         self.__vida = classe.dado_vida + (self.__atributos['constituicao'] - 10) // 2
         self.__vida_atual = self.__vida
         self.__dic_pericias = { 
             'forca':{
-                'atletismo': [(self.atributos["forca"] - 10) // 2, False]},
+                'atletismo': [(self.__atributos["forca"] - 10) // 2, False]},
 
             'destreza':{
-                'prestidigitacao': [(self.atributos["destreza"] -10) //2, False],
-                'acrobacia': [(self.atributos["destreza"] -10) //2, False],
-                'furtividade': [(self.atributos["destreza"] -10) //2, False]},
+                'prestidigitacao': [(self.__atributos["destreza"] -10) //2, False],
+                'acrobacia': [(self.__atributos["destreza"] -10) //2, False],
+                'furtividade': [(self.__atributos["destreza"] -10) //2, False]},
 
             'inteligencia':{
-                'arcanismo': [(self.atributos["inteligencia"] -10) //2, False],
-                'historia': [(self.atributos["inteligencia"] -10) //2, False],
-                'investigacao': [(self.atributos["inteligencia"] -10) //2, False],
-                'natureza': [(self.atributos["inteligencia"] -10) //2, False],
-                'religiao': [(self.atributos["inteligencia"] -10) //2, False]},
+                'arcanismo': [(self.__atributos["inteligencia"] -10) //2, False],
+                'historia': [(self.__atributos["inteligencia"] -10) //2, False],
+                'investigacao': [(self.__atributos["inteligencia"] -10) //2, False],
+                'natureza': [(self.__atributos["inteligencia"] -10) //2, False],
+                'religiao': [(self.__atributos["inteligencia"] -10) //2, False]},
 
             'sabedoria':{
-                'percepcao': [(self.atributos["sabedoria"] -10) //2, False],
-                'lidar_animais': [(self.atributos["sabedoria"] -10) //2, False],
-                'intuicao': [(self.atributos["sabedoria"] -10) //2, False],
-                'sobrevivencia': [(self.atributos["sabedoria"] -10) //2, False],
-                'medicina': [(self.atributos["sabedoria"] -10) //2, False],},
+                'percepcao': [(self.__atributos["sabedoria"] -10) //2, False],
+                'lidar_animais': [(self.__atributos["sabedoria"] -10) //2, False],
+                'intuicao': [(self.__atributos["sabedoria"] -10) //2, False],
+                'sobrevivencia': [(self.__atributos["sabedoria"] -10) //2, False],
+                'medicina': [(self.__atributos["sabedoria"] -10) //2, False],},
 
             'carisma':{
-                'persuasao': [(self.atributos["carisma"] -10) //2, False],
-                'intimidacao': [(self.atributos["carisma"] -10) //2, False],
-                'performance': [(self.atributos["carisma"] -10) //2, False],
-                'intimidacao': [(self.atributos["carisma"] -10) //2, False]}
+                'persuasao': [(self.__atributos["carisma"] -10) //2, False],
+                'intimidacao': [(self.__atributos["carisma"] -10) //2, False],
+                'performance': [(self.__atributos["carisma"] -10) //2, False],
+                'enganacao': [(self.__atributos["carisma"] -10) //2, False]}
             }
 
         for dic in self.__dic_pericias.values():
@@ -205,7 +211,7 @@ class Ficha:
     def subir_nivel(self):
         self.__nivel += 1
         self.__bonus_pericia = 2 + (self.__nivel - 1)//4 
-        vida_adicional = randint(1, self.classe.dado_vida) + ((self.atributos['constituicao'] - 10 ) // 2)
+        vida_adicional = randint(1, self.classe.dado_vida) + ((self.__atributos['constituicao'] - 10 ) // 2)
         self.__vida += vida_adicional
         self.__vida_atual += vida_adicional
 
@@ -238,12 +244,12 @@ class Ficha:
         \nClasse: {self.classe.nome}\
         \nEspecie: {self.especie.nome}\n' + \
         '><' * 8 + 'Atributos' + '><' * 8 + f'\
-        \nForça: {self.atributos["forca"]} ({(self.atributos["forca"] - 10) // 2})\
-        \nDestreza: {self.atributos["destreza"]} ({(self.atributos["destreza"] - 10) // 2})\
-        \nConstituição: {self.atributos["constituicao"]} ({(self.atributos["constituicao"] - 10) // 2})\
-        \nInteligencia: {self.atributos["inteligencia"]} ({(self.atributos["inteligencia"] - 10) // 2})\
-        \nSabedoria: {self.atributos["sabedoria"]} ({(self.atributos["sabedoria"] - 10) // 2})\
-        \nCarisma: {self.atributos["carisma"]} ({(self.atributos["carisma"] - 10) // 2})\n' + \
+        \nForça: {self.__atributos["forca"]} ({(self.__atributos["forca"] - 10) // 2})\
+        \nDestreza: {self.__atributos["destreza"]} ({(self.__atributos["destreza"] - 10) // 2})\
+        \nConstituição: {self.__atributos["constituicao"]} ({(self.__atributos["constituicao"] - 10) // 2})\
+        \nInteligencia: {self.__atributos["inteligencia"]} ({(self.__atributos["inteligencia"] - 10) // 2})\
+        \nSabedoria: {self.__atributos["sabedoria"]} ({(self.__atributos["sabedoria"] - 10) // 2})\
+        \nCarisma: {self.__atributos["carisma"]} ({(self.__atributos["carisma"] - 10) // 2})\n' + \
         '><' * 8 + 'Utilitários' + '><' * 8 + f'\
         \nInventário: {"vazio" if self.inventario == [] else [str(x) for x in self.inventario]}\
         \nMagias: {"Nenhuma magia" if self.lista_magias == [] else [str(x) for x in self.lista_magias]}\

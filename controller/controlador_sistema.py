@@ -4,6 +4,7 @@ from controller.controlador_magias import ControladorMagias
 from controller.controlador_habilidades import ControladorHabilidades
 from controller.controlador_pessoas import ControladorPessoas
 from controller.controlador_classses import ControladorClasses
+from controller.controlador_fichas import ControladorFichas
 from views.tela_sistema import TelaSistema
 
 
@@ -15,6 +16,7 @@ class ControladorSistema:
         self.__controlador_habilidades = ControladorHabilidades(self)
         self.__controlador_pessoas = ControladorPessoas(self)
         self.__controlador_classes = ControladorClasses(self)
+        self.__controlador_fichas = ControladorFichas(self)
         self.__tela_sistema = TelaSistema()
 
     def inicializa_sistema(self):
@@ -38,6 +40,9 @@ class ControladorSistema:
     def chama_classe(self):
         self.__controlador_classes.abre_tela()
 
+    def chama_fichas(self):
+        self.__controlador_fichas.abre_tela()
+
     def encerra_sistema(self):
         self.__tela_sistema.mensagem('A aplicação falhou com sucesso!')
         exit(0)
@@ -50,6 +55,7 @@ class ControladorSistema:
             4: self.chama_especie,
             5: self.chama_classe,
             6: self.chama_pessoas,
+            7: self.chama_fichas,
             0: self.encerra_sistema
         }
 
@@ -59,7 +65,7 @@ class ControladorSistema:
                 funcao_escolhida = opcoes[opc_escolhida]
                 funcao_escolhida()
             except Exception as e:
-                self.__tela_sistema.mensagem(f'[ERRO INESPERADO] Erro interno: {e}')
+                self.__tela_sistema.mensagem(f'[ERRO INESPERADO] Erro interno: {e} ({type(e).__name__})')
 
     @property
     def controlador_itens(self):
