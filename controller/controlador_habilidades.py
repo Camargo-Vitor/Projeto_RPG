@@ -49,7 +49,7 @@ class ControladorHabilidades:
                 self.__cod += 1
                 self.__tela_habilidades.mensagem('Habilidade criada com sucesso!')
                 return True
-                        
+         
         except HabilidadeJahExiste as e:
             self.__tela_habilidades.mensagem(e)
         except KeyError as e:
@@ -133,6 +133,8 @@ class ControladorHabilidades:
                 return True
             else:
                 raise HabilidadeJahExiste(dados_novos['nome'])
+        except HabilidadeJahExiste as e:
+            self.tela_habilidade.mensagem(e)
         except KeyError as e:
             self.__tela_habilidades.mensagem(f'[ERRO] Dado ausente: {str(e)}')
         except Exception as e:

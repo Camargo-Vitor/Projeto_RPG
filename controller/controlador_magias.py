@@ -50,7 +50,7 @@ class ControladorMagias:
         except KeyError as e:
             self.__tela_magias.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
-            self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao selecionar habilidade: {e}')
+            self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao selecionar magia: {e}')
             
 
     def listar_magias(self):
@@ -103,6 +103,8 @@ class ControladorMagias:
                 return True
             else:
                 raise MagiaJahExisteException(dados_novos['nome'])
+        except MagiaJahExisteException  as e:
+            self.__tela_magias.mensagem(e)
         except KeyError as e:
             self.__tela_magias.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:

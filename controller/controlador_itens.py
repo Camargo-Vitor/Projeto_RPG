@@ -53,7 +53,7 @@ class ControladorItens:
         except KeyError as e:
             self.__tela_itens.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
-            self.__tela_itens.mensagem(f"[ERRO INESPERADO] Erro ao incluir Item: {str(e)}")
+            self.__tela_itens.mensagem(f"[ERRO INESPERADO] Erro ao incluir item: {str(e)}")
 
     def listar_itens(self):
         try:
@@ -85,9 +85,9 @@ class ControladorItens:
             return True
 
         except KeyError as e:
-            self.__tela_itens.mensagem(f'[ERRO DE CHAVE] Erro ao excluir magia, código não encontrado: {str(e)}')
+            self.__tela_itens.mensagem(f'[ERRO DE CHAVE] Erro ao excluir item, código não encontrado: {str(e)}')
         except Exception as e:
-            self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade: {str(e)}')
+            self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao excluir item: {str(e)}')
 
     def alterar_item_por_cod(self):
         self.listar_itens()
@@ -108,6 +108,8 @@ class ControladorItens:
                 return True
             else:
                 raise ItemJahExisteException(dados_novos['nome'])
+        except ItemJahExisteException:
+            self.__tela_itens.mensagem(e)
         except KeyError as e:
             self.__tela_itens.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
