@@ -90,3 +90,7 @@ class ControladorSistema:
     @property
     def controlador_classes(self):
         return self.__controlador_classes
+
+    @property
+    def controlador_fichas(self):
+        return self.__controlador_fichas
