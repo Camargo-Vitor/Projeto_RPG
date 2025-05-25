@@ -77,6 +77,8 @@ class ControladorClasses:
                 del self.__dict__classes[identificador]
                 self.__tela_classes.mensagem('Classe removida!')
                 return True
+        except KeyError as e:
+            self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Erro ao excluir espécie, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao excluir classe: {e}') 
 
@@ -98,7 +100,7 @@ class ControladorClasses:
                 else:
                     raise ClasseJahExisteException(dados_novos['nome'])
         except ClasseJahExisteException as e:
-            self.__tela_classes.mensagem({str(e)})
+            self.__tela_classes.mensagem(e)
         except KeyError as e:
             self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
         except Exception as e:
@@ -112,19 +114,23 @@ class ControladorClasses:
             if identificador == 0:
                 return False
             else:
-                habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='classe')
                 codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
                 identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidade', codigos_validos_hab)
                 if identificador == 0:
                     return False
-                elif habilidade[identificador_hab].origem == 'classe':
+                elif habilidades[identificador_hab].origem == 'classe':
                     classe = self.__dict__classes[identificador]
-                    classe.add_hab(habilidade)
+                    if habilidades[identificador_hab].nome in [hab.nome for hab in classe.habilidades]:
+                        raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
+                    classe.add_hab(habilidades)
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
                     raise OrigemInvalidaException()
+        except HabilidadeJahExiste as e:
+            self.__tela_classes.mensagem(e)
         except OrigemInvalidaException as e:
             self.__tela_classes.mensagem(e)
         except KeyError as e:
@@ -159,12 +165,15 @@ class ControladorClasses:
                 if identificador_hab == 0:
                     return False
                 elif habilidades[identificador_sub].origem == 'subclasse':
-                    habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab]
-                    subclasse.add_hab(habilidade)
+                    if habilidades[identificador_hab].nome in [hab.nome for hab in subclasse.habilidades]:
+                        raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
+                    subclasse.add_hab(habilidades)
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
                     raise OrigemInvalidaException()
+        except HabilidadeJahExiste as e:
+            self.__tela_classes.mensagem(e)
         except OrigemInvalidaException as e:
             self.__tela_classes.mensagem(e)
         except KeyError as e:

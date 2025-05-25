@@ -146,7 +146,7 @@ class ControladorEspecies:
                 return True
             
         except KeyError as e:
-            self.tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao excluir espécie, código não encontrado: {str(e)}')
+            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao excluir espécie, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao excluir espécie: {str(e)}')
 
@@ -185,7 +185,8 @@ class ControladorEspecies:
                         return True
                     else:
                         raise EspecieJahExisteException(dados_novos['nome'])
-
+        except EspecieJahExisteException as e:
+            self.__tela_especies.mensagem(e)
         except KeyError as e:
             self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
         except Exception as e:
@@ -208,7 +209,9 @@ class ControladorEspecies:
                     return True
                 else:
                     raise EspecieJahExisteException(dados_novos['nome'])
-        except KeyError as e:   
+        except EspecieJahExisteException as e:
+            self.__tela_classes.mensagem(e)
+        except KeyError as e:
             self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao alterar subespécie por código: {e}')
@@ -236,7 +239,6 @@ class ControladorEspecies:
                     return True
                 else:
                     raise OrigemInvalidaException()
-
         except HabilidadeJahExiste as e:
             self.__tela_especies.mensagem(e)
         except OrigemInvalidaException as e:
