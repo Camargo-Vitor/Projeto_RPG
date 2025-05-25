@@ -61,7 +61,7 @@ class Ficha:
 
         self.__vida = classe.dado_vida + (self.__atributos['constituicao'] - 10) // 2
         self.__vida_atual = self.__vida
-        self.__dic_pericias = { 
+        self.__dict_pericias = { 
             'forca':{
                 'atletismo': [(self.__atributos["forca"] - 10) // 2, False]},
 
@@ -91,7 +91,7 @@ class Ficha:
                 'enganacao': [(self.__atributos["carisma"] -10) //2, False]}
             }
 
-        for dic in self.__dic_pericias.values():
+        for dic in self.__dict_pericias.values():
             for chave in dic.keys():
                 if chave in self.__pericias_treinadas:
                     dic[chave][0] = self.__bonus_pericia + dic[chave][0]
@@ -103,7 +103,7 @@ class Ficha:
     
     @nome.setter
     def nome(self, nome: str):
-        self.__nome = nome.strip().lower()
+        self.__nome = nome
 
     @property
     def pericias_treinadas(self):
@@ -119,7 +119,7 @@ class Ficha:
     
     @fisico.setter
     def fisico(self, fisico: str):
-        self.__fisico = fisico.strip().lower()
+        self.__fisico = fisico
 
     @property
     def altura(self):
@@ -131,7 +131,7 @@ class Ficha:
 
     @historia.setter
     def historia(self, historia: str):
-        self.__historia = historia.strip().lower()
+        self.__historia = historia
 
     @property
     def atributos(self):
@@ -207,6 +207,10 @@ class Ficha:
     @property
     def habilidades(self):
         return self.__habilidades
+
+    @property
+    def dict_pericias(self):
+        return self.__dict_pericias
 
     def subir_nivel(self):
         self.__nivel += 1

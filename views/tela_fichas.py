@@ -2,11 +2,14 @@ from views.tela_abstrata import TelaAbstrata
 from random import randint
 
 class TelaFichas(TelaAbstrata):
-    def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
+    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 0]):
         print('===== Fichas =====')
         print('1. Incluir Ficha')
         print('2. Listar Ficha')
-        
+        print('3. Adicionar item em ficha')
+        print('4. Remover item ficha')
+        print('5. Adicionar maiga em ficha')
+        print('6. Remover magia em ficha')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
@@ -66,9 +69,11 @@ class TelaFichas(TelaAbstrata):
             18: 'enganacao'
         }
         pericias_treinadas = []
+        valores_validos = list(range(1, 19))
         for i in range(5):
-            num_pericia = self.le_int_ou_float(f'Selecione uma pericia ({i+1}/5): ', conjunto_alvo=list(range(1, 19)))
+            num_pericia = self.le_int_ou_float(f'Selecione uma pericia ({i+1}/5): ', conjunto_alvo=valores_validos)
             pericias_treinadas.append(dic_num_pericias[num_pericia])
+            valores_validos.remove(num_pericia)
         return pericias_treinadas
 
     def pegar_dados_atributos(self):
@@ -95,26 +100,31 @@ class TelaFichas(TelaAbstrata):
 
         return sequencia_escolhida
     
-    def mostra_ficha(self, dados_ficha: dict):
+    def mostra_ficha_basica(self, dados_ficha: dict):
         print(f"{dados_ficha['cod']:^4}", end= ' | ')
         print(f"{dados_ficha['nome']:^16}")
         
     def mostra_ficha_inteira(self, dados_ficha: dict):
-        self.mostra_ficha()
-        print(f"{dados_ficha['nivel']:^4}")
-        print(f"{dados_ficha['vida']}")
-        print(f"{dados_ficha['vida_atual']}")
-        print(f"{dados_ficha['deslocamento']}")
-        print(f"{dados_ficha['fisíco']}")
-        print(f"{dados_ficha['altura']}")
-        print(f"{dados_ficha['historia']}")
-        print(f"{dados_ficha['classe']}")
-        print(f"{dados_ficha['especie']}")
+        print(f"Nome: {dados_ficha['nome']}")
+        print(f"Nivel: {dados_ficha['nivel']:^4}")
+        print(f"Vida: {dados_ficha['vida_atual']}/{dados_ficha['vida']}")
+        print(f"Descrição física: {dados_ficha['fisico']}")
+        print(f"História: {dados_ficha['historia']}")
+        print(f"Altura: {dados_ficha['altura']}")
+        print(f"Deslocamento: {dados_ficha['deslocamento']}")
+        print(f"Pericias Treinadas: {dados_ficha['pericias']}")
+        print(f"Classe: {dados_ficha['classe']}")
+        print(f"Especie: {dados_ficha['especie']}")
+        print('><' * 8 + 'Atributos' + '><' * 8)
+        print(f"Forca: {dados_ficha['forca']}")
+        print(f"Destreza: {dados_ficha['destreza']}")
+        print(f"Constituição: {dados_ficha['constituicao']}")
+        print(f"Inteligência: {dados_ficha['inteligencia']}")
+        print(f"Sabedoria: {dados_ficha['sabedoria']}")
+        print(f"Carisma: {dados_ficha['carisma']}")
         print('><' * 8 + 'Utilitários' + '><' * 8)
-        print(f"{dados_ficha['inventario']}")
-        print(f"{dados_ficha['magias']}")
-        print(f"{dados_ficha['habilidades']}")
-
+        print(f"Inventário: {dados_ficha['inventario']}")
+        print(f"Magias: {dados_ficha['magias']}")
 
         '''
         return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \

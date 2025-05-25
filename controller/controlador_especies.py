@@ -11,8 +11,12 @@ if TYPE_CHECKING:
 class ControladorEspecies:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
-        self.__dict_especie: dict[int, Especie] = dict()
-        self.__dict_subespecie: dict[int, Subespecie] = dict()
+        self.__dict_especie: dict[int, Especie] = {
+            1000: Especie('Ser humano', 9, 170)
+        }
+        self.__dict_subespecie: dict[int, Subespecie] = {
+            1000: Subespecie('Ser humano', 'De Xaragua', 9, 170, [])
+        }
         self.__tela_especies = TelaEspecies()
         self.__cod_esp = 1
         self.__cod_sub_esp = 1

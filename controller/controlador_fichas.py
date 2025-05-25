@@ -15,9 +15,6 @@ class ControladorFichas:
 
     def incluir_ficha(self):
         try:
-
-            #atributos
-            atributos = self.__tela_fichas.pegar_dados_atributos()
             #dados basicos
             dados__basicos_ficha = self.__tela_fichas.pegar_dados_basicos_ficha()
 
@@ -44,6 +41,9 @@ class ControladorFichas:
                 return False
             else:
                 subespecie = self.__controlador_sistema.controlador_especies.dict_subespecie[codigo_subespecie]
+
+            #atributos
+            atributos = self.__tela_fichas.pegar_dados_atributos()
             
             #pericias
             pericias_treinadas = self.__tela_fichas.pegar_dados_pericias()
@@ -56,53 +56,69 @@ class ControladorFichas:
                 subespecie,
                 pericias_treinadas,
                 atributos)
-            
+
             self.__dict_fichas[self.__cod] = nova_ficha
-            print(nova_ficha)
+            self.__cod += 1
             return True
 
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao criar Ficha: {e} ({type(e).__name__})')
 
-    def listar_ficha(self):
+    def listar_fichas(self, selecao=True):
         try:
-            cod_validos = list(self.dict_fichas.keys()) + [0]
+            cod_validos = list(self.__dict_fichas.keys()) + [0]
             self.__tela_fichas.mensagem(f"{'Cod':^4} | {'Nome':^16}")
-            for key, ficha_cod in self.__dict_fichas.items():
-                self.__tela_fichas.mostra_ficha(
+            for key, ficha in self.__dict_fichas.items():
+                self.__tela_fichas.mostra_ficha_basica(
                     {
                         'cod': key,
-                        'nome': ficha_cod.nome
+                        'nome': ficha.nome
                     }
                 )
-                identificador = self.tela_fichas.selecionar_obj_por_cod(f'fichas', cod_validos)
+            if selecao:
+                identificador = self.__tela_fichas.selecionar_obj_por_cod(f'fichas', cod_validos)
                 if identificador == 0:
                     return False
                 else:
-                    ficha = self.dict_fichas[identificador]
+                    '''
+                    TERMINAR A INCLUSAO DE HABILIDADES COM BASE NO NIVEL DA FICHA
+                    '''
+                    ficha = self.__dict_fichas[identificador]
+                    habilidades = []
+                    habilidades += ficha.classe.habilidades
+                    habiliades += ficha
+                    habilidades += ficha.especie.habilidades
                     self.__tela_fichas.mostra_ficha_inteira(
                         {
-                            ficha.nivel,
-                            ficha.vida,
-                            ficha.vida_atual,
-                            ficha.deslocamento,
-                            ficha.fisico,
-                            ficha.altura,
-                            ficha.historia,
-                            ficha.classe,
-                            ficha.especie,
-                            ficha.inventario,
-                            ficha.lista_magias
+                            'nome': ficha.nome,
+                            'nivel': ficha.nivel,
+                            'vida': ficha.vida,
+                            'vida_atual': ficha.vida_atual,
+                            'deslocamento': ficha.deslocamento,
+                            'fisico': ficha.fisico,
+                            'altura': ficha.altura,
+                            'historia': ficha.historia,
+                            'classe': ficha.classe.nome,
+                            'especie': ficha.especie.nome,
+                            'pericias': ficha.pericias_treinadas,
+                            'forca': f'{ficha.atributos["forca"]} ({(ficha.atributos["forca"] - 10) // 2})',
+                            'destreza': f'{ficha.atributos["destreza"]} ({(ficha.atributos["destreza"] - 10) // 2})',
+                            'constituicao': f'{ficha.atributos["constituicao"]} ({(ficha.atributos["constituicao"] - 10) // 2})',
+                            'inteligencia': f'{ficha.atributos["inteligencia"]} ({(ficha.atributos["inteligencia"] - 10) // 2})',
+                            'sabedoria': f'{ficha.atributos["sabedoria"]} ({(ficha.atributos["sabedoria"] - 10) // 2})',
+                            'carisma': f'{ficha.atributos["carisma"]} ({(ficha.atributos["carisma"] - 10) // 2})',
+                            'inventario': [item.nome for item in ficha.inventario],
+                            'magias': [magia.nome for magia in ficha.lista_magias],
+                            'habilidades': habilidades
                         }
                     )
         except Exception as e:
-            self.tela_fichas.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens: {str(e)}")
-
+            self.__tela_fichas.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens em ficha: {str(e)}")
 
     def adicionar_item_ficha(self):
         try:
-            self.listar_ficha()
-            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            self.listar_fichas(selecao=False)
+            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
@@ -119,19 +135,19 @@ class ControladorFichas:
                     self.__tela_fichas.mensagem('Item adicionada ao inventário!')
                     return True
         except KeyError as e:
-            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Item: {e}')
             
     def adicionar_magia_ficha(self):
         try:
-            self.listar_ficha()
-            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            self.listar_fichas(selecao=False)
+            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
             else:
-                magia = self.__controlador_sistema.controlador_magias.__dict_magias
+                magia = self.__controlador_sistema.controlador_magias.dict_magias
                 self.__controlador_sistema.controlador_magias.listar_magias()
                 codigos_validos_magia = list(magia.keys()) + [0]
                 identificador_magia = self.__tela_fichas.selecionar_obj_por_cod('magia', codigos_validos_magia)
@@ -143,14 +159,14 @@ class ControladorFichas:
                     self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
                     return True
         except KeyError as e:
-            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Magia: {e}')
 
     def remover_item_ficha(self):
         try:
-            self.listar_ficha()
-            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            self.listar_fichas(selecao=False)
+            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
@@ -167,33 +183,32 @@ class ControladorFichas:
                     self.__tela_fichas.mensagem('Item removido do inventário!')
                     return True
                 
-                
         except KeyError as e:
-            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Item: {e}')
             
     def remover_magia_ficha(self):
         try:
-            self.listar_ficha()
-            cod_validos_ficha = list(self.__dict_fichas.keys() + [0])
+            self.listar_fichas(selecao=False)
+            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
             else:
-                magia = self.__controlador_sistema.controlador_magias.__dict_magias
+                magias = self.__controlador_sistema.controlador_magias.dict_magias
                 self.__controlador_sistema.controlador_magias.listar_magias()
-                codigos_validos_magia = list(magia.keys()) + [0]
+                codigos_validos_magia = list(magias.keys()) + [0]
                 identificador_magia = self.__tela_fichas.selecionar_obj_por_cod('magia', codigos_validos_magia)
                 if identificador_magia == 0:
                     return False
                 else:
                     ficha = self.dict_fichas[identificador_ficha]
-                    ficha.rm_magia(magia[identificador_magia])
+                    ficha.rm_magia(magias[identificador_magia])
                     self.__tela_fichas.mensagem('Magia removida!')
                     return True
         except KeyError as e:
-            self.__tela_fichas.mensagem(f'ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Magia: {e}')
 
@@ -204,16 +219,17 @@ class ControladorFichas:
     def abre_tela(self):
         opcoes = {
             1: self.incluir_ficha,
-            2: self.listar_ficha,
+            2: self.listar_fichas,
             3: self.adicionar_item_ficha,
             4: self.remover_item_ficha,
             5: self.adicionar_magia_ficha,
             6: self.remover_magia_ficha,
             0: self.retornar
         }
-        opc = self.__tela_fichas.mostra_tela()
-        metodo = opcoes[opc]
-        metodo()
+        while True:
+            opc = self.__tela_fichas.mostra_tela()
+            metodo = opcoes[opc]
+            metodo()
 
     @property
     def tela_fichas(self):

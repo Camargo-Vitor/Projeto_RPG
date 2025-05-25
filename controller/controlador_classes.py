@@ -11,7 +11,10 @@ class ControladorClasses:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_classes = TelaClasses()
-        self.__dict__classes : dict[int, Classe] = dict()
+        self.__dict__classes : dict[int, Classe] = {
+            1000: Classe('Classe_teste', 6, ['Sub_teste1', 'Sub_teste2', 'Sub_teste3'])
+        }
+        
         self.__cod = 1
 
     def pega_classe_por_nome(self, nome: str):
