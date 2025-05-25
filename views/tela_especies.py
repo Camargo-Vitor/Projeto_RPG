@@ -34,7 +34,7 @@ class TelaEspecies(TelaAbstrata):
     
     def pegar_dados_especie(self):
         print('===== Dados Especie =====')
-        nome = input('Nome: ')
+        nome = self.le_str('Nome: ')
         deslocamento = self.le_int_ou_float('Deslocamento : ', tipo= 'float')
         altura = self.le_int_ou_float('Altura(cm): ', positivo= True)
         habilidades = []
@@ -47,7 +47,7 @@ class TelaEspecies(TelaAbstrata):
     
     def pegar_dados_subespecie(self, especie: str):
         print('===== Dados Subespecie =====')
-        nome = input(f'Nome: {especie} ').strip()
+        nome = self.le_str(f'Nome: {especie} ')
         return {'nome': nome}
         
     def selecionar_obj_por_cod(self, obj, total_codigos):

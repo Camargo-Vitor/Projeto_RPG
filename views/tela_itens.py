@@ -14,8 +14,8 @@ class TelaItens(TelaAbstrata):
 
     def pegar_dados_item(self):
         print('===== Dados Item =====')
-        nome = input('Nome: ').strip().title()
-        raridade = input('Raridade: ').strip().title()
+        nome = self.le_str('Nome: ')
+        raridade = self.le_str('Raridade: ')
         pagina = self.le_int_ou_float('Página: ', positivo=True)
         valor = self.le_int_ou_float('Valor: ', positivo=True)
 

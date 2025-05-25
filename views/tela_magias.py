@@ -14,7 +14,7 @@ class TelaMagias(TelaAbstrata):
 
     def pegar_dados_magia(self):
         print('==== Dados Magia ====')
-        nome = input('Digite o nome: ').strip().title()
+        nome = self.le_str('Digite o nome: ')
         nivel = self.le_int_ou_float('Digite o nivel de desbloqueio: ', positivo=True)
         pagina = self.le_int_ou_float('Digite a página referência: ', positivo=True)
         return {

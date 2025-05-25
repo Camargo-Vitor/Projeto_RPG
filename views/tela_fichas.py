@@ -11,9 +11,9 @@ class TelaFichas(TelaAbstrata):
         return super().mostra_tela(opcoes)
     
     def pegar_dados_basicos_ficha(self):
-        nome = input('Digite o nome do personagem: ').strip().title()
-        descricao_fisica = input('Digite uma breve descrição física: ').strip().capitalize()
-        historia = input('Digite, brevemente, a história do personagem: ')
+        nome = self.le_str('Digite o nome do personagem: ')
+        descricao_fisica = self.le_str('Digite uma breve descrição física: ', 'capitalize')
+        historia = self.le_str('Digite, brevemente, a história do personagem: ', 'capitalize')
         return {
             'nome_personagem': nome,
             'descricao_fisica': descricao_fisica,

@@ -17,7 +17,7 @@ class TelaClasses(TelaAbstrata):
     
     def pegar_dados_classes(self, basico=False):
         print('===== Dados Classe =====')
-        nome = input('Digite o nome da classe: ').strip().title()
+        nome = self.le_str('Digite o nome da classe: ')
         dado_vida = self.le_int_ou_float('Digite o número do dado de vida: ', positivo = True)
         if basico:
             return {
@@ -28,7 +28,7 @@ class TelaClasses(TelaAbstrata):
             nomes_sub = []
             for a in range(3):
                 #Por padrão todas as classes possuem 3 subclasses
-                nome_sub = input(f'Digite o nome da {a+1} ª subclasse: ').strip().title()
+                nome_sub = self.le_str(f'Digite o nome da {a+1} ª subclasse: ')
                 nomes_sub.append(nome_sub)
 
             return {

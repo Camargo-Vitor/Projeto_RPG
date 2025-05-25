@@ -14,7 +14,7 @@ class TelaHabilidades(TelaAbstrata):
 
     def pegar_dados_habilidade(self):
         print('===== Dados Habilidades =====')
-        nome = input('Digite o nome da habilidade: ').strip().title()
+        nome = self.le_str('Digite o nome da habilidade: ').strip().title()
         nivel = self.le_int_ou_float('Digite o nivel necessário: ', positivo= True)
         pagina = self.le_int_ou_float('Digite a página da habilidade: ', positivo=True)
 

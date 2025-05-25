@@ -44,6 +44,19 @@ class TelaAbstrata(ABC):
             except Exception as e :
                 print(f'[ERRO INESPERADO] Ocorreu um erro inesperado: {str(e)}')
 
+    def le_str(self, mensagem:str, formato='title'):
+        entrada = ''
+        while True:
+            entrada = input(mensagem).strip()
+            if not entrada.isalnum() and not entrada == '':
+                break
+            print(f'[ERRO] Entrada inválida, não digite números ou espaços vazios.')
+
+        if formato == 'title':
+            return entrada.title()
+        else:
+            return entrada.capitalize()
+
     def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
         try:
             print(f'===== Busca {obj.title()} =====')

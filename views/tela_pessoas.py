@@ -28,7 +28,7 @@ class TelaPessoas(TelaAbstrata):
 
     def pegar_dados_pessoa(self):
         print('==== Dados Pessoa ====')
-        nome = input('Digite o nome: ').strip().title()
+        nome = self.le_str('Digite o nome: ')
         while True:
             telefone = self.le_int_ou_float(
                 'Digite o número de telefone (com DDD, tudo junto): ', positivo=True)
@@ -36,8 +36,8 @@ class TelaPessoas(TelaAbstrata):
                 break
             else:
                 print('Formato inválido')
-        cidade = input('Digite a cidade: ')
-        bairro = input('Digite o bairro: ')
+        cidade = self.le_str('Digite a cidade: ')
+        bairro = self.le_str('Digite o bairro: ')
         numero = self.le_int_ou_float('Digite o número do endereço: ', positivo=True)
         cep = self.le_int_ou_float('Digite o cep (somente numeros)', positivo=True)
         return {
