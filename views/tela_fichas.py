@@ -2,7 +2,7 @@ from views.tela_abstrata import TelaAbstrata
 from random import randint
 
 class TelaFichas(TelaAbstrata):
-    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]):
+    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0]):
         print('===== Fichas =====')
         print('1. Incluir Ficha')
         print('2. Excluir Ficha')
