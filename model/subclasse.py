@@ -5,7 +5,7 @@ class Subclasse():
     def __init__(self,
                  nome_sub: str):
         self.__nome = nome_sub
-        self.__hab_espeficicas = []
+        self.__hab_espeficicas: list[Habilidade] = []
 
     @property
     def nome(self):

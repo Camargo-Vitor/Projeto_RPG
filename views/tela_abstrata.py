@@ -50,7 +50,7 @@ class TelaAbstrata(ABC):
             entrada = input(mensagem).strip()
             if not entrada.isnumeric() and not entrada == '':
                 break
-            print(f'[ERRO] Entrada inválida", não digite números ou espaços vazios.')
+            print(f'[ERRO] Entrada inválida, não digite números ou espaços vazios.')
 
         if formato == 'title':
             return entrada.title()

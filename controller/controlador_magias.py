@@ -124,3 +124,7 @@ class ControladorMagias:
             opc = self.__tela_magias.mostra_tela()
             metodo = opcoes[opc]
             metodo()
+
+    @property
+    def dict_magias(self):
+        return self.__dict_magias

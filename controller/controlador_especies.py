@@ -15,7 +15,7 @@ class ControladorEspecies:
             1000: Especie('Ser humano', 9, 170)
         }
         self.__dict_subespecie: dict[int, Subespecie] = {
-            1000: Subespecie('Ser humano', 'De Xaragua', 9, 170, [])
+            1000: Subespecie('Ser humano', 'De Xaragua', 9, 170, self.__dict_especie[1000].habilidades)
         }
         self.__tela_especies = TelaEspecies()
         self.__cod_esp = 1
@@ -223,7 +223,7 @@ class ControladorEspecies:
                 return False
             else:
                 habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
-                self.__controlador_sistema.controlador_habilidades.listar_habilidades()
+                self.__controlador_sistema.controlador_habilidades.listar_habilidades('especie')
                 cod_validos_hab = list(habilidade.keys()) + [0]
                 identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
                 if identificador_hab == 0:
@@ -253,7 +253,7 @@ class ControladorEspecies:
             else:
                 habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 cod_validos_hab = list(habilidades.keys()) + [0]
-                self.__controlador_sistema.controlador_habilidades.listar_habilidades()
+                self.__controlador_sistema.controlador_habilidades.listar_habilidades('subespecie')
                 identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
                 if identificador_hab == 0:
                     return False
@@ -283,7 +283,7 @@ class ControladorEspecies:
             else:
                 habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 cod_valido_hab = list(habilidade.keys()) + [0]
-                self.__controlador_sistema.controlador_habilidades.listar_habilidades()
+                self.__controlador_sistema.controlador_habilidades.listar_habilidades('especie')
                 identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_valido_hab)
                 if identificador_hab == 0:
                     return False
@@ -308,7 +308,7 @@ class ControladorEspecies:
                 habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 subespecie = self.__dict_subespecie[identificador_sub]
                 cod_validos_hab = list(habilidade.keys())
-                self.__controlador_sistema.controlador_habilidades.listar_habilidades()
+                self.__controlador_sistema.controlador_habilidades.listar_habilidades('subespecie')
                 identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
                 if identificador_hab == 0:
                     return False

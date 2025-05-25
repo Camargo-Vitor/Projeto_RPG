@@ -12,7 +12,7 @@ class Subespecie(Especie):
         super().__init__(nome, deslocamento, altura, habilidades)
         self.__nome_sub = nome_sub
         self.__habilidades = habilidades
-        self.__hab_especificas = []
+        self.__hab_especificas: list[Habilidade] = []
 
     @property
     def nome(self):

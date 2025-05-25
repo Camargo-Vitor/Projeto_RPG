@@ -6,7 +6,7 @@ class Especie():
                  nome: str,
                  deslocamento: float,
                  altura: int,
-                 habilidades = []):
+                 habilidades: list[Habilidade] = []):
         self.__nome = nome
         self.__deslocamento = deslocamento
         self.__altura = altura
