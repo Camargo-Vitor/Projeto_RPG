@@ -9,9 +9,10 @@ class Jogador(Pessoa):
                  cidade: str,
                  bairro: str,
                  numero: int,
-                 cep: int,):
+                 cep: int,
+                 personagens: list[Ficha] = []):
         super().__init__(nome, telefone, cidade, bairro, numero, cep)
-        self.__personagens: list[Ficha] = []
+        self.__personagens= personagens
 
     @property
     def personagens(self):
