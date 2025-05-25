@@ -15,7 +15,6 @@ class Pessoa(ABC):
         self.__nome = nome
         self.__endereco = Endereco(cidade, bairro, numero, cep)
         self.__telefone = telefone
-        self.__disponibilidade = disponibilidade
 
     @property
     def nome(self):
@@ -57,10 +56,3 @@ class Pessoa(ABC):
             self.__endereco = Endereco(cidade, bairro, numero, cep)
         except:
             raise ValueError("[ERRO] Endereço não alterado, valor inválido")
-
-    @disponibilidade.setter
-    def disponibilidade(self, disponibilidade: list[str]):
-        if isinstance(disponibilidade, list[str]):
-            self.__disponibilidade = disponibilidade
-        else:
-            raise ValueError("[ERRO] Disponibilidade não alterada, valor inválido")
