@@ -2,6 +2,7 @@ from views.tela_especies import TelaEspecies
 from model.especie import Especie
 from model.subespecie import Subespecie
 from model.exceptions.exception_especies import *
+from model.exceptions.excpetion_habilidades import *
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -220,20 +221,24 @@ class ControladorEspecies:
             if identificador_esp == 0:
                 return False
             else:
-                habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades('especie')
-                cod_validos_hab = list(habilidade.keys()) + [0]
+                cod_validos_hab = list(habilidades.keys()) + [0]
                 identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
                 if identificador_hab == 0:
                     return
-                elif habilidade[identificador_hab].origem == 'especie':
+                elif habilidades[identificador_hab].origem == 'especie':
                     especie = self.__dict_especie[identificador_esp]
-                    especie.add_habilidade(habilidade[identificador_hab])
+                    if habilidades[identificador_hab].nome in [hab.nome for hab in especie.habilidades]:
+                        raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
+                    especie.add_habilidade(habilidades[identificador_hab])
                     self.__tela_especies.mensagem('Hablidade adicionada!')
                     return True
                 else:
                     raise OrigemInvalidaException()
 
+        except HabilidadeJahExiste as e:
+            self.__tela_especies.mensagem(e)
         except OrigemInvalidaException as e:
             self.__tela_especies.mensagem(e)
         except KeyError as e:
@@ -257,12 +262,16 @@ class ControladorEspecies:
                     return False
                 elif habilidades[identificador_hab].origem == 'subespecie':
                     subespecie = self.__dict_subespecie[identificador_sub]
+                    if habilidades[identificador_hab].nome in [hab.nome for hab in subespecie.habilidades]:
+                        raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     subespecie.add_hab_sub(habilidades[identificador_hab])
                     self.__tela_especies.mensagem('Hablidade adicionada!')
                     return True
                 else:
                     raise OrigemInvalidaException()
 
+        except HabilidadeJahExiste as e:
+            self.__tela_especies.mensagem(e)
         except OrigemInvalidaException as e:
             self.__tela_especies.mensagem(e)
         except KeyError as e:

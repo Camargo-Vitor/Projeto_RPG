@@ -20,7 +20,6 @@ class ControladorHabilidades:
             1002: Habilidade('Hab_classe', 1, 67, 'classe'),
             1003: Habilidade('Hab_subclasse', 1, 68, 'subclasse')
         }
-
         self.__tela_habilidades = TelaHabilidades()
         self.__cod = 1
 
