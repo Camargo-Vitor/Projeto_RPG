@@ -29,20 +29,20 @@ class ControladorPessoas:
                 dados_pessoa['nome'],
                 dados_pessoa['telefone'],
                 dados_pessoa['cidade'],
+                dados_pessoa['bairro'],
                 dados_pessoa['numero'],
                 dados_pessoa['cep'],
             )
             self.__pessoas[self.__cod] = jogador
-            self.__pessoas +=1
+            self.__cod +=1
             self.__tela_pessoas.mensagem('Jogador criado com sucesso')
         else:
             self.__tela_pessoas.mensagem('Esse jogador já existe')
 
     def listar_jogador(self):
-        self.__tela_pessoas.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Telefone":^13} | {"Cidade":^16} | \
-                                       {"Bairro":^12} | {"Numero":^6} | {"Cep":^10} | {"Personagens":^12}')
+        self.__tela_pessoas.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Telefone":^13} | {"Cidade":^16} | {"Bairro":^12} | {"Numero":^6} | {"Cep":^10} | {"Personagens":^12}')
         for cod, pessoa in self.__pessoas.items():
-            self.__tela_pessoas(
+            self.__tela_pessoas.mostra_jogador(
                 {
                 'cod': cod,
                 'nome': pessoa.nome,
@@ -50,8 +50,8 @@ class ControladorPessoas:
                 'cidade': pessoa.endereco.cidade,
                 'bairro': pessoa.endereco.bairro,
                 'numero': pessoa.endereco.numero,
-                'cep': pessoa.endereco.cep
-                
+                'cep': pessoa.endereco.cep,
+                'personagens': pessoa.personagens
             }
             )
     def excluir_jogador(self):
@@ -93,20 +93,20 @@ class ControladorPessoas:
     def add_ficha(self):
         try:
             self.listar_jogador()
-            cod_validos = list(self.__pessoas.keys() + [0])
+            cod_validos = list(self.__pessoas.keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogadores',cod_validos)
             if identificador == 0:
                 return False
             else:
                 fichas = self.__controlador_sistema.controlador_fichas.dict_fichas
-                self.__controlador_sistema.controlador_fichas.listar_fichas('fichas')
+                self.__controlador_sistema.controlador_fichas.listar_fichas()
                 cod_validos_fichas = list(fichas.keys()) + [0]
                 identificador_ficha = self.__tela_pessoas.selecionar_obj_por_cod('fichas', cod_validos_fichas)
                 if identificador_ficha == 0:
                     return
                 else:
                     pessoa = self.__pessoas[identificador]
-                    pessoa.add_ficha()
+                    pessoa.add_ficha(fichas[identificador_ficha])
                     return True
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
@@ -116,7 +116,7 @@ class ControladorPessoas:
     def remove_ficha(self):
         try:
             self.listar_jogador()
-            cod_validos = list(self.__pessoas.keys() + [0])
+            cod_validos = list(self.__pessoas.keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogadores',cod_validos)
             jogador = self.__pessoas[identificador]
             if identificador == 0:
@@ -139,7 +139,8 @@ class ControladorPessoas:
             self.tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em espécie: {e}')   
 
     def alterar_mestre(self):
-        dad
+        pass
+
     def retornar(self):
         self.__controlador_sistema.abre_tela()
 
@@ -152,7 +153,7 @@ class ControladorPessoas:
             5: self.add_ficha,
             6: self.remove_ficha,
             7: self.alterar_mestre,
-            0: self.abre_tela
+            0: self.retornar
         }
         while True:
             opc = self.__tela_pessoas.mostra_tela()

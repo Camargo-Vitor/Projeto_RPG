@@ -3,27 +3,16 @@ from views.tela_abstrata import TelaAbstrata
 
 class TelaPessoas(TelaAbstrata):
 
-    def mostra_tela(self, opcoes=[1, 2, 0]):
+    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
         print('===== Pessoas =====')
-        print('1. Gerir Mestres')
-        print('2. Gerir Jogadores')
-        print('0. Voltar')
-        return super().mostra_tela(opcoes)
-
-    def mostra_tela_mestre(self, opcoes=[1, 2, 3, 4, 0]):
-        print('==== Mestre ====')
-        print('1. Criar Mestre')
-        print('2. Excluir Mestre')
-        print('3. Listar Mestres')
-        print('4. Alterar Mestre')
-        return super().mostra_tela(opcoes)
-        
-    def mostra_tela_jogador(self, opcoes=[1, 2, 3, 4, 0]):
-        print('==== Jogador ====')
-        print('1. Criar Jogador')
+        print('1. Incluir Jogador')
         print('2. Excluir Jogador')
-        print('3. Listar Jogadores')
+        print('3. Listar Jogador')
         print('4. Alterar Jogador')
+        print('5. Adicionar Ficha')
+        print('6. Remover Ficha')
+        print('7. Alterar Mestre')
+        print('0. Retornar')
         return super().mostra_tela(opcoes)
 
     def pegar_dados_pessoa(self):
@@ -60,4 +49,4 @@ class TelaPessoas(TelaAbstrata):
 
     def mostra_jogador(self, dados_jogador: dict):
         self.mostra_pessoa(dados_jogador)
-        print(f"{dados_jogador['personagens']}", end=' |')
+        print(f"{dados_jogador['personagens']}")
