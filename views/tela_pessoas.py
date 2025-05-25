@@ -11,7 +11,7 @@ class TelaPessoas(TelaAbstrata):
         print('4. Alterar Jogador')
         print('5. Adicionar Ficha')
         print('6. Remover Ficha')
-        print('7. Alterar Mestre')
+        print('7. Acessar Mestre')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
 
@@ -28,7 +28,7 @@ class TelaPessoas(TelaAbstrata):
         cidade = self.le_str('Digite a cidade: ')
         bairro = self.le_str('Digite o bairro: ')
         numero = self.le_int_ou_float('Digite o número do endereço: ', positivo=True)
-        cep = self.le_int_ou_float('Digite o cep (somente numeros)', positivo=True)
+        cep = self.le_int_ou_float('Digite o cep (somente numeros): ', positivo=True)
         return {
             'nome': nome,
             'telefone': telefone,
