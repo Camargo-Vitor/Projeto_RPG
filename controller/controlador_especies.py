@@ -30,10 +30,10 @@ class ControladorEspecies:
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao selecionar especie: {str(e)}')
 
-    def pega_subespecie_por_nome(self, nome: str):
+    def pega_subespecie_por_sub_nome(self, nome_sub: str):
         try:
             for subespecie in self.__dict_subespecie.values():
-                if subespecie.nome == nome:
+                if subespecie.nome_sub == nome_sub:
                     return subespecie
             return None
         except Exception as e:
@@ -72,7 +72,7 @@ class ControladorEspecies:
                 else:
                     especie = self.__dict_especie[identificador]
                     dados_subespecie = self.__tela_especies.pegar_dados_subespecie(especie.nome)
-                    s = self.pega_subespecie_por_nome(dados_subespecie['nome'])
+                    s = self.pega_subespecie_por_sub_nome(dados_subespecie['nome'])
 
                     if s:
                         raise EspecieJahExisteException(dados_subespecie['nome'])
@@ -200,7 +200,7 @@ class ControladorEspecies:
             else:
                 subespecie = self.__dict_subespecie[identificador]
                 dados_novos = self.__tela_especies.pegar_dados_subespecie(super(Subespecie, subespecie).nome)
-                e = self.pega_subespecie_por_nome(dados_novos['nome_sub'])
+                e = self.pega_subespecie_por_sub_nome(dados_novos['nome_sub'])
                 if e is None:
                     self.__dict_subespecie[identificador].nome_sub = dados_novos['nome']
                     self.__tela_especies.mensagem(f'Subespécie de código {identificador} alterada com sucesso!')

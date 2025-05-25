@@ -1,5 +1,4 @@
 from views.tela_pessoas import TelaPessoas
-from model.pessoa import Pessoa
 from model.mestre import Mestre
 from model.jogador import Jogador
 from typing import TYPE_CHECKING

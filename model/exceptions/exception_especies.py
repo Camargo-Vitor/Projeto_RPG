@@ -5,4 +5,3 @@ class EspecieJahExisteException(Exception):
 class OrigemInvalidaException(Exception):
     def __init__(self):
         super().__init__("[ERRO] A origem selecionada não é compatível")
-    
