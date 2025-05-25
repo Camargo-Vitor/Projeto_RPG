@@ -1,5 +1,5 @@
 from model.classe import Classe
-from model.subclasse import Subclasse
+from model.exceptions import *
 from views.tela_classes import TelaClasses
 from typing import TYPE_CHECKING
 
