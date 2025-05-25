@@ -31,13 +31,15 @@ class ControladorHabilidades:
                     return hab
             return None
         except Exception as e:
-            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao selecionar habilidade: {e}')
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao selecionar habilidade: {str(e)}')
     
     def incluir_habilidade(self):
         try:
             dados_hab = self.__tela_habilidades.pegar_dados_habilidade()
             hab = self.pega_habilidade_por_nome(dados_hab['nome'])
-            if hab == None:
+            if hab:
+                raise HabilidadeJahExiste(dados_hab['nome'])
+            else:
                 nova_habilidade = Habilidade(
                     dados_hab['nome'],
                     dados_hab['nivel'],
@@ -48,13 +50,13 @@ class ControladorHabilidades:
                 self.__cod += 1
                 self.__tela_habilidades.mensagem('Habilidade criada com sucesso!')
                 return True
-            else:
-                raise HabilidadeJahExiste(dados_hab['nome'])
-        
+                        
         except HabilidadeJahExiste as e:
             self.__tela_habilidades.mensagem(e)
+        except KeyError as e:
+            self.__tela_habilidades.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
-            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao incluir habilidade: {e}')
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao incluir habilidade: {str(e)}')
     
     def listar_habilidades(self, origem='todas'):
         try:
@@ -94,7 +96,7 @@ class ControladorHabilidades:
                 )
 
         except Exception as e:
-            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao listar habilidades: {e}')
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao listar habilidades: {str(e)}')
     
     def excluir_habilidade(self):
         try:
@@ -107,27 +109,35 @@ class ControladorHabilidades:
                 del self.__dict_habilidades[identificador]
                 self.__tela_habilidades.mensagem('Habilidade removida!')
                 return True
+            
+        except KeyError as e:
+            self.__tela_habilidades.mensagem(f'[ERRO DE CHAVE] Erro ao excluir habilidade, código não encontrado: {str(e)}')    
         except Exception as e:
-            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade: {e}')
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade: {str(e)}')
 
     def alterar_habilidade_por_cod(self):
+        self.listar_habilidades()
         try:
-            self.listar_habilidades()
             cod_validos = list(self.__dict_habilidades.keys()) + [0]
             identificador = self.__tela_habilidades.selecionar_obj_por_cod('habilidades', cod_validos)
             if identificador == 0:
                 return False
-            else:
-                habilidade = self.__dict_habilidades[identificador]
-                dados_novos = self.__tela_habilidades.pegar_dados_habilidade()
+            habilidade = self.__dict_habilidades[identificador]
+            dados_novos = self.__tela_habilidades.pegar_dados_habilidade()
+            i = self.pega_habilidade_por_nome(dados_novos['nome'])
+            if i is None:
                 habilidade.nome = dados_novos['nome']
                 habilidade.nivel = dados_novos['nivel']
                 habilidade.pagina = dados_novos['pagina']
                 habilidade.origem = dados_novos['origem']
                 self.__tela_habilidades.mensagem(f'Habilidade de código {identificador} alterada com sucesso!')
                 return True
+            else:
+                raise HabilidadeJahExiste(dados_novos['nome'])
+        except KeyError as e:
+            self.__tela_habilidades.mensagem(f'[ERRO] Dado ausente: {str(e)}')
         except Exception as e:
-            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao alterar habilidade: {e}')
+            self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro inesperado ao alterar habilidade por código: {e}')
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()

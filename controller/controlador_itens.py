@@ -28,7 +28,7 @@ class ControladorItens:
                     return item
             return None
         except Exception as e:
-            raise Exception(f"[ERRO INESPERADO] Erro ao buscar item por nome: {e}")
+            self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao selecionar item: {str(e)}')
 
     def incluir_item(self):
         try:
@@ -46,6 +46,7 @@ class ControladorItens:
                 self.__dict_item[self.__cod] = item
                 self.__cod += 1
                 self.__tela_itens.mensagem('Item criado com sucesso!')
+                return True
 
         except ItemJahExisteException as e:
             self.__tela_itens.mensagem(e)
@@ -83,8 +84,10 @@ class ControladorItens:
             self.__tela_itens.mensagem('Item removido!')
             return True
 
+        except KeyError as e:
+            self.__tela_itens.mensagem(f'[ERRO DE CHAVE] Erro ao excluir magia, código não encontrado: {str(e)}')
         except Exception as e:
-            self.__tela_itens.mensagem(f'[ERRO INESPERADO] Ocorreu um erro inesperado: {str(e)}')
+            self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade: {str(e)}')
 
     def alterar_item_por_cod(self):
         self.listar_itens()
@@ -93,16 +96,18 @@ class ControladorItens:
             identificador = self.__tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0: 
                 return
-
             item = self.__dict_item[identificador]
             dados_novos = self.__tela_itens.pegar_dados_item()
-
-            item.nome = dados_novos['nome']
-            item.raridade = dados_novos['raridade']
-            item.pagina = dados_novos['pagina']
-            item.valor = dados_novos['valor']
-            self.__tela_itens.mensagem('Item alterado com sucesso!')
-
+            i = self.pega_item_por_nome(dados_novos['nome'])
+            if i is None:
+                item.nome = dados_novos['nome']
+                item.raridade = dados_novos['raridade']
+                item.pagina = dados_novos['pagina']
+                item.valor = dados_novos['valor']
+                self.__tela_itens.mensagem('Item alterado com sucesso!')
+                return True
+            else:
+                raise ItemJahExisteException(dados_novos['nome'])
         except KeyError as e:
             self.__tela_itens.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:

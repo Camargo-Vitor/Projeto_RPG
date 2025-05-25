@@ -24,7 +24,7 @@ class ControladorEspecies:
                     return especie
             return None
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao selecionar especie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao selecionar especie: {str(e)}')
 
     def pega_subespecie_por_nome(self, nome: str):
         try:
@@ -33,13 +33,15 @@ class ControladorEspecies:
                     return subespecie
             return None
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao selecionar subespecie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao selecionar subespecie: {str(e)}')
 
     def incluir_especie(self):
         try:
             dados_especie = self.__tela_especies.pegar_dados_especie()
             e = self.pega_especie_por_nome(dados_especie['nome'])
-            if e is None:
+            if e:
+                raise EspecieJahExisteException(dados_especie['nome'])
+            else:
                 especie = Especie(
                     dados_especie['nome'],
                     dados_especie['deslocamento'],
@@ -49,13 +51,12 @@ class ControladorEspecies:
                 self.__cod_esp +=1
                 self.__tela_especies.mensagem('Espécie criada com sucesso!')
                 return True
-            else:
-                raise EspecieJahExisteException()
-
         except EspecieJahExisteException as e:
-            self.__tela_especies.mensagem(e)
+            self.tela_especies.mensagem(e)
+        except KeyError as e:
+            self.__tela_especies.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao incluir espécie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao incluir espécie: {str(e)}')
 
     def incluir_subespecie(self):
             try:
@@ -69,7 +70,9 @@ class ControladorEspecies:
                     dados_subespecie = self.__tela_especies.pegar_dados_subespecie(especie.nome)
                     s = self.pega_subespecie_por_nome(dados_subespecie['nome'])
 
-                    if s is None:
+                    if s:
+                        raise EspecieJahExisteException(dados_subespecie['nome'])
+                    else:
                         subespecie = Subespecie(
                             especie.nome, 
                             dados_subespecie['nome'],
@@ -81,13 +84,13 @@ class ControladorEspecies:
                         self.__cod_sub_esp += 1
                         self.__tela_especies.mensagem('Subespecie criada com sucesso!')
                         return True
-                    else:
-                        raise EspecieJahExisteException()
 
             except EspecieJahExisteException as e:
                 self.__tela_especies.mensagem(e)
+            except KeyError as e:
+                self.__tela_especies.mensagem(f"[ERRO] Dado ausente: {str(e)}")
             except Exception as e:
-                self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao incluir subespecie: {e}')
+                self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao incluir subespecie: {str(e)}')
 
     def listar_especies(self):
         try:
@@ -104,7 +107,7 @@ class ControladorEspecies:
                 )
 
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar especies: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as especies: {str(e)}')
 
     def listar_subespecies(self):
         try:
@@ -122,7 +125,7 @@ class ControladorEspecies:
                 )
 
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar subespécies: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as subespécies: {str(e)}')
 
     def excluir_especie(self):
         try:
@@ -138,8 +141,11 @@ class ControladorEspecies:
                 del self.__dict_especie[identificador]
                 self.__tela_especies.mensagem('Especie removida!')
                 return True
+            
+        except KeyError as e:
+            self.tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao excluir espécie, código não encontrado: {str(e)}')
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao excluir espécie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao excluir espécie: {str(e)}')
 
     def excluir_subespecie(self):
         try:
@@ -152,8 +158,10 @@ class ControladorEspecies:
                 del self.__dict_subespecie[identificador]
                 self.__tela_especies.mensagem('Subespecie removida!')
                 return True
+        except KeyError as e:
+            self.tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao excluir subespecie, código não encontrado: {str(e)}')
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao excluir subespécie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao excluir subespécie: {str(e)}')
         
     def alterar_especie_por_cod(self):
         try:
@@ -163,19 +171,22 @@ class ControladorEspecies:
             if identificador == 0:
                 return False
             else:
-                especie = self.__dict_especie[identificador]
-                dados_novos = self.__tela_especies.pegar_dados_especie()
-                especie.nome = dados_novos['nome']
-                especie.deslocamento = dados_novos['deslocamento']
-                especie.altura = dados_novos['altura']
-                especie.habilidades = dados_novos ['habilidades']
-                self.__tela_especies.mensagem(f'Especie de código {identificador} alterada com sucesso!')
-                return True
+                    especie = self.__dict_especie[identificador]
+                    dados_novos = self.__tela_especies.pegar_dados_especie()
+                    e = self.pega_especie_por_nome(dados_novos['nome'])
+                    if e is None:
+                        especie.nome = dados_novos['nome']
+                        especie.deslocamento = dados_novos['deslocamento']
+                        especie.altura = dados_novos['altura']
+                        self.__tela_especies.mensagem(f'Especie de código {identificador} alterada com sucesso!')
+                        return True
+                    else:
+                        raise EspecieJahExisteException(dados_novos['nome'])
 
         except KeyError as e:
-            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao alterar Espécie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao alterar espécie por código: {str(e)}')
 
     def alterar_subespecie_por_cod(self):
         try:
@@ -187,13 +198,17 @@ class ControladorEspecies:
             else:
                 subespecie = self.__dict_subespecie[identificador]
                 dados_novos = self.__tela_especies.pegar_dados_subespecie(super(Subespecie, subespecie).nome)
-                self.__dict_subespecie[identificador].nome_sub = dados_novos['nome']
-                self.__tela_especies.mensagem(f'Subespécie de código {identificador} alterada com sucesso!')
-                return True
+                e = self.pega_subespecie_por_nome(dados_novos['nome_sub'])
+                if e is None:
+                    self.__dict_subespecie[identificador].nome_sub = dados_novos['nome']
+                    self.__tela_especies.mensagem(f'Subespécie de código {identificador} alterada com sucesso!')
+                    return True
+                else:
+                    raise EspecieJahExisteException(dados_novos['nome'])
         except KeyError as e:   
             self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao alterar Subespécie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao alterar subespécie por código: {e}')
        
     def add_habilidade_especie(self):
         try:
