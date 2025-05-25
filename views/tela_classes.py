@@ -54,3 +54,4 @@ class TelaClasses(TelaAbstrata):
             for a in range(3):
                 print(f"{str(dados_classe['nomes_sub'][a]):^13}", end= ' | ')
                 print(f"{str(dados_classe['habilidades_sub'][a]):^13}")
+        print('=' *60)

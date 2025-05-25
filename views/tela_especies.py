@@ -54,14 +54,16 @@ class TelaEspecies(TelaAbstrata):
         return super().selecionar_obj_por_cod(obj, total_codigos)
     
     def mostra_especie(self, dados_especie: dict):
+        print(' Subespecie '.center(60, '='))
+        print(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média(cm)":^18}')
         print(f"{dados_especie['cod']:^4}", end=' | ')
         print(f"{dados_especie['nome']:^16}", end=' | ')
         print(f"{dados_especie['deslocamento']:^16}", end=' | ')
         print(f"{dados_especie['altura']:^18}")
-        print(f'===== Habilidades ====='.center(64, '='))
+        print(f'===== Habilidades ====='.center(60, '='))
         print(f"{str(dados_especie['habilidades'])}")
 
     def mostra_subespecie(self, dados_subespecie: dict):
         self.mostra_especie(dados_subespecie)
-        print(f'===== Habilidades específicas ====='.center(64, '='))
+        print(f'===== Habilidades específicas ====='.center(60, '='))
         print(f"{str(dados_subespecie['habilidades_esp'])}")

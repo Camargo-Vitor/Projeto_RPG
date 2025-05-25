@@ -98,7 +98,6 @@ class ControladorEspecies:
 
     def listar_especies(self):
         try:
-            self.__tela_especies.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média(cm)":^18}')
             for key, especie in self.__dict_especie.items():
                 self.__tela_especies.mostra_especie(
                     {
@@ -115,7 +114,6 @@ class ControladorEspecies:
 
     def listar_subespecies(self):
         try:
-            self.__tela_especies.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média":^18}')
             for key, subespecie in self.__dict_subespecie.items():
                 self.__tela_especies.mostra_subespecie(
                     {
