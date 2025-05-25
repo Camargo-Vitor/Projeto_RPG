@@ -10,8 +10,7 @@ class Pessoa(ABC):
                  cidade: str,
                  bairro: str,
                  numero: int,
-                 cep: int,
-                 disponibilidade: list):
+                 cep: int):
         self.__nome = nome
         self.__endereco = Endereco(cidade, bairro, numero, cep)
         self.__telefone = telefone
@@ -28,10 +27,6 @@ class Pessoa(ABC):
     def endereco(self):
         return self.__endereco
 
-    @property
-    def disponibilidade(self):
-        return self.__disponibilidade
-    
     @nome.setter
     def nome(self, nome: str):
         if isinstance(nome, str):
