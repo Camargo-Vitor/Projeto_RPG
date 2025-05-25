@@ -210,7 +210,7 @@ class ControladorEspecies:
                 else:
                     raise EspecieJahExisteException(dados_novos['nome'])
         except EspecieJahExisteException as e:
-            self.__tela_classes.mensagem(e)
+            self.__tela_especies.mensagem(e)
         except KeyError as e:
             self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
