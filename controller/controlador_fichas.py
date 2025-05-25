@@ -134,6 +134,22 @@ class ControladorFichas:
         except Exception as e:
             self.__tela_fichas.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens em ficha: {str(e)}")
 
+    def excluir_fichas(self):
+        try:
+            self.listar_fichas()
+            cod_validos = list(self.__dict_fichas.keys()) + [0]
+            identificador = self.__tela_fichas.selecionar_obj_por_cod('ficha', cod_validos)
+            if identificador == 0:
+                return
+            else:
+                del self.__dict_fichas[identificador]
+                self.__tela_fichas.mensagem('Ficha removida!')
+                return True
+        
+        except KeyError as e:
+            self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Erro ao excluir ficha, código não encontrado: {str(e)}')
+        except Exception as e:
+            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao excluir ficha: {str(e)}')
     def adicionar_item_ficha(self):
         try:
             self.listar_fichas(selecao=False)
@@ -365,14 +381,15 @@ class ControladorFichas:
     def abre_tela(self):
         opcoes = {
             1: self.incluir_ficha,
-            2: self.listar_fichas,
-            3: self.adicionar_item_ficha,
-            4: self.remover_item_ficha,
-            5: self.adicionar_magia_ficha,
-            6: self.remover_magia_ficha,
-            7: self.subir_nivel_de_uma_ficha,
-            8: self.alterar_vida_ficha,
-            9: self.relatorio,
+            2: self.excluir_fichas,
+            3: self.listar_fichas,
+            4: self.adicionar_item_ficha,
+            5: self.remover_item_ficha,
+            6: self.adicionar_magia_ficha,
+            7: self.remover_magia_ficha,
+            8: self.subir_nivel_de_uma_ficha,
+            9: self.alterar_vida_ficha,
+            10: self.relatorio,
             0: self.retornar
         }
         while True:
