@@ -1,6 +1,6 @@
 from model.classe import Classe
 from model.exceptions.exception_classe import *
-from model.exceptions.exception_especies import *
+from model.exceptions.excpetion_habilidades import *
 from views.tela_classes import TelaClasses
 from typing import TYPE_CHECKING
 
