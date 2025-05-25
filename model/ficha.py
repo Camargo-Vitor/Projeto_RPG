@@ -203,23 +203,14 @@ class Ficha:
         vida_adicional = randint(1, self.classe.dado_vida) + ((self.__atributos['constituicao'] - 10 ) // 2)
         self.__vida += vida_adicional
         self.__vida_atual += vida_adicional
+        if self.__vida_atual > self.__vida:
+            self.__vida_atual = self.__vida
 
-        for hab in self.classe.habilidades:
-            if hab.nivel == self.__nivel:
-                self.__habilidades.append(hab)
-
-        if type(self.classe) == 'subclasse':
-            for hab in self.classe.hab_especificas:
-                if hab.nivel <= self.__nivel:
-                    self.__habilidades.append(hab)
-
-        for hab in self.especie.habilidades:
-            if hab.nivel == self.__nivel:
-                self.__habilidades.append(hab)
-        
-        for hab in self.especie.hab_especificas:
-            if hab.nivel == self.__nivel:
-                self.__habilidades.append(hab)
+        for dic in self.__dict_pericias.values():
+            for chave in dic.keys():
+                if chave in self.__pericias_treinadas:
+                    dic[chave][0] = self.__bonus_pericia + dic[chave][0]
+                    dic[chave][1] = True
 
     def __str__(self):
         return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \

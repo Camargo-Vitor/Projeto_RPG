@@ -231,6 +231,38 @@ class ControladorFichas:
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Magia: {e}')
 
+    def subir_nivel_de_uma_ficha(self):
+            self.listar_fichas(selecao=False)
+            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+            identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
+            if identificador_ficha == 0:
+                return False
+            else:
+                ficha = self.dict_fichas[identificador_ficha]
+                ficha.subir_nivel()
+                self.__tela_fichas.mensagem(f'Ficha "{ficha.nome} subiu para o nivel {ficha.nivel}!"')
+                return True
+
+    def alterar_vida_ficha(self):
+        self.listar_fichas(selecao=False)
+        cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+        identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
+        if identificador_ficha == 0:
+            return False
+        else:
+            ficha = self.dict_fichas[identificador_ficha]
+            valor = self.__tela_fichas.le_int_ou_float(
+                'Digite o valor de vida a ser alterado (Utilize números negativos para subtrair vida): '
+            )
+            vida_antiga = ficha.vida_atual
+            ficha.vida_atual += valor
+            self.__tela_fichas.mensagem(f'Vida alterada {vida_antiga} -> {ficha.vida_atual}')
+            if ficha.vida_atual <= 0:
+                self.__tela_fichas.mensagem(f'O personagem "{ficha.nome}" está morrendo!')
+            elif vida_antiga <= 0 and ficha.vida_atual > 0:
+                self.__tela_fichas.mensagem(f'O personagem "{ficha.nome}" foi estabilizado! <3')
+            return True
+
     def relatorio(self):
         if not self.__dict_fichas:
             self.__tela_fichas.mensagem("Nenhuma ficha cadastrada.")
@@ -338,7 +370,9 @@ class ControladorFichas:
             4: self.remover_item_ficha,
             5: self.adicionar_magia_ficha,
             6: self.remover_magia_ficha,
-            7: self.relatorio,
+            7: self.subir_nivel_de_uma_ficha,
+            8: self.alterar_vida_ficha,
+            9: self.relatorio,
             0: self.retornar
         }
         while True:

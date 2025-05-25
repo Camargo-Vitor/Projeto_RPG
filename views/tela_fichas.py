@@ -2,7 +2,7 @@ from views.tela_abstrata import TelaAbstrata
 from random import randint
 
 class TelaFichas(TelaAbstrata):
-    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
+    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]):
         print('===== Fichas =====')
         print('1. Incluir Ficha')
         print('2. Listar Ficha')
@@ -10,15 +10,19 @@ class TelaFichas(TelaAbstrata):
         print('4. Remover item ficha')
         print('5. Adicionar maiga em ficha')
         print('6. Remover magia em ficha')
-        print('7. Relatório de fichas')
+        print('7. Subir nivel de uma ficha')
+        print('8. Alterar vida de uma ficha')
+        print('9. Relatório de fichas')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
     def pegar_dados_basicos_ficha(self):
+        print(' Dados Básicos Ficha '.center(60, '='))
         nome = self.le_str('Digite o nome do personagem: ')
         descricao_fisica = self.le_str('Digite uma breve descrição física: ', 'capitalize')
         historia = self.le_str('Digite, brevemente, a história do personagem: ', 'capitalize')
         moedas = self.le_int_ou_float('Digite quantas moedas o personagem tem: ',positivo=True)
+        print('='*60)
         return {
             'nome_personagem': nome,
             'descricao_fisica': descricao_fisica,
