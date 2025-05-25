@@ -2,7 +2,7 @@ from views.tela_abstrata import TelaAbstrata
 from random import randint
 
 class TelaFichas(TelaAbstrata):
-    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 0]):
+    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
         print('===== Fichas =====')
         print('1. Incluir Ficha')
         print('2. Listar Ficha')
@@ -10,6 +10,7 @@ class TelaFichas(TelaAbstrata):
         print('4. Remover item ficha')
         print('5. Adicionar maiga em ficha')
         print('6. Remover magia em ficha')
+        print('7. Relatório de fichas')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
     
@@ -17,10 +18,12 @@ class TelaFichas(TelaAbstrata):
         nome = self.le_str('Digite o nome do personagem: ')
         descricao_fisica = self.le_str('Digite uma breve descrição física: ', 'capitalize')
         historia = self.le_str('Digite, brevemente, a história do personagem: ', 'capitalize')
+        moedas = self.le_int_ou_float('Digite quantas moedas o personagem tem: ',positivo=True)
         return {
             'nome_personagem': nome,
             'descricao_fisica': descricao_fisica,
-            'historia': historia
+            'historia': historia,
+            'moedas': moedas
         }
     
     def pegar_dados_pericias(self):
@@ -108,6 +111,7 @@ class TelaFichas(TelaAbstrata):
         print(f"Nome: {dados_ficha['nome']}")
         print(f"Nivel: {dados_ficha['nivel']:^4}")
         print(f"Vida: {dados_ficha['vida_atual']}/{dados_ficha['vida']}")
+        print(f"Moedas: {dados_ficha['moedas']}")
         print(f"Descrição física: {dados_ficha['fisico']}")
         print(f"História: {dados_ficha['historia']}")
         print(f"Altura: {dados_ficha['altura']}")
@@ -125,27 +129,22 @@ class TelaFichas(TelaAbstrata):
         print('><' * 8 + 'Utilitários' + '><' * 8)
         print(f"Inventário: {dados_ficha['inventario']}")
         print(f"Magias: {dados_ficha['magias']}")
+        print(f"Habilidades: {dados_ficha['habilidades']}")
 
-        '''
-        return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
-        f'\nNome: {self.nome}\
-        \nVida: {self.vida}\
-        \nNível: {self.nivel}\
-        \nDeslocamento: {self.especie.deslocamento}\
-        \nFisico: {self.fisico}\
-        \nAltura: {self.altura}cm\
-        \nHistória: {self.historia}\
-        \nClasse: {self.classe.nome}\
-        \nEspecie: {self.especie.nome}\n' + \
-        '><' * 8 + 'Atributos' + '><' * 8 + f'\
-        \nForça: {self.__atributos["forca"]} ({(self.__atributos["forca"] - 10) // 2})\
-        \nDestreza: {self.__atributos["destreza"]} ({(self.__atributos["destreza"] - 10) // 2})\
-        \nConstituição: {self.__atributos["constituicao"]} ({(self.__atributos["constituicao"] - 10) // 2})\
-        \nInteligencia: {self.__atributos["inteligencia"]} ({(self.__atributos["inteligencia"] - 10) // 2})\
-        \nSabedoria: {self.__atributos["sabedoria"]} ({(self.__atributos["sabedoria"] - 10) // 2})\
-        \nCarisma: {self.__atributos["carisma"]} ({(self.__atributos["carisma"] - 10) // 2})\n' + \
-        '><' * 8 + 'Utilitários' + '><' * 8 + f'\
-        \nInventário: {"vazio" if self.inventario == [] else [str(x) for x in self.inventario]}\
-        \nMagias: {"Nenhuma magia" if self.lista_magias == [] else [str(x) for x in self.lista_magias]}\
-        \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else [str(x) for x in self.habilidades]}'
-        '''
+    def mostra_relatorio(self, dados):
+        print("\n" + "=" * 30)
+        print("RELATÓRIO DE PERSONAGENS")
+        print("=" * 30)
+        print(f">> Maior nível: {dados['maior_nivel'][0]} (nível {dados['maior_nivel'][1]})")
+        print(f">> Mais rico: {dados['mais_ouro'][0]} ({dados['mais_ouro'][1]} moedas)")
+        print(f">> Mais itens: {dados['mais_itens'][0]} ({dados['mais_itens'][1]} itens)")
+        print(f">> Maior deslocamento: {dados['maior_deslocamento'][0]} ({dados['maior_deslocamento'][1]}m)")
+        print(f">> Mais magias: {dados['mais_magias'][0]} ({dados['mais_magias'][1]} magias)")
+        print(f">> Mais vida: {dados['maior_vida'][0]} ({dados['maior_vida'][1]} HP)")
+        print(f">> Maior dado de vida: {dados['maior_dado_vida'][0]} ({dados['maior_dado_vida'][1]})")
+        print(f">> Classe mais comum: {dados['classe_mais_comum'][0]} ({dados['classe_mais_comum'][1]} personagens)")
+        print(f">> Perícia mais comum: {dados['pericia_mais_comum'][0]} ({dados['pericia_mais_comum'][1]} vezes)")
+        print(f">> Personagem com mais habilidades: {dados['mais_hab'][0]} ({dados['mais_hab'][1]})")
+        print(f">> Maior atributo registrado: {dados['maior_atributo']}")
+        print(f">> Média de magias por personagem: {dados['media_magias']}")
+        print("=" * 30 + "\n")

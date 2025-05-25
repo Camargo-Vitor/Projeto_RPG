@@ -13,6 +13,30 @@ class ControladorFichas:
         self.__cod = 1
         self.__dict_fichas: dict[int, Ficha] = dict()
 
+    def selecionar_habilidades_aivas_em_ficha(self, ficha: Ficha):
+        habilidades = []
+        for hab in ficha.especie.hab_especificas:
+            if hab.nivel <= ficha.nivel:
+                habilidades.append(hab)
+        for hab in ficha.especie.habilidades:
+            if hab.nivel <= ficha.nivel:
+                habilidades.append(hab)
+        for hab in ficha.classe.habilidades:
+            if hab.nivel <= ficha.nivel:
+                habilidades.append(hab)
+        for subclasse in ficha.classe.subclasses:
+            for hab in subclasse.hab_especificas:
+                if hab.nivel <= ficha.nivel:
+                    habilidades.append(hab)
+        return habilidades
+
+    def selecionar_magias_ativas_em_ficha(self, ficha: Ficha):
+        magias = []
+        for magia in ficha.lista_magias:
+            if magia.nivel <= ficha.nivel:
+                magias.append(magia)
+        return magias
+
     def incluir_ficha(self):
         try:
             #dados basicos
@@ -52,6 +76,7 @@ class ControladorFichas:
                 dados__basicos_ficha['nome_personagem'],
                 dados__basicos_ficha['descricao_fisica'],
                 dados__basicos_ficha['historia'],
+                dados__basicos_ficha['moedas'],
                 classe,
                 subespecie,
                 pericias_treinadas,
@@ -80,14 +105,7 @@ class ControladorFichas:
                 if identificador == 0:
                     return False
                 else:
-                    '''
-                    TERMINAR A INCLUSAO DE HABILIDADES COM BASE NO NIVEL DA FICHA
-                    '''
                     ficha = self.__dict_fichas[identificador]
-                    habilidades = []
-                    habilidades += ficha.classe.habilidades
-                    habiliades += ficha
-                    habilidades += ficha.especie.habilidades
                     self.__tela_fichas.mostra_ficha_inteira(
                         {
                             'nome': ficha.nome,
@@ -98,6 +116,7 @@ class ControladorFichas:
                             'fisico': ficha.fisico,
                             'altura': ficha.altura,
                             'historia': ficha.historia,
+                            'moedas': ficha.moedas,
                             'classe': ficha.classe.nome,
                             'especie': ficha.especie.nome,
                             'pericias': ficha.pericias_treinadas,
@@ -108,8 +127,8 @@ class ControladorFichas:
                             'sabedoria': f'{ficha.atributos["sabedoria"]} ({(ficha.atributos["sabedoria"] - 10) // 2})',
                             'carisma': f'{ficha.atributos["carisma"]} ({(ficha.atributos["carisma"] - 10) // 2})',
                             'inventario': [item.nome for item in ficha.inventario],
-                            'magias': [magia.nome for magia in ficha.lista_magias],
-                            'habilidades': habilidades
+                            'magias': [magia.nome for magia in self.selecionar_magias_ativas_em_ficha(ficha)],
+                            'habilidades': [hab.nome for hab in self.selecionar_habilidades_aivas_em_ficha(ficha)]
                         }
                     )
         except Exception as e:
@@ -212,6 +231,101 @@ class ControladorFichas:
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao alterar Magia: {e}')
 
+    def relatorio(self):
+        if not self.__dict_fichas:
+            self.__tela_fichas.mensagem("Nenhuma ficha cadastrada.")
+            return False
+
+        fichas = list(self.__dict_fichas.values())
+
+        #Valores maiores
+        personagem_com_maior_nivel = fichas[0]
+        personagem_mais_ouro = fichas[0]
+        personagem_mais_itens = fichas[0]
+        personagem_maior_deslocamento = fichas[0]
+        personagem_mais_magias = fichas[0]
+        personagem_com_maior_dado_de_vida = fichas[0]
+        personagem_maior_vida = fichas[0]
+        personagem_com_mais_hab = fichas[0]
+
+        total_magias = 0
+        total_fichas = len(fichas)
+        todas_classes = []
+        todas_pericias = {}
+
+        for ficha in fichas:
+            if ficha.nivel > personagem_com_maior_nivel.nivel:
+                personagem_com_maior_nivel = ficha
+            if ficha.moedas > personagem_mais_ouro.moedas:
+                personagem_mais_ouro = ficha
+            if len(ficha.inventario) > len(personagem_mais_itens.inventario):
+                personagem_mais_itens = ficha
+            if ficha.deslocamento > personagem_maior_deslocamento.deslocamento:
+                personagem_maior_deslocamento = ficha
+            if  len(self.selecionar_magias_ativas_em_ficha(ficha)) > \
+                len(self.selecionar_magias_ativas_em_ficha(personagem_mais_magias)):
+                personagem_mais_magias = ficha
+            if ficha.vida > personagem_maior_vida.vida:
+                personagem_maior_vida = ficha
+            if ficha.classe.dado_vida > personagem_com_maior_dado_de_vida.classe.dado_vida:
+                personagem_com_maior_dado_de_vida = ficha
+            if len(self.selecionar_habilidades_aivas_em_ficha(personagem_com_mais_hab)) > \
+                len(self.selecionar_habilidades_aivas_em_ficha(ficha)):
+                personagem_com_mais_hab = ficha
+
+            total_magias += len(self.selecionar_magias_ativas_em_ficha(ficha))
+            todas_classes.append(ficha.classe.nome)
+
+            for pericia in ficha.pericias_treinadas:
+                if pericia in todas_pericias:
+                    todas_pericias[pericia] += 1
+                else:
+                    todas_pericias[pericia] = 1
+
+        # Classe mais comum
+        classe_mais_comum = todas_classes[0]
+        qtd_classe_mais_comum = todas_classes.count(classe_mais_comum)
+        for classe in todas_classes:
+            qtd = todas_classes.count(classe)
+            if qtd > qtd_classe_mais_comum:
+                classe_mais_comum = classe
+                qtd_classe_mais_comum = qtd
+
+        # Perícia mais comum
+        pericia_mais_comum = ""
+        qtd_pericia_mais_comum = 0
+
+        for pericia in todas_pericias:
+            if todas_pericias[pericia] > qtd_pericia_mais_comum:
+                pericia_mais_comum = pericia
+                qtd_pericia_mais_comum = todas_pericias[pericia]
+
+        # Maior atributo bruto
+        maior_atributo = 0
+        for ficha in fichas:
+            for valor in ficha.atributos.values():
+                if valor > maior_atributo:
+                    maior_atributo = valor
+
+        media_magias = total_magias / total_fichas
+
+        dados_relatorio = {
+            'maior_nivel': (personagem_com_maior_nivel.nome, personagem_com_maior_nivel.nivel),
+            'mais_ouro': (personagem_mais_ouro.nome, personagem_mais_ouro.moedas),
+            'mais_itens': (personagem_mais_itens.nome, len(personagem_mais_itens.inventario)),
+            'maior_deslocamento': (personagem_maior_deslocamento.nome, personagem_maior_deslocamento.deslocamento),
+            'mais_magias': (personagem_mais_magias.nome, len(personagem_mais_magias.lista_magias)),
+            'maior_vida': (personagem_maior_vida.nome, personagem_maior_vida.vida),
+            'maior_dado_vida': (personagem_com_maior_dado_de_vida.nome, personagem_com_maior_dado_de_vida.classe.dado_vida),
+            'classe_mais_comum': (classe_mais_comum, qtd_classe_mais_comum),
+            'pericia_mais_comum': (pericia_mais_comum, qtd_pericia_mais_comum),
+            'maior_atributo': maior_atributo,
+            'media_magias': round(media_magias, 2),
+            'mais_hab': (personagem_com_mais_hab.nome, len(self.selecionar_habilidades_aivas_em_ficha(ficha)))
+        }
+
+        self.__tela_fichas.mostra_relatorio(dados_relatorio)
+        return dados_relatorio
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()
@@ -224,6 +338,7 @@ class ControladorFichas:
             4: self.remover_item_ficha,
             5: self.adicionar_magia_ficha,
             6: self.remover_magia_ficha,
+            7: self.relatorio,
             0: self.retornar
         }
         while True:
