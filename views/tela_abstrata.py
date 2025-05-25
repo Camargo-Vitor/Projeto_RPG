@@ -48,7 +48,7 @@ class TelaAbstrata(ABC):
         entrada = ''
         while True:
             entrada = input(mensagem).strip()
-            if not entrada.isalnum() and not entrada == '':
+            if not entrada.isnumeric() and not entrada == '':
                 break
             print(f'[ERRO] Entrada inválida, não digite números ou espaços vazios.')
 
