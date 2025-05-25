@@ -2,7 +2,6 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaSistema(TelaAbstrata):
-
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
         print('===== Sistema =====')
         print('1. Item')

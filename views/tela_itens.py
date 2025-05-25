@@ -2,7 +2,6 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaItens(TelaAbstrata):
-
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
         print('===== Item =====')
         print('1. Criar Item')
@@ -25,9 +24,6 @@ class TelaItens(TelaAbstrata):
                 'pagina': pagina,
                 'valor': valor
                 }        
-
-    def selecionar_obj_por_cod(self, obj, total_codigos):
-        return super().selecionar_obj_por_cod(obj, total_codigos)
 
     def mostra_item(self, dados_item: dict):
         print(f"{dados_item['cod']:^4}", end=' | ')

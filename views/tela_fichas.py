@@ -16,7 +16,7 @@ class TelaFichas(TelaAbstrata):
         print('10. Relatório de fichas')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
-    
+
     def pegar_dados_basicos_ficha(self):
         print(' Dados Básicos Ficha '.center(60, '='))
         nome = self.le_str('Digite o nome do personagem: ')

@@ -2,7 +2,6 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaPessoas(TelaAbstrata):
-
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
         print('===== Pessoas =====')
         print('1. Incluir Jogador')

@@ -2,7 +2,6 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaMagias(TelaAbstrata):
-
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
         print('===== Magias =====')
         print('1. Criar Magia')
@@ -22,9 +21,6 @@ class TelaMagias(TelaAbstrata):
                 'nivel': nivel,
                 'pagina': pagina
                 }
-
-    def selecionar_obj_por_cod(self, obj, total_codigos):
-        return super().selecionar_obj_por_cod(obj, total_codigos)   
 
     def mostra_magia(self, dados_magia: dict):
         print(f"{dados_magia['cod']:^4}", end=' | ')

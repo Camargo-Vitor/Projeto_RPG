@@ -66,7 +66,7 @@ class ControladorEspecies:
                 self.__tela_especies.mensagem('Espécie criada com sucesso!')
                 return True
         except EspecieJahExisteException as e:
-            self.tela_especies.mensagem(e)
+            self.__tela_especies.mensagem(e)
         except KeyError as e:
             self.__tela_especies.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
@@ -171,7 +171,7 @@ class ControladorEspecies:
                 self.__tela_especies.mensagem('Subespecie removida!')
                 return True
         except KeyError as e:
-            self.tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao excluir subespecie, código não encontrado: {str(e)}')
+            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao excluir subespecie, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao excluir subespécie: {str(e)}')
         

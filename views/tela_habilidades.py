@@ -2,7 +2,6 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaHabilidades(TelaAbstrata):
-
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 0]):
         print('===== Habilidades =====')
         print('1. Criar Habilidade')
@@ -42,9 +41,6 @@ class TelaHabilidades(TelaAbstrata):
             'pagina': pagina,
             'origem': origem
         }
-
-    def selecionar_obj_por_cod(self, obj, total_codigos):
-        return super().selecionar_obj_por_cod(obj, total_codigos)
     
     def mostra_habilidade(self, dados_habilidade: dict):
         print(f"{dados_habilidade['cod']:^4}", end= ' | ')

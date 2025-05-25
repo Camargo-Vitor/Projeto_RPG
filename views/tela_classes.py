@@ -37,9 +37,6 @@ class TelaClasses(TelaAbstrata):
                 'nomes_sub': nomes_sub,
             }
 
-    def selecionar_obj_por_cod(self, obj, total_codigos):
-        return super().selecionar_obj_por_cod(obj, total_codigos)
-
     def mostra_classe_e_subclasse(self, dados_classe: dict, classe=True, subclasse=True):
         if classe:
             print('==== Classe ===='.center(36, '='))

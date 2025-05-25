@@ -2,7 +2,6 @@ from views.tela_abstrata import TelaAbstrata
 
 
 class TelaEspecies(TelaAbstrata):
-    
     def mostra_tela(self, opcoes = [1, 2, 0]):
         print('===== Especie/Subespecie =====')
         print('1. Gerir Especie')
@@ -49,12 +48,9 @@ class TelaEspecies(TelaAbstrata):
         print('===== Dados Subespecie =====')
         nome = self.le_str(f'Nome: {especie} ')
         return {'nome': nome}
-        
-    def selecionar_obj_por_cod(self, obj, total_codigos):
-        return super().selecionar_obj_por_cod(obj, total_codigos)
     
     def mostra_especie(self, dados_especie: dict):
-        print(' Subespecie '.center(60, '='))
+        print(' Subespecie '.center(60,'='))
         print(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média(cm)":^18}')
         print(f"{dados_especie['cod']:^4}", end=' | ')
         print(f"{dados_especie['nome']:^16}", end=' | ')
