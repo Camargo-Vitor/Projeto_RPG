@@ -1,5 +1,6 @@
 from model.classe import Classe
-from model.exceptions import *
+from model.exceptions.exception_classe import *
+from model.exceptions.exception_especies import *
 from views.tela_classes import TelaClasses
 from typing import TYPE_CHECKING
 
@@ -24,19 +25,28 @@ class ControladorClasses:
         return None
     
     def incluir_classe(self):
-        dados_classe = self.__tela_classes.pegar_dados_classes()
-        c = self.pega_classe_por_nome(dados_classe['nome'])
-        if c is None:
-            classe = Classe(
-                dados_classe['nome'],
-                dados_classe['dado'],
-                dados_classe['nomes_sub']
-            )
-            self.__dict__classes[self.__cod] = classe
-            self.__cod += 1
-            self.__tela_classes.mensagem('Classe criada com sucesso!')
-        else:
-            self.__tela_classes.mensagem('A classe criada ja existe!')
+        try:
+            dados_classe = self.__tela_classes.pegar_dados_classes()
+            c = self.pega_classe_por_nome(dados_classe['nome'])
+            if c:
+                raise ClasseJahExisteException
+            else:
+                classe = Classe(
+                    dados_classe['nome'],
+                    dados_classe['dado'],
+                    dados_classe['nomes_sub']
+                )
+                self.__dict__classes[self.__cod] = classe
+                self.__cod += 1
+                self.__tela_classes.mensagem('Classe criada com sucesso!')
+                return True
+        except ClasseJahExisteException as e:
+            self.__tela_classes.mensagem(e)
+        except KeyError as e:
+            self.__tela_classes.mensagem(f'"[ERRO] Dado ausente: {str(e)}"')
+        except Exception as e:
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao incluir classe: {str(e)}')
+
     
     def listar_classes_e_subclasses(self, classes=True, subclasses=True):
         try:
@@ -74,88 +84,91 @@ class ControladorClasses:
         try:
             self.listar_classes_e_subclasses(subclasses=False)
             codigos_validos = list(self.__dict__classes.keys()) + [0]
-            identificador = self.__tela_classes.le_int_ou_float(
-                'Digite o código da classe: (0 para cancelar) ',
-                conjunto_alvo=codigos_validos
-            )
+            identificador = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos)
             if identificador == 0:
                 return False
             else:
                 classe = self.__dict__classes[identificador]
-                novos_dados = self.__tela_classes.pegar_dados_classes(basico=True)
-                classe.nome = novos_dados['nome']
-                classe.dado_vida = novos_dados['dado']
+                dados_novos = self.__tela_classes.pegar_dados_classes(basico=True)
+                e = self.pega_classe_por_nome(dados_novos['nome'])
+                if e is None:
+                    classe.nome = dados_novos['nome']
+                    classe.dado_vida = dados_novos['dado']
+                    self.__tela_classes.mensagem(f'Classe de código {identificador} alterada com sucesso!')
+                else:
+                    raise ClasseJahExisteException(dados_novos['nome'])
+        except ClasseJahExisteException as e:
+            self.__tela_classes.mensagem({str(e)})
+        except KeyError as e:
+            self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
         except Exception as e:
-            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao modificar dados base de classe: {e}') 
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao modificar dados base de classe: {str(e)}') 
 
     def adiciona_hab_classe(self):
         try:
             self.listar_classes_e_subclasses(subclasses=False)
             codigos_validos = list(self.__dict__classes.keys()) + [0]
-            identificador = self.__tela_classes.le_int_ou_float(
-                'Digite o código da classe: (0 para cancelar) ',
-                conjunto_alvo=codigos_validos
-            )
+            identificador = self.__tela_classes.selecionar_obj_por_cod('classes', codigos_validos)
             if identificador == 0:
                 return False
             else:
-                classe = self.__dict__classes[identificador]
+                habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='classe')
-                codigos_validos = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
-                identificador = self.__tela_classes.le_int_ou_float(
-                    'Digite o código da Habilidade: (0 para cancelar) ',
-                    conjunto_alvo=codigos_validos
-                )
+                codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
+                identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidade', codigos_validos_hab)
                 if identificador == 0:
                     return False
-                else:
-                    habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador]
+                elif habilidade[identificador_hab].origem == 'classe':
+                    classe = self.__dict__classes[identificador]
                     classe.add_hab(habilidade)
-                    self.__tela_classes.mensagem('Habilidade adicionada com sucesso!')
+                    self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
-        except ValueError as e:
+                else:
+                    raise OrigemInvalidaException()
+        except OrigemInvalidaException as e:
             self.__tela_classes.mensagem(e)
+        except KeyError as e:
+            self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {str(e)}')
         except Exception as e:
-            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em classe: {e}')
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em classe: {str(e)}')
 
     def adiciona_hab_subclasse(self):
         try:
             self.listar_classes_e_subclasses(subclasses=False)
-            codigos_validos = list(self.__dict__classes.keys()) + [0]
-            identificador = self.__tela_classes.le_int_ou_float(
-                'Digite o código da classe: (0 para cancelar) ',
-                conjunto_alvo=codigos_validos
-            )
-            if identificador == 0:
+            codigos_validos_class = list(self.__dict__classes.keys()) + [0]
+            identificador_class= self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_class)
+            if identificador_class== 0:
                 return False
             else:
-                classe = self.__dict__classes[identificador]
+                classe = self.__dict__classes[identificador_class]
+                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
                          'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
                 self.tela_classes.mostra_classe_e_subclasse(infos, classe=False)
-                identificador = self.__tela_classes.le_int_ou_float(
+                identificador_sub = self.__tela_classes.le_int_ou_float(
                     'Digite qual a subclasse (1, 2 ou 3 - de cima para baixo): ',
                     conjunto_alvo=[1, 2, 3]
                 )
-                if identificador == 0:
+                if identificador_sub == 0:
                     return False
                 else:
-                    subclasse = classe.subclasses[identificador-1]    
+                    subclasse = classe.subclasses[identificador_sub - 1]    
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
-                    codigos_validos = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
-                    identificador = self.__tela_classes.le_int_ou_float(
-                        'Digite o código da Habilidade: (0 para cancelar) ',
-                        conjunto_alvo=codigos_validos
-                    )
-                    if identificador == 0:
-                        return False
-                    else:
-                        habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador]
-                        subclasse.add_hab(habilidade)
-                        self.__tela_classes.mensagem('Habilidade adicionada com sucesso!')
-                        return True
-        except ValueError as e:
+                    codigos_validos_sub = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
+                    identificador_hab = self.__tela_classes.selecionar_obj_por_cod('subclase', codigos_validos_sub)
+                if identificador_hab == 0:
+                    return False
+                elif habilidades[identificador_sub].origem == 'subclasse':
+                    habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab]
+                    subclasse.add_hab(habilidade)
+                    self.__tela_classes.mensagem('Habilidade adicionada!')
+                    return True
+                else:
+                    raise OrigemInvalidaException()
+        except OrigemInvalidaException as e:
             self.__tela_classes.mensagem(e)
+        except KeyError as e:
+            self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em subclasse: {e}')
 
@@ -188,7 +201,7 @@ class ControladorClasses:
                     return True
 
         except KeyError as e: 
-            self.__tela_classes.mensagem(e)
+            self.__tela_classes.mensagem(f'ERRO DE CHAVE] Elemento não excluido, código não encontado: {e}')
         except Exception as e:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade em classe: {e}')
 
@@ -230,8 +243,8 @@ class ControladorClasses:
                         self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                         return True
 
-        except ValueError as e:
-            self.__tela_classes.mensagem(e)
+        except KeyError as e:
+            self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Elemento não excluido, código não encontrado: {e}')
         except Exception as e:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em subclasse: {e}')
       
