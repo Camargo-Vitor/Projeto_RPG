@@ -173,7 +173,7 @@ class ControladorClasses:
                 elif habilidades[identificador_sub].origem == 'subclasse':
                     if habilidades[identificador_hab].nome in [hab.nome for hab in subclasse.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
-                    subclasse.add_hab(habilidades)
+                    subclasse.add_hab(habilidades[identificador_hab])
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
@@ -242,7 +242,7 @@ class ControladorClasses:
                         return False
                     else:
                         habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab]
-                        subclasse.rm_hab(habilidade)
+                        subclasse.rm_hab(habilidade[identificador_hab])
                         self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                         return True
 
