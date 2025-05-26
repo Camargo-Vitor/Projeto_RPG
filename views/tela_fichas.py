@@ -11,7 +11,7 @@ class TelaFichas(TelaAbstrata):
         print('5. Subir nivel de uma ficha')
         print('6. Adicionar item em ficha')
         print('7. Remover item ficha')
-        print('8. Adicionar maiga em ficha')
+        print('8. Adicionar magia em ficha')
         print('9. Remover magia em ficha')
         print('10. Relatório de fichas')
         print('0. Retornar')

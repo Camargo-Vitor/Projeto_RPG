@@ -160,9 +160,9 @@ class ControladorFichas:
 
     def excluir_fichas(self):
         try:
-            self.listar_fichas()
+            self.listar_fichas(selecao=False)
             cod_validos = list(self.__dict_fichas.keys()) + [0]
-            identificador = self.__tela_fichas.selecionar_obj_por_cod('ficha', cod_validos)
+            identificador = self.__tela_fichas.selecionar_obj_por_cod('selecione a ficha', cod_validos)
             if identificador == 0:
                 return
             else:
@@ -230,15 +230,18 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                item = self.__controlador_sistema.controlador_itens.dict_item
+                ficha = self.dict_fichas[identificador_ficha]
+                itens = self.__controlador_sistema.controlador_itens.dict_item
                 self.__controlador_sistema.controlador_itens.listar_itens()
-                codigos_validos_item = list(item.keys()) + [0]
+                codigos_validos_item = list(itens.keys()) + [0]
+                itens_personagem = [item.nome for item in ficha.inventario]
+                self.__tela_fichas.mensagem(f'Itens do Personagem: {itens_personagem}')
                 identificador_item = self.__tela_fichas.selecionar_obj_por_cod('item', codigos_validos_item)
                 if identificador_item == 0:
                     return False
                 else: 
-                    ficha = self.dict_fichas[identificador_ficha]
-                    ficha.rm_item_inventario(item[identificador_item])
+                    
+                    ficha.rm_item_inventario(itens[identificador_item])
                     self.__tela_fichas.mensagem('Item removido do inventário!')
                     return True
                 
@@ -255,14 +258,16 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
+                ficha = self.dict_fichas[identificador_ficha]
                 magias = self.__controlador_sistema.controlador_magias.dict_magias
                 self.__controlador_sistema.controlador_magias.listar_magias()
                 codigos_validos_magia = list(magias.keys()) + [0]
+                itens_personagem = [magia.nome for magia in self.selecionar_magias_ativas_em_ficha(ficha)]
+                self.__tela_fichas.mensagem(f'Magias do Personagem: {itens_personagem}')
                 identificador_magia = self.__tela_fichas.selecionar_obj_por_cod('magia', codigos_validos_magia)
                 if identificador_magia == 0:
                     return False
                 else:
-                    ficha = self.dict_fichas[identificador_ficha]
                     ficha.rm_magia(magias[identificador_magia])
                     self.__tela_fichas.mensagem('Magia removida!')
                     return True
