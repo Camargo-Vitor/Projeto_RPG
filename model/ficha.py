@@ -22,6 +22,7 @@ class Ficha:
             self.__moedas = moedas
             self.__pericias_treinadas = pericias_treinadas 
             self.__classe = classe
+            self.__subclasse = 'Não há'
             self.__especie = especie
             self.__nivel = 1
             self.__bonus_pericia = 2 + (self.__nivel - 1)//4 
@@ -146,6 +147,14 @@ class Ficha:
     @property
     def dict_pericias(self):
         return self.__dict_pericias
+
+    @property
+    def subclasse(self):
+        return self.__subclasse
+
+    @subclasse.setter
+    def subclasse(self, subclasse):
+        self.__subclasse = subclasse
 
     @nome.setter
     def nome(self, nome: str):

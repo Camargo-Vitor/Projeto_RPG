@@ -24,10 +24,9 @@ class ControladorFichas:
         for hab in ficha.classe.habilidades:
             if hab.nivel <= ficha.nivel:
                 habilidades.append(hab)
-        for subclasse in ficha.classe.subclasses:
-            for hab in subclasse.hab_especificas:
-                if hab.nivel <= ficha.nivel:
-                    habilidades.append(hab)
+        if not isinstance(ficha.subclasse, str):
+            for hab in ficha.subclasse.hab_especificas:
+                habilidades.append(hab)
         return habilidades
 
     def selecionar_magias_ativas_em_ficha(self, ficha: Ficha):
@@ -112,6 +111,7 @@ class ControladorFichas:
                             'historia': ficha.historia,
                             'moedas': ficha.moedas,
                             'classe': ficha.classe.nome,
+                            'subclasse': ficha.subclasse if isinstance(ficha.subclasse, str) else ficha.subclasse.nome,
                             'especie': ficha.especie.nome,
                             'pericias': ficha.pericias_treinadas,
                             'forca': f'{ficha.atributos["forca"]} ({(ficha.atributos["forca"] - 10) // 2})',
@@ -249,6 +249,13 @@ class ControladorFichas:
                 return False
             else:
                 ficha = self.dict_fichas[identificador_ficha]
+                if ficha.nivel == 2:
+                    infos = {'nomes_sub': [sub.nome for sub in ficha.classe.subclasses],
+                            'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in ficha.classe.subclasses]}
+                    self.__controlador_sistema.controlador_classes.tela_classes.mostra_classe_e_subclasse(infos, classe=False)
+                    subclasse_ecolhida = self.__tela_fichas.selecionar_obj_por_cod(
+                        'Digite a subclasse que deseja se aperfeiçoar (1, 2 ou 3 - de cima para baixo): ', [1, 2, 3])
+                    ficha.subclasse = ficha.classe.subclasses[subclasse_ecolhida - 1]
                 ficha.subir_nivel()
                 self.__tela_fichas.mensagem(f'Ficha "{ficha.nome} subiu para o nivel {ficha.nivel}!"')
                 return True

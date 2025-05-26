@@ -123,6 +123,7 @@ class TelaFichas(TelaAbstrata):
         print(f"Deslocamento: {dados_ficha['deslocamento']}")
         print(f"Pericias Treinadas: {dados_ficha['pericias']}")
         print(f"Classe: {dados_ficha['classe']}")
+        print(f"Subclasse: {dados_ficha['subclasse']}")
         print(f"Especie: {dados_ficha['especie']}")
         print('><' * 8 + 'Atributos' + '><' * 8)
         print(f"Forca: {dados_ficha['forca']}")
