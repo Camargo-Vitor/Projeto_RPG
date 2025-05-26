@@ -4,14 +4,31 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
-
+    
 
 class ControladorFichas:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_fichas = TelaFichas()
         self.__cod = 1
-        self.__dict_fichas: dict[int, Ficha] = dict()
+        self.__dict_fichas: dict[int, Ficha] = {
+            1000: Ficha('Maria', 'Alta e de cabelo azul','nasceu, cresceu, viveu.', 100,
+            self.__controlador_sistema.controlador_classes.dict_classes[1001], 
+            self.__controlador_sistema.controlador_especies.dict_subespecie[1000],
+            ['Percepção', 'Presdigitação', 'Sobrevivência', 'Persuasão', 'Percepção'],
+            [10, 8, 13, 14, 12, 16]),
+
+            1001: Ficha('Sindur', 'Baixo, com uma longa barba laranja e calvo', 'nasceu, não cresceu, viveu muito', 1341,
+            self.__controlador_sistema.controlador_classes.dict_classes[1002],
+            self.__controlador_sistema.controlador_especies.dict_subespecie[1001],
+            ['Atletismo', 'Lidar com Animais', 'Percepção', 'Intimidação', 'Natureza'],
+            [20, 15, 18, 12, 7, 13]),
+
+            1002: Ficha('Kashimir', 'Alto, Velho, com uma cicatriz na bochecha esquerda', 'nasceu, sofreu, creseceu, vendeu a alma, viveu', 6547,
+            self.__controlador_sistema.controlador_classes.dict_classes[1003],
+            self.__controlador_sistema.controlador_especies.dict_subespecie[1005],
+            ['Persuasão', 'Arcanismo', 'Natureza', 'Performace', 'História'],
+            [7, 15, 12, 11, 14, 18])}
 
     def selecionar_habilidades_aivas_em_ficha(self, ficha: Ficha):
         habilidades = []
