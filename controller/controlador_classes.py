@@ -171,7 +171,7 @@ class ControladorClasses:
                 if identificador_hab == 0:
                     return False
                 elif habilidades[identificador_hab].origem == 'subclasse':
-                    if habilidades[identificador_hab].nome in [hab.nome for hab in subclasse.habilidades]:
+                    if habilidades[identificador_hab].nome in [hab.nome for hab in subclasse.hab_especificas]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     subclasse.add_hab(habilidades[identificador_hab])
                     self.__tela_classes.mensagem('Habilidade adicionada!')
