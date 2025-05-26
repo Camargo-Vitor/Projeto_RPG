@@ -15,17 +15,6 @@ class ControladorPessoas:
         # O dicionário de "Jogadores" iniciaria normalmente vazio, porém
         # para demonstração, utilzaremos alguns objetos já instanciados. 
         # Estes objetos receberão códigos acima de 999.
-        self.__jogadores: dict[int, Jogador] = {
-            1000: Jogador('João', 92222222221, 'americana', 'americos', 231, 87312432,
-                          self.__controlador_sistema.controlador_fichas.dict_fichas[1000]),
-            1001: Jogador('Victor', 4896703241, 'Florianópolis', 'centro', 261, 88031483,
-                          self.__controlador_sistema.controlador_fichas.dict_fichas[1001]),
-            1002: Jogador('Elias', 25123456789, 'joinville', 'cinza', 981, 86135098,
-                          self.__controlador_sistema.controlador_fichas.dict_fichas['1003']),
-            1003: Jogador('Sofia', 21849021435, 'jaraguá', 'amizade', 784, 98099876,
-                          self.__controlador_sistema.controlador_fichas.dict_fichas['1000'])
-
-        }
         self.__mestre: Mestre = Mestre('[VAZIO]', 0, '[VAZIO]', 'VAZIO', 0, 0)
         self.__cod = 1
     
