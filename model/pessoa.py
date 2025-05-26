@@ -1,9 +1,9 @@
 from model.endereco import Endereco
-from abc import ABC, abstractclassmethod
+from abc import ABC, abstractmethod
 
 
 class Pessoa(ABC):
-    @abstractclassmethod
+    @abstractmethod
     def __init__(self,
                  nome: str,
                  telefone: int,

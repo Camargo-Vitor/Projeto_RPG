@@ -98,7 +98,7 @@ class ControladorPessoas:
                 jogador = self.__jogadores[identificador]
                 dados_novos = self.__tela_pessoas.pegar_dados_pessoa()
                 j = self.pega_pessoa_por_nome(dados_novos['nome'])
-                if j is None:
+                if j is not None:
                     jogador.nome = dados_novos['nome']
                     jogador.telefone = dados_novos['telefone']
                     jogador.endereco.cidade = dados_novos['cidade']
@@ -106,10 +106,6 @@ class ControladorPessoas:
                     jogador.endereco.numero = dados_novos['numero']
                     jogador.endereco.cep = dados_novos['cep']
                     return True
-                else:
-                    raise JogadorJahExisteException
-        except JogadorJahExisteException as e:
-            self.__tela_pessoas.mensagem(e)
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
         except Exception as e:
@@ -148,10 +144,10 @@ class ControladorPessoas:
             self.listar_jogador()
             cod_validos = list(self.__jogadores.keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogadores', cod_validos)
-            jogador = self.__jogadores[identificador]
             if identificador == 0:
                 return False
             else:
+                jogador = self.__jogadores[identificador]
                 fichas = self.__controlador_sistema.controlador_fichas.dict_fichas
                 self.__controlador_sistema.controlador_fichas.listar_fichas(selecao=False)
                 cod_validos_fichas = list(fichas.keys()) + [0]
@@ -166,7 +162,7 @@ class ControladorPessoas:
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Elemento não excluido, código não encontado.: {e}')
         except Exception as e:
-            self.tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao remover ficha {e}')   
+            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao remover ficha {e}')   
 
     def acessar_mestre(self, alterar=False):
         try:
@@ -199,7 +195,7 @@ class ControladorPessoas:
             else:
                 return False
         except Exception as e:
-            self.tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao alterar mestre: {e}')
+            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao alterar mestre: {e}')
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()
