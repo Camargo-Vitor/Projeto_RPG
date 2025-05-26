@@ -158,9 +158,12 @@ class ControladorEspecies:
             if identificador == 0:
                 return False
             else:
+                subespecies_relacionadas = []
                 for key, subespecie in self.__dict_subespecie.items():
                     if super(Subespecie, subespecie).nome == self.__dict_especie[identificador].nome:
-                        del self.__dict_subespecie[key]
+                        subespecies_relacionadas.append(key)
+                for i in subespecies_relacionadas:
+                    del self.__dict_subespecie[i]
                 del self.__dict_especie[identificador]
                 self.__tela_especies.mensagem('Especie removida!')
                 return True
