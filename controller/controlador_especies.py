@@ -16,10 +16,18 @@ class ControladorEspecies:
         # para demonstração, utilzaremos alguns objetos já instanciados. 
         # Estes objetos receberão códigos acima de 999.
         self.__dict_especie: dict[int, Especie] = {
-            1000: Especie('Ser humano', 9, 170)
+            1000: Especie('Humano', 9, 170),
+            1001: Especie('Anão', 7.5, 135),
+            1002: Especie('Elfo', 9, 170),
+            1003: Especie('Tiefling', 9, 165)
         }
         self.__dict_subespecie: dict[int, Subespecie] = {
-            1000: Subespecie('Ser humano', 'De Xaragua', 9, 170, self.__dict_especie[1000].habilidades)
+            1000: Subespecie('Humano', 'De Xaragua', 9, 170, self.__dict_especie[1000].habilidades),
+            1001: Subespecie('Anão', 'Da Montanha', 7.5, 135, self.__dict_especie[1001].habilidades),
+            1002: Subespecie('Anão', 'Da Colina', 7.5, 135, self.__dict_especie[1001].habilidades),
+            1003: Subespecie('Elfo', 'Drow', 9, 170, self.__dict_especie[1002].habilidades),
+            1004: Subespecie('Tiefling', 'Abissal', 9, 165, self.__dict_especie[1003].habilidades),
+            1005: Subespecie('Tiefling', 'Infermal', 9, 170, self.dict_especie[1003].habilidades)
         }
         self.__tela_especies = TelaEspecies()
         self.__cod_esp = 1

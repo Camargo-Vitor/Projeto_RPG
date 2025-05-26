@@ -14,8 +14,12 @@ class ControladorMagias:
         # para demonstração, utilzaremos alguns objetos já instanciados. 
         # Estes objetos receberão códigos acima de 999.
         self.__dict_magias: dict[int, Magia] = {
-            1000: Magia('Bola de fogo', 5, 134),
-            1001: Magia('Congelar', 2, 134)
+            1000: Magia('Bola de fogo', 5, 221),
+            1001: Magia('Benção', 1, 221),
+            1002: Magia('Desejo', 17, 234),
+            1003: Magia('Raio de Gelo', 0, 273),
+            1004: Magia('Truque de Corda', 3, 286),
+            1005: Magia('Zona da Verdade', 3, 288)
         }
         self.__tela_magias = TelaMagias()
         self.__cod = 1
