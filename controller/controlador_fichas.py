@@ -45,7 +45,7 @@ class ControladorFichas:
             #classe
             self.__controlador_sistema.controlador_classes.listar_classes_e_subclasses()
             codigos_validos_class = list(self.__controlador_sistema.controlador_classes.dict_classes.keys()) + [0]
-            codigo_classe = self.__tela_fichas.selecionar_obj_por_cod('classe', codigos_validos_class)
+            codigo_classe = self.__tela_fichas.selecionar_obj_por_cod('Digite o código da classe: ', codigos_validos_class)
             if codigo_classe == 0:
                 return False
             else:
@@ -54,7 +54,7 @@ class ControladorFichas:
             #subespecie
             self.__controlador_sistema.controlador_especies.listar_subespecies()
             codigos_valido_sub_esp = list(self.__controlador_sistema.controlador_especies.dict_subespecie.keys()) + [0]
-            codigo_subespecie = self.__tela_fichas.le_int_ou_float('subespecie', codigos_valido_sub_esp)
+            codigo_subespecie = self.__tela_fichas.le_int_ou_float('Digite o código da subespecie: ', codigos_valido_sub_esp)
             if codigo_subespecie == 0:
                 return False
             else:
