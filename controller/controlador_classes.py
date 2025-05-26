@@ -167,10 +167,10 @@ class ControladorClasses:
                     subclasse = classe.subclasses[identificador_sub - 1]    
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
                     codigos_validos_sub = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
-                    identificador_hab = self.__tela_classes.selecionar_obj_por_cod('subclase', codigos_validos_sub)
+                    identificador_hab = self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_sub)
                 if identificador_hab == 0:
                     return False
-                elif habilidades[identificador_sub].origem == 'subclasse':
+                elif habilidades[identificador_hab].origem == 'subclasse':
                     if habilidades[identificador_hab].nome in [hab.nome for hab in subclasse.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     subclasse.add_hab(habilidades[identificador_hab])
