@@ -33,7 +33,7 @@ class ControladorFichas:
             ['Persuasão', 'Arcanismo', 'Natureza', 'Performace', 'História'],
             [7, 15, 12, 11, 14, 18]),
             1003: Ficha('Sebo', 'Pequeno, Calvo, Magro e Novo', 'Nasceu, Não vive e leu', 100,
-            self.__controlador_sistema.controlador_classes.dict_classes[1001],
+            self.__controlador_sistema.controlador_classes.dict_classes[1000],
             self.__controlador_sistema.controlador_especies.dict_subespecie[1002],
             ['Arcanismo', 'Intuição', 'Religião', 'Medicina', 'Furtividade'],
             [7, 14, 11, 18, 15, 13]),
@@ -56,7 +56,8 @@ class ControladorFichas:
                 habilidades.append(hab)
         if ficha.subclasse:
             for hab in ficha.subclasse.hab_especificas:
-                habilidades.append(hab)
+                if hab.nivel <= ficha.nivel:
+                    habilidades.append(hab)
         return habilidades
 
     def selecionar_magias_ativas_em_ficha(self, ficha: Ficha):
