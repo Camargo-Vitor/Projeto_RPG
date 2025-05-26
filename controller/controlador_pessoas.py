@@ -111,6 +111,10 @@ class ControladorPessoas:
                     jogador.endereco.cep = dados_novos['cep']
                     self.__tela_pessoas.mensagem('Jogador Alterado com sucesso')
                     return True
+                else:
+                    raise JogadorJahExisteException(dados_novos['nome'])
+        except JogadorJahExisteException as e:
+            self.__tela_pessoas.mensagem(e)
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
         except Exception as e:
