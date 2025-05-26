@@ -44,11 +44,8 @@ class ControladorFichas:
 
             #classe
             self.__controlador_sistema.controlador_classes.listar_classes_e_subclasses()
-            codigos_validos = list(self.__controlador_sistema.controlador_classes.dict_classes.keys()) + [0]
-            codigo_classe = self.__tela_fichas.le_int_ou_float(
-                'Digite o código da classe (0 para cancelar): ',
-                conjunto_alvo = codigos_validos
-                )
+            codigos_validos_class = list(self.__controlador_sistema.controlador_classes.dict_classes.keys()) + [0]
+            codigo_classe = self.__tela_fichas.selecionar_obj_por_cod('classe', codigos_validos_class)
             if codigo_classe == 0:
                 return False
             else:
@@ -56,11 +53,8 @@ class ControladorFichas:
 
             #subespecie
             self.__controlador_sistema.controlador_especies.listar_subespecies()
-            codigos_validos = list(self.__controlador_sistema.controlador_especies.dict_subespecie.keys()) + [0]
-            codigo_subespecie = self.__tela_fichas.le_int_ou_float(
-                'Digite o código da subespecie (0 para cancelar): ',
-                conjunto_alvo = codigos_validos
-                )
+            codigos_valido_sub_esp = list(self.__controlador_sistema.controlador_especies.dict_subespecie.keys()) + [0]
+            codigo_subespecie = self.__tela_fichas.le_int_ou_float('subespecie', codigos_valido_sub_esp)
             if codigo_subespecie == 0:
                 return False
             else:
@@ -91,7 +85,7 @@ class ControladorFichas:
 
     def listar_fichas(self, selecao=True):
         try:
-            cod_validos = list(self.__dict_fichas.keys()) + [0]
+            cod_valido_ficha = list(self.__dict_fichas.keys()) + [0]
             self.__tela_fichas.mensagem(f"{'Cod':^4} | {'Nome':^16}")
             for key, ficha in self.__dict_fichas.items():
                 self.__tela_fichas.mostra_ficha_basica(
@@ -101,7 +95,7 @@ class ControladorFichas:
                     }
                 )
             if selecao:
-                identificador = self.__tela_fichas.selecionar_obj_por_cod(f'fichas', cod_validos)
+                identificador = self.__tela_fichas.selecionar_obj_por_cod(f'fichas', cod_valido_ficha)
                 if identificador == 0:
                     return False
                 else:

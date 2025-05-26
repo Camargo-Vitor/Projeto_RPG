@@ -12,6 +12,9 @@ class ControladorPessoas:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_pessoas = TelaPessoas()
+        # O dicionário de "Jogadores" iniciaria normalmente vazio, porém
+        # para demonstração, utilzaremos alguns objetos já instanciados. 
+        # Estes objetos receberão códigos acima de 999.
         self.__jogadores: dict[int, Jogador] = dict()
         self.__mestre: Mestre = Mestre('[VAZIO]', 0, '[VAZIO]', 'VAZIO', 0, 0)
         self.__cod = 1

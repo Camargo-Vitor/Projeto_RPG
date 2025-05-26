@@ -12,6 +12,9 @@ if TYPE_CHECKING:
 class ControladorEspecies:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
+        # O dicionário de "Espécies" iniciaria normalmente vazio, porém
+        # para demonstração, utilzaremos alguns objetos já instanciados. 
+        # Estes objetos receberão códigos acima de 999.
         self.__dict_especie: dict[int, Especie] = {
             1000: Especie('Ser humano', 9, 170)
         }
