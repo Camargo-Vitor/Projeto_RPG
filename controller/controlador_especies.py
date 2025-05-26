@@ -27,7 +27,7 @@ class ControladorEspecies:
             1002: Subespecie('Anão', 'Da Colina', 7.5, 135, self.__dict_especie[1001].habilidades),
             1003: Subespecie('Elfo', 'Drow', 9, 170, self.__dict_especie[1002].habilidades),
             1004: Subespecie('Tiefling', 'Abissal', 9, 165, self.__dict_especie[1003].habilidades),
-            1005: Subespecie('Tiefling', 'Infermal', 9, 170, self.dict_especie[1003].habilidades)
+            1005: Subespecie('Tiefling', 'Infernal', 9, 165, self.dict_especie[1003].habilidades)
         }
         self.__tela_especies = TelaEspecies()
         self.__cod_esp = 1
