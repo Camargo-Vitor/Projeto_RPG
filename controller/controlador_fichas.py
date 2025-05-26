@@ -191,7 +191,7 @@ class ControladorFichas:
                 else:
                     ficha = self.__dict_fichas[identificador_ficha]
                     ficha.add_item_inventario(item[identificador_item])
-                    self.__tela_fichas.mensagem('Item adicionada ao inventário!')
+                    self.__tela_fichas.mensagem('Item adicionado ao inventário!')
                     return True
         except KeyError as e:
             self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')

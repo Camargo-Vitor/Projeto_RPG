@@ -195,6 +195,8 @@ class Ficha:
     def rm_item_inventario(self, item: Item):
         if item in self.inventario:
             self.inventario.remove(item)
+        else:
+            raise Exception('Item não está na ficha')
 
     def add_magia(self, magia: Magia):
         if isinstance(magia, Magia) and magia not in self.__lista_magias:
@@ -205,6 +207,8 @@ class Ficha:
     def rm_magia(self, magia: Magia):
         if magia in self.__lista_magias:
             self.__lista_magias.remove(magia)
+        else:
+            raise Exception('Magia não está na ficha')
 
     def subir_nivel(self):
         self.__nivel += 1
