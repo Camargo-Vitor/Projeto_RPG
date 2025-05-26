@@ -15,6 +15,7 @@ class ControladorPessoas:
         # O dicionário de "Jogadores" iniciaria normalmente vazio, porém
         # para demonstração, utilzaremos alguns objetos já instanciados. 
         # Estes objetos receberão códigos acima de 999.
+        self.__jogadores: dict[int, Jogador] = dict()
         self.__mestre: Mestre = Mestre('[VAZIO]', 0, '[VAZIO]', 'VAZIO', 0, 0)
         self.__cod = 1
     
@@ -22,7 +23,7 @@ class ControladorPessoas:
         for pessoa in self.__jogadores.values():
             if pessoa.nome == nome:
                 return pessoa
-            return None
+        return None
     
     def incluir_jogador(self):
         try:

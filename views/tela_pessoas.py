@@ -38,7 +38,7 @@ class TelaPessoas(TelaAbstrata):
         }
 
     def mostra_pessoa(self, dados_pessoa: dict):
-        print(f"\n{dados_pessoa['cod']:^4}", end=' | ')
+        print(f"{dados_pessoa['cod']:^4}", end=' | ')
         print(f"{dados_pessoa['nome']:^16}", end=' | ')
         print(f"{dados_pessoa['telefone']:^13}", end=' | ')
         print(f"{dados_pessoa['cidade']:^16}", end=' | ')
