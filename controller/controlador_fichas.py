@@ -383,12 +383,12 @@ class ControladorFichas:
             1: self.incluir_ficha,
             2: self.excluir_fichas,
             3: self.listar_fichas,
-            4: self.adicionar_item_ficha,
-            5: self.remover_item_ficha,
-            6: self.adicionar_magia_ficha,
-            7: self.remover_magia_ficha,
-            8: self.subir_nivel_de_uma_ficha,
-            9: self.alterar_vida_ficha,
+            4: self.alterar_vida_ficha,
+            5: self.subir_nivel_de_uma_ficha,
+            6: self.adicionar_item_ficha,
+            7: self.remover_item_ficha,
+            8: self.adicionar_magia_ficha,
+            9: self.remover_magia_ficha,
             10: self.relatorio,
             0: self.retornar
         }
