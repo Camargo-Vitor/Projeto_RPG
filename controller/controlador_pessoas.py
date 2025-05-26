@@ -128,7 +128,7 @@ class ControladorPessoas:
                 else:
                     jogador = self.__jogadores[identificador]
                     if fichas[identificador_ficha].nome in [fic.nome for fic in jogador.personagens]:
-                        raise FichaJahExisteException(fichas[identificador_ficha])
+                        raise FichaJahExisteException(fichas[identificador_ficha].nome)
                     jogador.add_ficha(fichas[identificador_ficha])
                     self.__tela_pessoas.mensagem('Ficha adicionada!')
                     return True

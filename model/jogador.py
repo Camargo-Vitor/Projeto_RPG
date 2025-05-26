@@ -18,10 +18,10 @@ class Jogador(Pessoa):
         return self.__personagens
     
     def add_ficha(self, ficha: Ficha):
-        if isinstance(ficha, Ficha):
+        if isinstance(ficha, Ficha) and ficha not in self.__personagens:
             self.__personagens.append(ficha)
         else:
-            raise ValueError("[ERRO] Ficha não adicionada, valor inválido")
+            raise KeyError ("[ERRO] Ficha já está associada.")
 
     def rm_ficha(self, ficha: Ficha):
         if ficha in self.__personagens:
