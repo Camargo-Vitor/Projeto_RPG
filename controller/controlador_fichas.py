@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
-    
+
 
 class ControladorFichas:
     def __init__(self, controlador_sistema: "ControladorSistema"):
@@ -28,7 +28,17 @@ class ControladorFichas:
             self.__controlador_sistema.controlador_classes.dict_classes[1003],
             self.__controlador_sistema.controlador_especies.dict_subespecie[1005],
             ['Persuasão', 'Arcanismo', 'Natureza', 'Performace', 'História'],
-            [7, 15, 12, 11, 14, 18])}
+            [7, 15, 12, 11, 14, 18]),
+            1003: Ficha('Sebo', 'Pequeno, Calvo, Magro e Novo', 'Nasceu, Não vive e leu', 100,
+            self.__controlador_sistema.controlador_classes.dict_classes[1001],
+            self.__controlador_sistema.controlador_especies.dict_subespecie[1002],
+            ['Arcanismo', 'Intuição', 'Religião', 'Medicina', 'Furtividade'],
+            [7, 14, 11, 18, 15, 13]),
+            1004: Ficha('Barmarlee', 'Musculoso, coberto de cicatrizes, velho, barba mal feita', 'nasceu, casou, cresceu, quase foi, sobreviveu', 2341,
+            self.__controlador_sistema.controlador_classes.dict_classes[1002],
+            self.__controlador_sistema.controlador_especies.dict_subespecie[1003],
+            ['Historia', 'Atletismo', 'Intimidação', 'Furtividade', 'Medicina'],
+            [17, 13, 16, 12, 12, 8])}
 
     def selecionar_habilidades_aivas_em_ficha(self, ficha: Ficha):
         habilidades = []
