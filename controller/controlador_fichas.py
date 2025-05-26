@@ -43,7 +43,7 @@ class ControladorFichas:
             ['Historia', 'Atletismo', 'Intimidação', 'Furtividade', 'Medicina'],
             [17, 13, 16, 12, 12, 8])}
 
-    def selecionar_habilidades_aivas_em_ficha(self, ficha: Ficha):
+    def selecionar_habilidades_ativas_em_ficha(self, ficha: Ficha):
         habilidades = []
         for hab in ficha.especie.hab_especificas:
             if hab.nivel <= ficha.nivel:
@@ -152,7 +152,7 @@ class ControladorFichas:
                             'carisma': f'{ficha.atributos["carisma"]} ({(ficha.atributos["carisma"] - 10) // 2})',
                             'inventario': [item.nome for item in ficha.inventario],
                             'magias': [magia.nome for magia in self.selecionar_magias_ativas_em_ficha(ficha)],
-                            'habilidades': [hab.nome for hab in self.selecionar_habilidades_aivas_em_ficha(ficha)]
+                            'habilidades': [hab.nome for hab in self.selecionar_habilidades_ativas_em_ficha(ficha)]
                         }
                     )
         except Exception as e:
@@ -353,8 +353,8 @@ class ControladorFichas:
                 personagem_maior_vida = ficha
             if ficha.classe.dado_vida > personagem_com_maior_dado_de_vida.classe.dado_vida:
                 personagem_com_maior_dado_de_vida = ficha
-            if len(self.selecionar_habilidades_aivas_em_ficha(personagem_com_mais_hab)) > \
-                len(self.selecionar_habilidades_aivas_em_ficha(ficha)):
+            if len(self.selecionar_habilidades_ativas_em_ficha(personagem_com_mais_hab)) > \
+                len(self.selecionar_habilidades_ativas_em_ficha(ficha)):
                 personagem_com_mais_hab = ficha
 
             total_magias += len(self.selecionar_magias_ativas_em_ficha(ficha))
@@ -405,7 +405,7 @@ class ControladorFichas:
             'pericia_mais_comum': (pericia_mais_comum, qtd_pericia_mais_comum),
             'maior_atributo': maior_atributo,
             'media_magias': round(media_magias, 2),
-            'mais_hab': (personagem_com_mais_hab.nome, len(self.selecionar_habilidades_aivas_em_ficha(ficha)))
+            'mais_hab': (personagem_com_mais_hab.nome, len(self.selecionar_habilidades_ativas_em_ficha(ficha)))
         }
 
         self.__tela_fichas.mostra_relatorio(dados_relatorio)
