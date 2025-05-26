@@ -50,7 +50,7 @@ class TelaEspecies(TelaAbstrata):
         return {'nome': nome}
     
     def mostra_especie(self, dados_especie: dict):
-        print(' Subespecie '.center(60,'='))
+        print(' Especie '.center(60,'='))
         print(f'{"Cod":^4} | {"Nome":^16} | {"Deslocamento":^16} | {"Altura média(cm)":^18}')
         print(f"{dados_especie['cod']:^4}", end=' | ')
         print(f"{dados_especie['nome']:^16}", end=' | ')
