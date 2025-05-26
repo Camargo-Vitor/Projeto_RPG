@@ -134,7 +134,7 @@ class ControladorHabilidades:
             else:
                 raise HabilidadeJahExiste(dados_novos['nome'])
         except HabilidadeJahExiste as e:
-            self.tela_habilidade.mensagem(e)
+            self.__tela_habilidades.mensagem(e)
         except KeyError as e:
             self.__tela_habilidades.mensagem(f'[ERRO] Dado ausente: {str(e)}')
         except Exception as e:

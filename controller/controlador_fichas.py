@@ -189,7 +189,7 @@ class ControladorFichas:
                 if identificador_item == 0:
                     return False
                 else:
-                    ficha = self.dict_fichas[identificador_ficha]
+                    ficha = self.__dict_fichas[identificador_ficha]
                     ficha.add_item_inventario(item[identificador_item])
                     self.__tela_fichas.mensagem('Item adicionada ao inventário!')
                     return True
@@ -213,7 +213,7 @@ class ControladorFichas:
                 if identificador_magia == 0:
                     return False
                 else:
-                    ficha = self.dict_fichas[identificador_ficha]
+                    ficha = self.__dict_fichas[identificador_ficha]
                     ficha.add_magia(magia[identificador_magia])
                     self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
                     return True
@@ -230,7 +230,7 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.dict_fichas[identificador_ficha]
+                ficha = self.__dict_fichas[identificador_ficha]
                 itens = self.__controlador_sistema.controlador_itens.dict_item
                 self.__controlador_sistema.controlador_itens.listar_itens()
                 codigos_validos_item = list(itens.keys()) + [0]
@@ -258,7 +258,7 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.dict_fichas[identificador_ficha]
+                ficha = self.__dict_fichas[identificador_ficha]
                 magias = self.__controlador_sistema.controlador_magias.dict_magias
                 self.__controlador_sistema.controlador_magias.listar_magias()
                 codigos_validos_magia = list(magias.keys()) + [0]
@@ -283,7 +283,7 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.dict_fichas[identificador_ficha]
+                ficha = self.__dict_fichas[identificador_ficha]
                 if ficha.nivel == 2:
                     infos = {'nomes_sub': [sub.nome for sub in ficha.classe.subclasses],
                             'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in ficha.classe.subclasses]}
@@ -302,7 +302,7 @@ class ControladorFichas:
         if identificador_ficha == 0:
             return False
         else:
-            ficha = self.dict_fichas[identificador_ficha]
+            ficha = self.__dict_fichas[identificador_ficha]
             valor = self.__tela_fichas.le_int_ou_float(
                 'Digite o valor de vida a ser alterado (Utilize números negativos para subtrair vida): '
             )

@@ -156,7 +156,7 @@ class ControladorClasses:
                 habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
                          'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
-                self.tela_classes.mostra_classe_e_subclasse(infos, classe=False)
+                self.__tela_classes.mostra_classe_e_subclasse(infos, classe=False)
                 identificador_sub = self.__tela_classes.le_int_ou_float(
                     'Digite qual a subclasse (1, 2 ou 3 - de cima para baixo): ',
                     conjunto_alvo=[1, 2, 3]
@@ -225,7 +225,7 @@ class ControladorClasses:
                 classe = self.__dict__classes[identificador_class]
                 infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
                          'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
-                self.tela_classes.mostra_classe_e_subclasse(infos, classe=False)
+                self.__tela_classes.mostra_classe_e_subclasse(infos, classe=False)
                 identificador_sub = self.__tela_classes.le_int_ou_float(
                     'Digite qual subclasse (1, 2 ou 3 - de cima para baixo): ',
                     conjunto_alvo=[1, 2, 3]
