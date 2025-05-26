@@ -11,6 +11,9 @@ class ControladorFichas:
         self.__controlador_sistema = controlador_sistema
         self.__tela_fichas = TelaFichas()
         self.__cod = 1
+        # O dicionário de "Fichas" iniciaria normalmente vazio, porém
+        # para demonstração, utilzaremos alguns objetos já instanciados. 
+        # Estes objetos receberão códigos acima de 999.
         self.__dict_fichas: dict[int, Ficha] = {
             1000: Ficha('Maria', 'Alta e de cabelo azul','nasceu, cresceu, viveu.', 100,
             self.__controlador_sistema.controlador_classes.dict_classes[1001], 
