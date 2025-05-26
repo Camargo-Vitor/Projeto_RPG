@@ -115,22 +115,22 @@ class ControladorClasses:
     def adiciona_hab_classe(self):
         try:
             self.listar_classes_e_subclasses(subclasses=False)
-            codigos_validos = list(self.__dict__classes.keys()) + [0]
-            identificador = self.__tela_classes.selecionar_obj_por_cod('classes', codigos_validos)
-            if identificador == 0:
+            codigos_validos_class = list(self.__dict__classes.keys()) + [0]
+            identificador_class = self.__tela_classes.selecionar_obj_por_cod('classes', codigos_validos_class)
+            if identificador_class == 0:
                 return False
             else:
                 habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='classe')
                 codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
                 identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidade', codigos_validos_hab)
-                if identificador == 0:
+                if identificador_hab == 0:
                     return False
                 elif habilidades[identificador_hab].origem == 'classe':
-                    classe = self.__dict__classes[identificador]
+                    classe = self.__dict__classes[identificador_class]
                     if habilidades[identificador_hab].nome in [hab.nome for hab in classe.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
-                    classe.add_hab(habilidades)
+                    classe.add_hab(habilidades[identificador_hab])
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
