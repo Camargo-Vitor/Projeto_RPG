@@ -22,7 +22,7 @@ class Ficha:
             self.__moedas = moedas
             self.__pericias_treinadas = pericias_treinadas 
             self.__classe = classe
-            self.__subclasse = 'Não há'
+            self.__subclasse = None
             self.__especie = especie
             self.__nivel = 1
             self.__bonus_pericia = 2 + (self.__nivel - 1)//4 

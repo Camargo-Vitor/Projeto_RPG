@@ -54,7 +54,7 @@ class ControladorFichas:
         for hab in ficha.classe.habilidades:
             if hab.nivel <= ficha.nivel:
                 habilidades.append(hab)
-        if not isinstance(ficha.subclasse, str):
+        if ficha.subclasse:
             for hab in ficha.subclasse.hab_especificas:
                 habilidades.append(hab)
         return habilidades
@@ -141,7 +141,7 @@ class ControladorFichas:
                             'historia': ficha.historia,
                             'moedas': ficha.moedas,
                             'classe': ficha.classe.nome,
-                            'subclasse': ficha.subclasse if isinstance(ficha.subclasse, str) else ficha.subclasse.nome,
+                            'subclasse': 'Não há' if ficha.subclasse == None else ficha.subclasse.nome,
                             'especie': ficha.especie.nome,
                             'pericias': ficha.pericias_treinadas,
                             'forca': f'{ficha.atributos["forca"]} ({(ficha.atributos["forca"] - 10) // 2})',
