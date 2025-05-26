@@ -398,7 +398,7 @@ class ControladorFichas:
             'mais_ouro': (personagem_mais_ouro.nome, personagem_mais_ouro.moedas),
             'mais_itens': (personagem_mais_itens.nome, len(personagem_mais_itens.inventario)),
             'maior_deslocamento': (personagem_maior_deslocamento.nome, personagem_maior_deslocamento.deslocamento),
-            'mais_magias': (personagem_mais_magias.nome, len(self.selecionar_habilidades_aivas_em_ficha(personagem_mais_magias))),
+            'mais_magias': (personagem_mais_magias.nome, len(self.selecionar_magias_ativas_em_ficha(personagem_mais_magias))),
             'maior_vida': (personagem_maior_vida.nome, personagem_maior_vida.vida),
             'maior_dado_vida': (personagem_com_maior_dado_de_vida.nome, personagem_com_maior_dado_de_vida.classe.dado_vida),
             'classe_mais_comum': (classe_mais_comum, qtd_classe_mais_comum),
