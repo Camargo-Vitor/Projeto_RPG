@@ -175,11 +175,9 @@ class Ficha:
         if isinstance(vida, int):
             self.__vida = vida
 
-
     @vida_atual.setter
     def vida_atual(self, nova_vida: int):
         self.__vida_atual = nova_vida
-
 
     def add_item_inventario(self, item: Item):
         if isinstance(item, Item):
@@ -211,26 +209,3 @@ class Ficha:
                 if chave in self.__pericias_treinadas:
                     dic[chave][0] = self.__bonus_pericia + dic[chave][0]
                     dic[chave][1] = True
-
-    def __str__(self):
-        return '><' * 8 + 'Ficha de Personagem' + '><' * 8 + \
-        f'\nNome: {self.nome}\
-        \nVida: {self.vida}\
-        \nNível: {self.nivel}\
-        \nDeslocamento: {self.especie.deslocamento}\
-        \nFisico: {self.fisico}\
-        \nAltura: {self.altura}cm\
-        \nHistória: {self.historia}\
-        \nClasse: {self.classe.nome}\
-        \nEspecie: {self.especie.nome}\n' + \
-        '><' * 8 + 'Atributos' + '><' * 8 + f'\
-        \nForça: {self.__atributos["forca"]} ({(self.__atributos["forca"] - 10) // 2})\
-        \nDestreza: {self.__atributos["destreza"]} ({(self.__atributos["destreza"] - 10) // 2})\
-        \nConstituição: {self.__atributos["constituicao"]} ({(self.__atributos["constituicao"] - 10) // 2})\
-        \nInteligencia: {self.__atributos["inteligencia"]} ({(self.__atributos["inteligencia"] - 10) // 2})\
-        \nSabedoria: {self.__atributos["sabedoria"]} ({(self.__atributos["sabedoria"] - 10) // 2})\
-        \nCarisma: {self.__atributos["carisma"]} ({(self.__atributos["carisma"] - 10) // 2})\n' + \
-        '><' * 8 + 'Utilitários' + '><' * 8 + f'\
-        \nInventário: {"vazio" if self.inventario == [] else [str(x) for x in self.inventario]}\
-        \nMagias: {"Nenhuma magia" if self.lista_magias == [] else [str(x) for x in self.lista_magias]}\
-        \nHabilidades: {"Nenhuma habilidade" if self.habilidades == [] else [str(x) for x in self.habilidades]}'
