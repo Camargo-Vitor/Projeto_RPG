@@ -12,8 +12,14 @@ class ControladorClasses:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_classes = TelaClasses()
+        # O dicionário de "Classes" iniciaria normalmente vazio, porém
+        # para demonstração, utilzaremos alguns objetos já instanciados. 
+        # Estes objetos receberão códigos acima de 999.
         self.__dict__classes : dict[int, Classe] = {
-            1000: Classe('Classe_teste', 6, ['Sub_teste1', 'Sub_teste2', 'Sub_teste3'])
+            1000: Classe('Mago', 6, ['Invocador', 'Ilusionista', 'Divino']),
+            1001: Classe('Paladino', 10, ['Devoção', 'Anciões', 'Vingança']),
+            1002: Classe('Barbáro', 12, ['Totêmico', 'Furioso', 'Zealot']),
+            1003: Classe('Bruxo', 8, ['Arquifada', 'Corruptor', 'Grande Antigo'])
         }
         
         self.__cod = 1
@@ -29,7 +35,7 @@ class ControladorClasses:
             dados_classe = self.__tela_classes.pegar_dados_classes()
             c = self.pega_classe_por_nome(dados_classe['nome'])
             if c:
-                raise ClasseJahExisteException
+                raise ClasseJahExisteException(dados_classe['nome'])
             else:
                 classe = Classe(
                     dados_classe['nome'],
@@ -185,27 +191,21 @@ class ControladorClasses:
         try:
             self.listar_classes_e_subclasses(subclasses=False)
             codigos_validos = list(self.__dict__classes.keys()) + [0]
-            identificador = self.__tela_classes.le_int_ou_float(
-                'Digite o código da classe: (0 para cancelar) ',
-                conjunto_alvo=codigos_validos
-            )
-            if identificador == 0:
+            identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos),
+            if identificador_class == 0:
                 return False
             else:
-                todas_habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
-                classe = self.__dict__classes[identificador]
+                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                classe = self.__dict__classes[identificador_class]
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades('classe')
-                codigos_validos = list(todas_habilidades.keys()) + [0]
-                identificador = self.__tela_classes.le_int_ou_float(
-                    'Digite o identificador da habilidade que deseja excluir (0 para cancelar): ',
-                    conjunto_alvo=codigos_validos
-                )
-                if identificador == 0:
+                codigos_validos_hab = list(habilidades.keys()) + [0]
+                identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidades', codigos_validos_hab)
+                if identificador_hab == 0:
                     return False
-                elif todas_habilidades[identificador] not in classe.habilidades:
+                elif habilidades[identificador_hab] not in classe.habilidades:
                     raise KeyError("[ERRO DE CHAVE] A habilidade selecionada é inválida.")
                 else:
-                    classe.rm_hab(todas_habilidades[identificador])
+                    classe.rm_hab(habilidades[identificador_hab])
                     self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                     return True
 
@@ -217,37 +217,31 @@ class ControladorClasses:
     def remover_hab_subclasse(self):
         try:
             self.listar_classes_e_subclasses(subclasses=False)
-            codigos_validos = list(self.__dict__classes.keys()) + [0]
-            identificador = self.__tela_classes.le_int_ou_float(
-                'Digite o código da classe: (0 para cancelar) ',
-                conjunto_alvo=codigos_validos
-            )
-            if identificador == 0:
+            codigos_validos_class = list(self.__dict__classes.keys()) + [0]
+            identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos_class)
+            if identificador_class == 0:
                 return False
             else:
-                classe = self.__dict__classes[identificador]
+                classe = self.__dict__classes[identificador_class]
                 infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
                          'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
                 self.tela_classes.mostra_classe_e_subclasse(infos, classe=False)
-                identificador = self.__tela_classes.le_int_ou_float(
+                identificador_sub = self.__tela_classes.le_int_ou_float(
                     'Digite qual subclasse (1, 2 ou 3 - de cima para baixo): ',
                     conjunto_alvo=[1, 2, 3]
                 )
-                if identificador == 0:
+                if identificador_sub == 0:
                     return False
                 else:
-                    subclasse = classe.subclasses[identificador-1]
+                    subclasse = classe.subclasses[identificador_sub-1]
     
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
-                    codigos_validos = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
-                    identificador = self.__tela_classes.le_int_ou_float(
-                        'Digite o código da Habilidade: (0 para cancelar) ',
-                        conjunto_alvo=codigos_validos
-                    )
-                    if identificador == 0:
+                    codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
+                    identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidade', codigos_validos_hab)
+                    if identificador_hab == 0:
                         return False
                     else:
-                        habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador]
+                        habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab]
                         subclasse.rm_hab(habilidade)
                         self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                         return True
