@@ -5,7 +5,8 @@ class Especie():
     def __init__(self,
                  nome: str,
                  deslocamento: float,
-                 altura: int):
+                 altura: int,
+                 habilidades: list[Habilidade] = []):
         self.__nome = nome
         self.__deslocamento = deslocamento
         self.__altura = altura
