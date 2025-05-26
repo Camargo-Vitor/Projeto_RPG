@@ -189,7 +189,7 @@ class Ficha:
         self.__vida_atual = nova_vida
 
     def add_item_inventario(self, item: Item):
-        if isinstance(item, Item):
+        if isinstance(item, Item) and item not in self.inventario:
             self.__inventario.append(item)
 
     def rm_item_inventario(self, item: Item):
@@ -197,8 +197,10 @@ class Ficha:
             self.inventario.remove(item)
 
     def add_magia(self, magia: Magia):
-        if isinstance(magia, Magia):
+        if isinstance(magia, Magia) and magia not in self.__lista_magias:
             self.lista_magias.append(magia)
+        else:
+            raise Exception('Magia já está na ficha')
 
     def rm_magia(self, magia: Magia):
         if magia in self.__lista_magias:

@@ -18,7 +18,7 @@ class ControladorFichas:
             1000: Ficha('Maria', 'Alta e de cabelo azul','nasceu, cresceu, viveu.', 100,
             self.__controlador_sistema.controlador_classes.dict_classes[1001], 
             self.__controlador_sistema.controlador_especies.dict_subespecie[1000],
-            ['Percepção', 'Presdigitação', 'Sobrevivência', 'Persuasão', 'Percepção'],
+            ['Percepção', 'Presdigitação', 'Sobrevivência', 'Persuasão', 'Performance'],
             [10, 8, 13, 14, 12, 16]),
 
             1001: Ficha('Sindur', 'Baixo, com uma longa barba laranja e calvo', 'nasceu, não cresceu, viveu muito', 1341,
