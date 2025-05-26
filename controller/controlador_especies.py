@@ -313,7 +313,7 @@ class ControladorEspecies:
         except KeyError as e:
             self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Elemento não excluido, código não encontado.: {e}')
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em espécie: {e}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro remover habilidade de espécie: {e}')
     
     def remove_habilidade_subespecie(self):
         try:

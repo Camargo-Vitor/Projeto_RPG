@@ -1,6 +1,7 @@
 from views.tela_pessoas import TelaPessoas
 from model.mestre import Mestre
 from model.jogador import Jogador
+from model.exceptions.exception_pessoas import *
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
@@ -22,38 +23,52 @@ class ControladorPessoas:
             return None
     
     def incluir_jogador(self):
-        dados_pessoa = self.__tela_pessoas.pegar_dados_pessoa()
-        m = self.pega_pessoa_por_nome(dados_pessoa['nome'])
-        if m is None:
-            jogador = Jogador(
-                dados_pessoa['nome'],
-                dados_pessoa['telefone'],
-                dados_pessoa['cidade'],
-                dados_pessoa['bairro'],
-                dados_pessoa['numero'],
-                dados_pessoa['cep'],
-            )
-            self.__jogadores[self.__cod] = jogador
-            self.__cod +=1
-            self.__tela_pessoas.mensagem('Jogador criado com sucesso')
-        else:
-            self.__tela_pessoas.mensagem('Esse jogador já existe')
+        try:
+            dados_pessoa = self.__tela_pessoas.pegar_dados_pessoa()
+            m = self.pega_pessoa_por_nome(dados_pessoa['nome'])
+            if m:
+                raise JogadorJahExisteException(dados_pessoa['nome']) 
+            else:
+                jogador = Jogador(
+                    dados_pessoa['nome'],
+                    dados_pessoa['telefone'],
+                    dados_pessoa['cidade'],
+                    dados_pessoa['bairro'],
+                    dados_pessoa['numero'],
+                    dados_pessoa['cep'],
+                )
+                self.__jogadores[self.__cod] = jogador
+                self.__cod +=1
+                self.__tela_pessoas.mensagem('Jogador criado com sucesso')
+                return True 
+        except JogadorJahExisteException as e:
+            self.__tela_pessoas.mensagem(e)
+        except KeyError as e:
+            self.__tela_pessoas.mensagem(f"[ERRO] Dado ausente: {str(e)}")
+        except Exception as e:
+            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao incluir jogador: {str(e)}')
+    
+
 
     def listar_jogador(self):
-        self.__tela_pessoas.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Telefone":^13} | {"Cidade":^16} | {"Bairro":^12} | {"Numero":^6} | {"Cep":^10} | {"Personagens":^12}')
-        for cod, jogador in self.__jogadores.items():
-            self.__tela_pessoas.mostra_jogador(
-                {
-                'cod': cod,
-                'nome': jogador.nome,
-                'telefone': jogador.telefone,
-                'cidade': jogador.endereco.cidade,
-                'bairro': jogador.endereco.bairro,
-                'numero': jogador.endereco.numero,
-                'cep': jogador.endereco.cep,
-                'personagens': [jogador.nome for jogador in jogador.personagens]
-            }
-            )
+        try:
+            self.__tela_pessoas.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Telefone":^13} | {"Cidade":^16} | {"Bairro":^12} | {"Numero":^6} | {"Cep":^10} | {"Personagens":^12}')
+            for cod, jogador in self.__jogadores.items():
+                self.__tela_pessoas.mostra_jogador(
+                    {
+                    'cod': cod,
+                    'nome': jogador.nome,
+                    'telefone': jogador.telefone,
+                    'cidade': jogador.endereco.cidade,
+                    'bairro': jogador.endereco.bairro,
+                    'numero': jogador.endereco.numero,
+                    'cep': jogador.endereco.cep,
+                    'personagens': [jogador.nome for jogador in jogador.personagens]
+                }
+                )
+
+        except Exception as e:
+            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao listar as jogador: {str(e)}')
 
     def excluir_jogador(self):
         try:
@@ -66,6 +81,8 @@ class ControladorPessoas:
                 del self.__jogadores[identificador]
                 self.__tela_pessoas.mensagem('Jogador Removido')
                 return True
+        except KeyError as e:
+            self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Erro ao excluir jogador, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao excluir jogador: {e}')
 
@@ -73,21 +90,27 @@ class ControladorPessoas:
         try:
             self.listar_jogador()
             codigo_validos = list(self.__jogadores.keys()) + [0]
-            identificador = self.__tela_pessoas.le_int_ou_float(
-                'Digite o código da jogador: (0 para cancelar) ',
-                conjunto_alvo=codigo_validos
-            )
+            identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogador', codigo_validos)
             if identificador == 0:
                 return False
             else:
                 jogador = self.__jogadores[identificador]
-                novos_dados = self.__tela_pessoas.pegar_dados_pessoa()
-                jogador.nome = novos_dados['nome']
-                jogador.telefone = novos_dados['telefone']
-                jogador.endereco.cidade = novos_dados['cidade']
-                jogador.endereco.bairro = novos_dados['bairro']
-                jogador.endereco.numero = novos_dados['numero']
-                jogador.endereco.cep = novos_dados['cep']
+                dados_novos = self.__tela_pessoas.pegar_dados_pessoa()
+                j = self.pega_pessoa_por_nome(dados_novos['nome'])
+                if j is None:
+                    jogador.nome = dados_novos['nome']
+                    jogador.telefone = dados_novos['telefone']
+                    jogador.endereco.cidade = dados_novos['cidade']
+                    jogador.endereco.bairro = dados_novos['bairro']
+                    jogador.endereco.numero = dados_novos['numero']
+                    jogador.endereco.cep = dados_novos['cep']
+                    return True
+                else:
+                    raise JogadorJahExisteException
+        except JogadorJahExisteException as e:
+            self.__tela_pessoas.mensagem(e)
+        except KeyError as e:
+            self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao alterar jogador: {e}')
 
@@ -100,19 +123,24 @@ class ControladorPessoas:
                 return False
             else:
                 fichas = self.__controlador_sistema.controlador_fichas.dict_fichas
-                self.__controlador_sistema.controlador_fichas.listar_fichas(selecao=False)
                 cod_validos_fichas = list(fichas.keys()) + [0]
+                self.__controlador_sistema.controlador_fichas.listar_fichas(selecao=False)
                 identificador_ficha = self.__tela_pessoas.selecionar_obj_por_cod('fichas', cod_validos_fichas)
                 if identificador_ficha == 0:
-                    return
+                    return False
                 else:
                     jogador = self.__jogadores[identificador]
-                    jogador.add_ficha(fichas[identificador_ficha])
+                    if fichas[identificador_ficha].nome in [fic.nome for fic in jogador.personagens]:
+                        raise FichaJahExisteException(fichas[identificador_ficha])
+                    jogador.add_ficha(fichas[identificador_ficha].nome)
+                    self.__tela_pessoas.mensagem('Ficha adicionada!')
                     return True
+        except FichaJahExisteException as e:
+            self.__tela_pessoas.mensagem(e)
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
-            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao adicionar ficha para jogador: {e}')
+            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao adicionar ficha em jogador: {e}')
 
     def remove_ficha(self):
         try:
