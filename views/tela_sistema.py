@@ -6,28 +6,16 @@ class TelaSistema(TelaAbstrata):
         self.__window = None
         self.init_components()
 
-    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
+    def mostra_tela(self, opcoes=[]):
         self.init_components()
         button, values = self.__window.Read()
-        opcoes = 0
-        if values['1']:
-            opcoes = 1
-        elif values['2']:
-            opcoes = 2
-        elif values['3']:
-            opcoes = 3
-        elif values['4']:
-            opcoes = 4
-        elif values['5']:
-            opcoes = 5
-        elif values['6']:
-            opcoes = 6
-        elif values['7']:
-            opcoes = 7
-        elif values['0'] or button in (None,'Cancelar'):
+        for key, opc in values.items():
+            if opc:
+                opcoes = int(key)
+        if values['0'] or button in (None,'Cancelar'):
             opcoes = 0
         self.close()
-        return super().mostra_tela(opcoes)
+        return opcoes
     
     def close(self):
         self.__window.Close()
