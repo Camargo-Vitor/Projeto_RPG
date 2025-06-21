@@ -70,3 +70,17 @@ class TelaAbstrata(ABC):
 
     def mensagem(self, msg):
         sg.popup("", msg)
+
+    def init_components(self, objeto: str):
+       sg.change_look_and_feel('DarkBrown4')
+       layout = [
+           [sg.Text(objeto, font = ('Arial', 25))],
+           [sg.Text('Escolha uma opção', font=('Arial', 15))],
+           [sg.Radio(f'Incluir {objeto}', 'RD1', key = '1')],
+           [sg.Radio(f'Alterar {objeto}', 'RD1', key = '2')],
+           [sg.Radio(f'Listar {objeto}', 'RD1', key = '3')],
+           [sg.Radio(f'Excluir {objeto}', 'RD1', key = '4')],
+           [sg.Radio('Retornar', "RD1", key = '0')],
+           [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+
