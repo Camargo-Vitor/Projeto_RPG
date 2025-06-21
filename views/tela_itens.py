@@ -7,10 +7,17 @@ class TelaItens(TelaAbstrata):
         self.__window = None
         self.init_components()
 
+    def close(self):
+        self.__window.Close()
+
+    def open(self):
+        button, values = self.__window.Read()
+        return button, values
+    
     def init_components(self):
-       sg.change_look_and_feel('Black')
+       sg.change_look_and_feel('DarkBrown4')
        layout = [
-           [sg.Text('===== Item =====', font = ('Arial', 25))],
+           [sg.Text('Gerenciador de Itens', font = ('Arial', 25))],
            [sg.Text('Escolha uma opção', font=('Arial', 15))],
            [sg.Radio(f'Incluir Item', 'RD1', key = '1')],
            [sg.Radio(f'Excluir Item', 'RD1', key = '2')],
@@ -19,7 +26,7 @@ class TelaItens(TelaAbstrata):
            [sg.Radio('Retornar', "RD1", key = '0')],
            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
         ]
-       self.__window = sg.Window('Sistema de Gerenciamento de aventura de D&D').Layout(layout)
+       self.__window = sg.Window('Gerenciador de Itens').Layout(layout)
 
     def mostra_tela(self, opcoes=[]):
         self.init_components()
@@ -33,7 +40,6 @@ class TelaItens(TelaAbstrata):
         return opcoes
 
     def pegar_dados_item(self):
-        sg.change_look_and_feel('DarkBrown4')
         layout = [
             [sg.Text('Dados Itens', font = ('Helvica', 25))],
             [sg.Text('Nome:', size = (15, 1)), sg.InputText('', key='nome')],
@@ -42,9 +48,11 @@ class TelaItens(TelaAbstrata):
             [sg.Text('Valor:', size = (15, 1)), sg.InputText('', key='valor')],
             [sg.Submit('Confirmar'), sg.Cancel('Cancelar')]
         ]
-        self.__window = sg.Window('Novo Itemm').Layout(layout)
+        self.__window = sg.Window('Novo Item!').Layout(layout)
         button, values = self.open()
         try:
+            values['nome'] = values['nome'].title().strip()
+            values['raridade'] = values['raridade'].title().strip()
             values['pagina'] = int(values['pagina'])
             values['valor'] = int(values['valor'])
         except:
@@ -55,7 +63,7 @@ class TelaItens(TelaAbstrata):
     
     def exibir_tabela(self, cabecalho: list, dados: list[list]):
         layout = [
-            [sg.Text("Lista de Magias", font=("Arial", 16))],
+            [sg.Text("Lista de Itens", font=("Arial", 16))],
             [sg.Table(values=dados,
                       headings=cabecalho,
                       auto_size_columns=True,
@@ -68,23 +76,24 @@ class TelaItens(TelaAbstrata):
         window = sg.Window("Itens Cadastrados", layout)
         button, _ = window.read()
         window.close()
-        
-    def mostra_item(self, dados_item: dict):
-        string_todos_itens = ""
-        for dado in dados_item:
-            string_todos_itens = string_todos_itens + "NOME DO ITEM: " + dado["nome"] + '\n'
-            string_todos_itens = string_todos_itens + "RARIDADE DO ITEM: " + str(dado["raridade"]) + '\n'
-            string_todos_itens = string_todos_itens + "PAGINA DO ITEM: " + str(dado["pagina"]) + '\n'            
-            string_todos_itens = string_todos_itens + "VALOR DO ITEM: " + str(dado["valor"]) + '\n\n'
 
-        sg.Popup('-------- LISTA DE AMIGOS ----------', string_todos_itens)
-    
-    def mostra_mensagem(self, msg):
-        sg.popup("", msg)
-
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
+    def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
+        layout = [
+            [sg.Text('Digite o ID da magia desejada: ')],
+            [sg.Text('ID: ', size=(15, 1)), sg.InputText('', key='codigo')],
+            [sg.Submit('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window('Seleção de Magia').Layout(layout)
         button, values = self.__window.Read()
-        return button, values
+        try:
+            values['codigo'] = int(values['codigo'])
+            if values['codigo'] not in total_codigos:
+                raise Exception()
+        except Exception as e:
+            print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')
+            self.close()
+            return -1
+        self.close()
+        return values['codigo']
+        
+
