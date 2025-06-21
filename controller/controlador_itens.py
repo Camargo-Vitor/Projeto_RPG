@@ -30,6 +30,8 @@ class ControladorItens:
     def incluir_item(self):
         try:
             dados_item = self.__tela_itens.pegar_dados_item()
+            if dados_item == 0:
+                return False
             i = self.pega_item_por_nome(dados_item['nome'])
             if i:
                 raise ItemJahExisteException(dados_item['nome'])
