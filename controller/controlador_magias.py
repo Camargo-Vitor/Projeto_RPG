@@ -25,12 +25,9 @@ class ControladorMagias:
         self.__cod = 1
 
     def pegar_magia_por_nome(self, nome: str):
-        try:
-            for magia in self.__dict_magias.values():
-                if magia.nome == nome:
-                    return magia
-        except Exception as e:
-            self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao selecionar magia: {str(e)}')
+        for magia in self.__dict_magias.values():
+            if magia.nome == nome:
+                return magia
 
     def incluir_magia(self):
         try:
@@ -54,9 +51,8 @@ class ControladorMagias:
         except KeyError as e:
             self.__tela_magias.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
-            self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao selecionar magia: {e}')
+            self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao criar magia: {e}')
             
-
     def listar_magias(self):
         try:
             self.__tela_magias.mensagem(f"{'Cod':^4} | {'Nome':^16} | {'Nivel':^5} | {'Pagina':^5}")
@@ -67,10 +63,8 @@ class ControladorMagias:
                     'nivel': magia.nivel,
                     'pagina': magia.pagina
                 })
-
         except Exception as e:
             self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao listar as magias: {str(e)}')
-
 
     def excluir_magia(self):
         try:

@@ -22,7 +22,7 @@ class TelaSistema(TelaAbstrata):
 
     def init_components(self):
         #sg.theme_previewer()
-        sg.ChangeLookAndFeel('Black') #procurar corzinha
+        sg.ChangeLookAndFeel('DarkBrown4') #procurar corzinha
         layout = [
             [sg.Text('Bem vindo ao sistema de gerenciamento de uma aventura de D&D!', font=('Arial', 25))],
             [sg.Text('Escolha sua opção', font=("Helvica",15))],

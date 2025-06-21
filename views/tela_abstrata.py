@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import os
+import PySimpleGUI as sg
 
 class TelaAbstrata(ABC):
     @abstractmethod
@@ -68,4 +69,4 @@ class TelaAbstrata(ABC):
             print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')
 
     def mensagem(self, msg):
-        print(msg)
+        sg.popup("", msg)
