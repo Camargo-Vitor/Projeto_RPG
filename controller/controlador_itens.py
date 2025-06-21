@@ -48,6 +48,8 @@ class ControladorItens:
                 return True
         except ItemJahExisteException as e:
             self.__tela_itens.mensagem(e)
+        except ValueError as e:
+            self.__tela_itens.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_itens.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
@@ -81,6 +83,8 @@ class ControladorItens:
             self.__tela_itens.mensagem('Item removido!')
             return True
 
+        except ValueError as e:
+            self.__tela_itens.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_itens.mensagem(f'[ERRO DE CHAVE] Erro ao excluir item, código não encontrado: {str(e)}')
         except Exception as e:
@@ -109,6 +113,8 @@ class ControladorItens:
                 raise ItemJahExisteException(dados_novos['nome'])
         except ItemJahExisteException:
             self.__tela_itens.mensagem(e)
+        except ValueError as e:
+            self.__tela_itens.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_itens.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
