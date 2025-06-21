@@ -44,7 +44,6 @@ class ControladorItens:
                 self.__cod += 1
                 self.__tela_itens.mensagem('Item criado com sucesso!')
                 return True
-
         except ItemJahExisteException as e:
             self.__tela_itens.mensagem(e)
         except KeyError as e:
@@ -76,7 +75,6 @@ class ControladorItens:
             identificador = self.__tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0:
                 return False
-
             del self.__dict_item[identificador]
             self.__tela_itens.mensagem('Item removido!')
             return True
@@ -92,9 +90,11 @@ class ControladorItens:
             cod_validos = list(self.__dict_item.keys()) + [0]
             identificador = self.__tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0: 
-                return
+                return False
             item = self.__dict_item[identificador]
             dados_novos = self.__tela_itens.pegar_dados_item()
+            if dados_novos == 0:
+                return False
             i = self.pega_item_por_nome(dados_novos['nome'])
             if i is None:
                 item.nome = dados_novos['nome']

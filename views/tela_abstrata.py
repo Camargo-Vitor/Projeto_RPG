@@ -95,9 +95,11 @@ class TelaAbstrata(ABC):
             if values['codigo'] not in total_codigos:
                 raise Exception()
         except Exception as e:
-            print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')
             self.close()
-            return -1
+            if button == 'Cancelar':
+                return 0
+            else:
+                print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')
         self.close()
         return values['codigo']
 
