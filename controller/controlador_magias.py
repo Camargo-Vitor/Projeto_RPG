@@ -55,14 +55,17 @@ class ControladorMagias:
             
     def listar_magias(self):
         try:
-            self.__tela_magias.mensagem(f"{'Cod':^4} | {'Nome':^16} | {'Nivel':^5} | {'Pagina':^5}")
+            dados_para_tabela = []
             for cod, magia in self.__dict_magias.items():
-                self.__tela_magias.mostra_magia({
-                    'cod': cod,
-                    'nome': magia.nome,
-                    'nivel': magia.nivel,
-                    'pagina': magia.pagina
-                })
+                dados_para_tabela.append([
+                    cod,
+                    magia.nome,
+                    magia.nivel,
+                    magia.pagina,
+                ])
+
+            cabecalho = ['Cód', 'Nome', 'Nivel', 'Pág.']
+            self.__tela_magias.exibir_tabela(cabecalho, dados_para_tabela)
         except Exception as e:
             self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao listar as magias: {str(e)}')
 
