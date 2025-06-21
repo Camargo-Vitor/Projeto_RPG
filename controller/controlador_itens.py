@@ -22,14 +22,11 @@ class ControladorItens:
         self.__cod = 1
 
     def pega_item_por_nome(self, nome: str):
-        try:
             for item in self.__dict_item.values():
                 if item.nome == nome:
                     return item
             return None
-        except Exception as e:
-            self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao selecionar item: {str(e)}')
-
+ 
     def incluir_item(self):
         try:
             dados_item = self.__tela_itens.pegar_dados_item()
@@ -57,21 +54,21 @@ class ControladorItens:
 
     def listar_itens(self):
         try:
-            self.__tela_itens.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Raridade":^10} | {"Pag":^5} | {"Valor":^9}')
-            for key, item in self.__dict_item.items():
-                self.__tela_itens.mostra_item(
-                    {
-                        'cod': key,
-                        'nome': item.nome,
-                        'raridade': item.raridade,
-                        'pagina': item.pagina,
-                        'valor': item.valor
-                    }
-                )
+            dados_para_tabela = []
+            for cod, item in self.__dict_item.items():
+                dados_para_tabela.append([
+                    cod,
+                    item.nome,
+                    item.raridade,
+                    item.pagina,
+                    item.valor,
+                ])
 
+            cabecalho = ['Cód', 'Nome', 'Raridade', 'Pagina', 'Valor.']
+            self.__tela_itens.exibir_tabela(cabecalho, dados_para_tabela)
         except Exception as e:
-            self.__tela_itens.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens: {str(e)}")
-
+            self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao listar as itens: {str(e)}')
+    
     def excluir_item(self):
         try:
             self.listar_itens()
