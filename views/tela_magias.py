@@ -25,24 +25,31 @@ class TelaMagias(TelaAbstrata):
 
     def pegar_dados_magia(self):
         layout = [
-            [sg.Text('Dados Magia')],
-            [sg.Text('Nome', size=(15, 1)), sg.InputText('', key='nome')],
-            [sg.Text('Nivel', size=(15, 1)), sg.InputText('', key='nivel')],
-            [sg.Text('Pagina', size=(15, 1)), sg.InputText('', key='pagina')],
-            [sg.Submit('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Text('Dados Magia', font = ('Helvica', 25))],
+            [sg.Text('Nome', size=(15, 1)), sg.InputText('', key='nome', enable_events=True)],
+            [sg.Text('Nivel', size = (15, 1)), sg.Combo(values=([i for i in range(1, 21)]), enable_events=True, readonly=True, key='nivel')],
+            [sg.Text('Pagina', size = (15, 1)), sg.Combo(values=([i for i in range(1, 385)]), enable_events=True, readonly=True, key='pagina')],
+            [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
         self.__window = sg.Window('Dados Magia').Layout(layout)
-        button, values = self.__window.Read()
-        try:
-            values['nome'] = values['nome'].title().strip()
-            values['nivel'] = int(values['nivel'])
-            values['pagina'] = int(values['pagina'])
-        except:
-            self.close()
-            return -1
+        while True:
+            button, values = self.__window.read()
+            if button in (sg.WIN_CLOSED, "Cancelar", 'Confirmar'):
+                break
+            check_nome = values['nome'].strip() != ''
+            check_nivel = values['nivel'] != ''
+            check_pagina = values['pagina'] != ''
+            if all([check_nome, check_nivel, check_pagina]):
+                self.__window['Confirmar'].update(disabled=False)
+            else:
+                self.__window['Confirmar'].update(disabled=True)
+            values['nome'] = values['nome'].title().strip()      
         self.close()
-        return values
-
+        if button == 'Confirmar':
+            return values
+        else:
+            return
+    
     @property
     def window(self):
         return self.__window

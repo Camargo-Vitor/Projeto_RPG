@@ -20,6 +20,9 @@ class TelaHabilidades(TelaAbstrata):
     def mostra_tela(self, nome_objeto = 'Habilidade'):
         return super().mostra_tela(nome_objeto=nome_objeto)
 
+    def exibir_tabela(self, cabecalho, dados, nome_objeto='Habilidade'):
+        return super().exibir_tabela(cabecalho, dados, nome_objeto)
+    
     def pegar_dados_habilidade(self):
         layout = [
             [sg.Text('Dados Habilidade')],
@@ -48,9 +51,6 @@ class TelaHabilidades(TelaAbstrata):
             return values
         else:
             return
-    
-    def exibir_tabela(self, cabecalho, dados, nome_objeto='Habilidade'):
-        return super().exibir_tabela(cabecalho, dados, nome_objeto)
 
     @property
     def window(self):
