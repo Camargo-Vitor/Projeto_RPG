@@ -35,22 +35,19 @@ class TelaHabilidades(TelaAbstrata):
             if button in (sg.WIN_CLOSED, "Cancelar", 'Confirmar'):
                 break
             check_nome = values['nome'].strip() != ''
-            check_nivel = values['nivel'] != None
-            check_pagina = values['pagina'] != None
+            check_nivel = values['nivel'] != ''
+            check_pagina = values['pagina'] != ''
             check_origem = values['origem'].strip() != ''
             if all([check_nome, check_nivel, check_pagina, check_origem]):
                 self.__window['Confirmar'].update(disabled=False)
             else:
                 self.__window['Confirmar'].update(disabled=True)
-        try:
             values['nome'] = values['nome'].title().strip()
-            values['nivel'] = int(values['nivel'])
-            values['pagina'] = int(values['pagina'])
-        except:
-            self.close()
-            return -1
         self.close()
-        return values
+        if button == 'Confirmar':
+            return values
+        else:
+            return
     
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Habilidade'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
