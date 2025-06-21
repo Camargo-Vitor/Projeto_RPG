@@ -48,3 +48,11 @@ class TelaHabilidades(TelaAbstrata):
         print(f"{dados_habilidade['nivel']:^5}", end= ' | ')
         print(f"{dados_habilidade['pagina']:^6}", end= ' | ')
         print(f"{dados_habilidade['origem']:^10}")
+
+    @property
+    def window(self):
+        pass
+
+    @window.setter
+    def window(self, window):
+        pass

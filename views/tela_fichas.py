@@ -154,3 +154,11 @@ class TelaFichas(TelaAbstrata):
         print(f">> Maior atributo registrado: {dados['maior_atributo']}")
         print(f">> Média de magias por personagem: {dados['media_magias']}")
         print("=" * 30 + "\n")
+
+    @property
+    def window(self):
+        pass
+
+    @window.setter
+    def window(self, window):
+        pass

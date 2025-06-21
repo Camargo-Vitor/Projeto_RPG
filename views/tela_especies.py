@@ -63,3 +63,11 @@ class TelaEspecies(TelaAbstrata):
         self.mostra_especie(dados_subespecie)
         print(f'===== Habilidades específicas ====='.center(60, '='))
         print(f"{str(dados_subespecie['habilidades_esp'])}")
+
+    @property
+    def window(self):
+        pass
+
+    @window.setter
+    def window(self, window):
+        pass

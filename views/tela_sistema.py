@@ -38,3 +38,10 @@ class TelaSistema(TelaAbstrata):
         ]
         self.__window = sg.Window('Sistema de Gerenciamento de aventura de D&D').Layout(layout)
         
+    @property
+    def window(self):
+        pass
+
+    @window.setter
+    def window(self, window):
+        pass

@@ -3,19 +3,43 @@ import os
 import PySimpleGUI as sg
 
 class TelaAbstrata(ABC):
-    @abstractmethod
-    def mostra_tela(self, opcoes=[]):
-        opc = self.le_int_ou_float(
-            'Digite a opção: ',
-            conjunto_alvo = opcoes
-                    )
+    def init_components(self, nome_objeto: str):
+       sg.change_look_and_feel('DarkBrown4')
+       layout = [
+           [sg.Text(f'Gerenciador de {nome_objeto}', font = ('Arial', 25))],
+           [sg.Text('Escolha uma opção', font=('Arial', 15))],
+           [sg.Radio(f'Incluir {nome_objeto}', 'RD1', key = '1')],
+           [sg.Radio(f'Excluir {nome_objeto}', 'RD1', key = '2')],
+           [sg.Radio(f'Listar {nome_objeto}', 'RD1', key = '3')],
+           [sg.Radio(f'Alterar {nome_objeto}', 'RD1', key = '4')],
+           [sg.Radio('Retornar', "RD1", key = '0')],
+           [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+       self.window = sg.Window(f'Gerenciador de {nome_objeto}').Layout(layout)
 
-        if os.name == 'posix':
-            os.system('clear')  
+    def mostra_tela(self, opcoes=[], nome_objeto: str = ''):
+        if opcoes != []:        
+            opc = self.le_int_ou_float(
+                'Digite a opção: ',
+                conjunto_alvo = opcoes
+                        )
+
+            if os.name == 'posix':
+                os.system('clear')  
+            else:
+                os.system('cls')
+
+            return opc
         else:
-            os.system('cls')
-
-        return opc
+            self.init_components(nome_objeto)
+            button, values = self.window.Read()
+            for key, opc in values.items():
+                if opc:
+                    opcoes = int(key)
+            if values['0'] or button in (None,'Cancelar'):
+                opcoes = 0
+            self.close()
+            return opcoes
 
     def le_int_ou_float(self, mensagem: str, conjunto_alvo: list=None, positivo: bool=False, tipo: str='int'):
         while True:
@@ -59,14 +83,49 @@ class TelaAbstrata(ABC):
             return entrada.capitalize()
 
     def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
+        layout = [
+            [sg.Text(f'Digite o ID do(a) {obj} desejado(a)')],
+            [sg.Text('ID: ', size=(15, 1)), sg.InputText('', key='codigo')],
+            [sg.Submit('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.window = sg.Window('Seleção de Magia').Layout(layout)
+        button, values = self.window.Read()
         try:
-            print(f'===== Busca {obj.title()} =====')
-            identificador = self.le_int_ou_float('Digite o Identificador desejado (0 para cancelar): ',
-                                        conjunto_alvo = total_codigos
-                                        )
-            return identificador
+            values['codigo'] = int(values['codigo'])
+            if values['codigo'] not in total_codigos:
+                raise Exception()
         except Exception as e:
             print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')
+            self.close()
+            return -1
+        self.close()
+        return values['codigo']
+
+    def exibir_tabela(self, cabecalho: list, dados: list[list], nome_objeto: str):
+        layout = [
+            [sg.Text(f"Lista de {nome_objeto}", font=("Arial", 16))],
+            [sg.Table(values=dados,
+                      headings=cabecalho,
+                      auto_size_columns=True,
+                      display_row_numbers=False,
+                      justification='center',
+                      num_rows=min(10, len(dados)),
+                      key='-TABELA-')],
+            [sg.Button("OK")]
+        ]
+        window = sg.Window(f"{nome_objeto} Cadastrados", layout)
+        button, _ = window.read()
+        window.close()
+
+    @property
+    @abstractmethod
+    def window(self):
+        pass
+
+    @window.setter
+    @abstractmethod
+    def window(self, window):
+        pass
 
     def mensagem(self, msg):
         sg.popup("", msg)

@@ -49,3 +49,11 @@ class TelaPessoas(TelaAbstrata):
     def mostra_jogador(self, dados_jogador: dict):
         self.mostra_pessoa(dados_jogador)
         print(f"{dados_jogador['personagens']}")
+
+    @property
+    def window(self):
+        pass
+
+    @window.setter
+    def window(self, window):
+        pass
