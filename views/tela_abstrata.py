@@ -32,7 +32,7 @@ class TelaAbstrata(ABC):
             return opc
         else:
             self.init_components(nome_objeto)
-            button, values = self.window.Read()
+            button, values = self.open()
             for key, opc in values.items():
                 if opc:
                     opcoes = int(key)

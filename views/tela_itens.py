@@ -25,15 +25,28 @@ class TelaItens(TelaAbstrata):
 
     def pegar_dados_item(self):
         layout = [
-            [sg.Text('Dados Itens', font = ('Helvica', 25))],
-            [sg.Text('Nome:', size = (15, 1)), sg.InputText('', key='nome')],
-            [sg.Text('Raridade:', size = (15, 1)), sg.InputText('', key='raridade')],
-            [sg.Text('Pagina:', size = (15, 1)), sg.InputText('', key='pagina')],
-            [sg.Text('Valor:', size = (15, 1)), sg.InputText('', key='valor')],
-            [sg.Submit('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Text('Dados Item', font = ('Helvica', 25))],
+            [sg.Text('Nome', size = (15, 1)), sg.InputText('', key='nome', enable_events=True)],
+            [sg.Text('Raridade: ', size = (15, 1)),
+             sg.InputCombo(('comum', 'raro', 'épico', 'lendário'), size=(20, 1), readonly=True, enable_events=True, key='raridade')],
+            [sg.Text('Pagina', size = (15, 1)), sg.Combo(values=([i for i in range(1, 385)]), enable_events=True, readonly=True, key='pagina')],
+            [sg.Text('Valor', size = (15, 1)), sg.InputText('PO', enable_events=True, key='valor')],
+            [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
+
         self.__window = sg.Window('Novo Item!').Layout(layout)
-        button, values = self.open()
+        while True:
+            button, values = self.__window.read()
+            if button in (sg.WIN_CLOSED, "Cancelar", 'Confirmar'):
+                break
+            check_nome = values['nome'].strip() != ''
+            check_raridade = values['raridade'].strip() != ''
+            check_pagina = values['pagina'] != None
+            check_valor = values['valor'] != None
+            if all([check_nome, check_raridade, check_pagina, check_valor]):
+                self.__window['Confirmar'].update(disabled=False)
+            else:
+                self.__window['Confirmar'].update(disabled=True)
         try:
             values['nome'] = values['nome'].title().strip()
             values['raridade'] = values['raridade'].title().strip()

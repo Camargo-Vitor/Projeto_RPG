@@ -64,7 +64,7 @@ class ControladorItens:
                     item.valor,
                 ])
 
-            cabecalho = ['Cód', 'Nome', 'Raridade', 'Pagina', 'Valor.']
+            cabecalho = ['Cód', 'Nome', 'Raridade', 'Pagina', 'Valor']
             self.__tela_itens.exibir_tabela(cabecalho, dados_para_tabela)
         except Exception as e:
             self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao listar as itens: {str(e)}')

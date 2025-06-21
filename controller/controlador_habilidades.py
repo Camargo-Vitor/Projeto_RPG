@@ -59,7 +59,6 @@ class ControladorHabilidades:
     
     def listar_habilidades(self, origem='todas'):
         try:
-            self.__tela_habilidades.mensagem(f"{'cod':^4} | {'nome':^16} | {'nível':^5} | {'pagina':^6} | {'origem':^10}")
             if origem == 'todas':
                 habilidades_filtradas = {
                     k: h for k, h in self.__dict_habilidades.items()
@@ -83,16 +82,18 @@ class ControladorHabilidades:
             else:
                 raise ValueError("[ERRO] Origem inválida")
 
-            for key, habilidade in habilidades_filtradas.items():
-                self.__tela_habilidades.mostra_habilidade(
-                    {
-                    'cod': key ,
-                    'nome': habilidade.nome,
-                    'nivel': habilidade.nivel,
-                    'pagina': habilidade.pagina,
-                    'origem': habilidade.origem
-                    }
-                )
+            dados_para_tabela = []
+            for cod, habilidade in habilidades_filtradas.items():
+                dados_para_tabela.append([
+                    cod,
+                    habilidade.nome,
+                    habilidade.nivel,
+                    habilidade.pagina,
+                    habilidade.origem,
+                ])
+
+            cabecalho = ['Cód', 'Nome', 'Nivel', 'Pagina', 'Tipo']
+            self.__tela_habilidades.exibir_tabela(cabecalho, dados_para_tabela)
 
         except Exception as e:
             self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao listar habilidades: {str(e)}')
