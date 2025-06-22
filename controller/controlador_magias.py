@@ -32,6 +32,8 @@ class ControladorMagias:
     def incluir_magia(self):
         try:
             dados_magia = self.__tela_magias.pegar_dados_magia()
+            if dados_magia == 0:
+                return False
             m = self.pegar_magia_por_nome(dados_magia['nome'])
             if m:
                 raise MagiaJahExisteException(dados_magia['nome'])

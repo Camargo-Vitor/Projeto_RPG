@@ -71,6 +71,8 @@ class ControladorFichas:
         try:
             #dados basicos
             dados__basicos_ficha = self.__tela_fichas.pegar_dados_basicos_ficha()
+            if dados__basicos_ficha == 0:
+                return False
 
             #classe
             self.__controlador_sistema.controlador_classes.listar_classes_e_subclasses()

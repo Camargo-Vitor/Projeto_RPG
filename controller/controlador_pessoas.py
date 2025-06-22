@@ -32,6 +32,8 @@ class ControladorPessoas:
     def incluir_jogador(self):
         try:
             dados_pessoa = self.__tela_pessoas.pegar_dados_pessoa()
+            if dados_pessoa == 0:
+                return False
             m = self.pega_pessoa_por_nome(dados_pessoa['nome'])
             if m:
                 raise JogadorJahExisteException(dados_pessoa['nome']) 

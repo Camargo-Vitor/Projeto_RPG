@@ -33,6 +33,8 @@ class ControladorClasses:
     def incluir_classe(self):
         try:
             dados_classe = self.__tela_classes.pegar_dados_classes()
+            if dados_classe == 0:
+                return False
             c = self.pega_classe_por_nome(dados_classe['nome'])
             if c:
                 raise ClasseJahExisteException(dados_classe['nome'])
