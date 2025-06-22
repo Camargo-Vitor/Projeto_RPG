@@ -13,18 +13,23 @@ class TelaEspecies(TelaAbstrata):
     def open(self):
         button, values = self.__window.Read()
         return button, values
-    """
-    def init_components(self, nome_objeto = 'Especie', layout_extra = None, indice_layout_extra = 0):
-        layout_extra = [
-            [sg.Text('a')]
-            [sg.Radio(f'Remover Habilidades em {nome_objeto}', 'RD1', key='6')]
-        ]
-        self.__window.extend_layout(container=layout_extra, rows=[])
-        return super().init_components(nome_objeto = 'Especie', layout_extra = layout_extra, indice_layout_extra = 7)
-    """
 
-    def mostra_tela(self, nome_objeto='Especie'):
-        return super().mostra_tela(nome_objeto=nome_objeto)
+    def mostra_tela(self, opcoes = [], nome_objeto = '', layout_extra = None, indice_layout_extra = 0, crud=False):
+        layout_extra = [
+            [sg.Text(f'Gerenciador de Especies e Subespecies', font = ('Arial', 25))],
+            [sg.Text('Escolha uma opção', font=('Arial', 15))],
+            [sg.Radio(f'Incluir Especie', 'RD1', enable_events=True, key = '1')],
+            [sg.Radio(f'Excluir Especie ', 'RD1', enable_events=True, key = '2')],
+            [sg.Radio(f'Listar Especie', 'RD1', enable_events=True, key = '3')],
+            [sg.Radio(f'Alterar Especie', 'RD1', enable_events=True, key = '4')],
+            [sg.Radio(f'Incluir Subespecie', 'RD1', enable_events=True, key = '5')],
+            [sg.Radio(f'Excluir Subespecie', 'RD1', enable_events=True, key = '6')],
+            [sg.Radio(f'Listar Subespecie', 'RD1', enable_events=True, key = '7')],
+            [sg.Radio(f'Alterar Subespecie', 'RD1', enable_events=True, key = '8')],
+            [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
+            [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
+        ]
+        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
 
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Especie'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)

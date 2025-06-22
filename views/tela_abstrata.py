@@ -3,23 +3,24 @@ import os
 import PySimpleGUI as sg
 
 class TelaAbstrata(ABC):
-    def init_components(self, nome_objeto: str, layout_extra:list[list]=None, indice_layout_extra: int=0):
+    def init_components(self, nome_objeto: str, layout_extra:list[list]=None, indice_layout_extra: int=0, crud=True):
         sg.change_look_and_feel('DarkBrown4')
-        layout = [
-            [sg.Text(f'Gerenciador de {nome_objeto}', font = ('Arial', 25))],
-            [sg.Text('Escolha uma opção', font=('Arial', 15))],
-            [sg.Radio(f'Incluir {nome_objeto}', 'RD1', enable_events=True, key = '1')],
-            [sg.Radio(f'Excluir {nome_objeto}', 'RD1', enable_events=True, key = '2')],
-            [sg.Radio(f'Listar {nome_objeto}', 'RD1', enable_events=True, key = '3')],
-            [sg.Radio(f'Alterar {nome_objeto}', 'RD1', enable_events=True, key = '4')],
-            [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
-            [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
-        ]
-        if layout_extra:
+        if crud:
+            layout = [
+                [sg.Text(f'Gerenciador de {nome_objeto}', font = ('Arial', 25))],
+                [sg.Text('Escolha uma opção', font=('Arial', 15))],
+                [sg.Radio(f'Incluir {nome_objeto}', 'RD1', enable_events=True, key = '1')],
+                [sg.Radio(f'Excluir {nome_objeto}', 'RD1', enable_events=True, key = '2')],
+                [sg.Radio(f'Listar {nome_objeto}', 'RD1', enable_events=True, key = '3')],
+                [sg.Radio(f'Alterar {nome_objeto}', 'RD1', enable_events=True, key = '4')],
+                [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
+                [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
+            ]
+        elif layout_extra:
             layout.insert(indice_layout_extra, layout_extra)
         self.window = sg.Window(f'Gerenciador de {nome_objeto}').Layout(layout)
 
-    def mostra_tela(self, opcoes=[], nome_objeto: str = ''):
+    def mostra_tela(self, opcoes:list = [], nome_objeto: str = '', layout_extra:list[list]=None, indice_layout_extra: int=0, crud=True):
         if opcoes != []:        
             opc = self.le_int_ou_float(
                 'Digite a opção: ',
@@ -33,7 +34,7 @@ class TelaAbstrata(ABC):
 
             return opc
         else:
-            self.init_components(nome_objeto)
+            self.init_components(nome_objeto, layout_extra, indice_layout_extra)
             while True:
                 button, values = self.open()
                 if button in (sg.WIN_CLOSED, 'Cancelar'):
