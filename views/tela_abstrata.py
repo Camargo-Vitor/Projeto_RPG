@@ -8,12 +8,12 @@ class TelaAbstrata(ABC):
         layout = [
             [sg.Text(f'Gerenciador de {nome_objeto}', font = ('Arial', 25))],
             [sg.Text('Escolha uma opção', font=('Arial', 15))],
-            [sg.Radio(f'Incluir {nome_objeto}', 'RD1', key = '1')],
-            [sg.Radio(f'Excluir {nome_objeto}', 'RD1', key = '2')],
-            [sg.Radio(f'Listar {nome_objeto}', 'RD1', key = '3')],
-            [sg.Radio(f'Alterar {nome_objeto}', 'RD1', key = '4')],
-            [sg.Radio('Retornar', "RD1", key = '0')],
-            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Radio(f'Incluir {nome_objeto}', 'RD1', enable_events=True, key = '1')],
+            [sg.Radio(f'Excluir {nome_objeto}', 'RD1', enable_events=True, key = '2')],
+            [sg.Radio(f'Listar {nome_objeto}', 'RD1', enable_events=True, key = '3')],
+            [sg.Radio(f'Alterar {nome_objeto}', 'RD1', enable_events=True, key = '4')],
+            [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
+            [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
         if layout_extra:
             layout.insert(indice_layout_extra, layout_extra)
@@ -34,14 +34,22 @@ class TelaAbstrata(ABC):
             return opc
         else:
             self.init_components(nome_objeto)
-            button, values = self.open()
-            for key, opc in values.items():
-                if opc:
-                    opcoes = int(key)
-            if values['0'] or button in (None,'Cancelar'):
-                opcoes = 0
-            self.close()
-            return opcoes
+            while True:
+                button, values = self.open()
+                if button in (sg.WIN_CLOSED, 'Cancelar'):
+                    self.close()
+                    return 0
+                if any(values[key] for key in ['0','1','2','3','4','5','6','7']):
+                    self.window['Confirmar'].update(disabled=False)
+                else:
+                    self.window['Confirmar'].update(disabled=True)
+
+                if button == 'Confirmar':
+                    for key, opc in values.items():
+                        if opc:
+                            escolha = int(key)
+                            self.close()
+                            return escolha
 
     def le_int_ou_float(self, mensagem: str, conjunto_alvo: list=None, positivo: bool=False, tipo: str='int'):
         while True:
