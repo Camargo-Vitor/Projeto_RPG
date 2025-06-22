@@ -39,11 +39,10 @@ class TelaAbstrata(ABC):
                 if button in (sg.WIN_CLOSED, 'Cancelar'):
                     self.close()
                     return 0
-                if any(values[key] for key in ['0','1','2','3','4','5','6','7']):
+                elif any(values[key] for key in self.window.key_dict.keys()):
                     self.window['Confirmar'].update(disabled=False)
                 else:
                     self.window['Confirmar'].update(disabled=True)
-
                 if button == 'Confirmar':
                     for key, opc in values.items():
                         if opc:

@@ -3,7 +3,7 @@ import PySimpleGUI as sg
 
 class TelaSistema(TelaAbstrata):
     def __init__(self):
-        self.__window = None
+        self.__window: sg.Window = None
         self.init_components()
     
     def close(self):
@@ -38,7 +38,7 @@ class TelaSistema(TelaAbstrata):
             if button in (sg.WIN_CLOSED, 'Cancelar'):
                 self.close()
                 return 0
-            if any(values[key] for key in ['0','1','2','3','4','5','6','7']):
+            if any(values[key] for key in self.window.key_dict.keys()):
                 self.__window['Confirmar'].update(disabled=False)
             else:
                 self.__window['Confirmar'].update(disabled=True)
@@ -52,8 +52,9 @@ class TelaSistema(TelaAbstrata):
    
     @property
     def window(self):
-        pass
+        return self.__window
 
     @window.setter
     def window(self, window):
-        pass
+        if isinstance(window, sg.Window):
+            self.__window = window

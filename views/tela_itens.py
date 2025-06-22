@@ -13,9 +13,12 @@ class TelaItens(TelaAbstrata):
     def open(self):
         button, values = self.__window.Read()
         return button, values
-    
-    def init_components(self, nome_objeto):
-        return super().init_components(nome_objeto)
+
+    def init_components(self, nome_objeto, layout_extra = None, indice_layout_extra = 0):
+        layout_extra = [
+            [sg.Text('Teste')]
+        ]
+        return super().init_components(nome_objeto, layout_extra=layout_extra, indice_layout_extra=6)
 
     def mostra_tela(self, nome_objeto='Item'):
         return super().mostra_tela(nome_objeto=nome_objeto)
