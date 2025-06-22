@@ -116,7 +116,7 @@ class ControladorItens:
         except ValueError as e:
             self.__tela_itens.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
-            self.__tela_itens.mensagem(f"[ERRO] Dado ausente: {str(e)}")
+            self.__tela_itens.mensagem(f'[ERRO DE CHAVE] Erro ao buscar item, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro inesperado ao alterar item por código: {str(e)}')
 

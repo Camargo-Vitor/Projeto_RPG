@@ -143,7 +143,7 @@ class ControladorHabilidades:
         except TypeError as e:
             self.__tela_habilidades.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
-            self.__tela_habilidades.mensagem(f'[ERRO] Dado ausente: {str(e)}')
+            self.__tela_habilidades.mensagem(f'[ERRO DE CHAVE] Erro ao buscar habilidade, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro inesperado ao alterar habilidade por código: {e}')
 

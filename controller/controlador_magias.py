@@ -113,7 +113,7 @@ class ControladorMagias:
         except TypeError as e:
             self.__tela_magias.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
-            self.__tela_magias.mensagem(f"[ERRO] Dado ausente: {str(e)}")
+            self.__tela_magias.mensagem(f'[ERRO DE CHAVE] Erro ao buscar magia, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro inesperado ao alterar magia por código: {str(e)}')
 

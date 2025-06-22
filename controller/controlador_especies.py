@@ -211,7 +211,7 @@ class ControladorEspecies:
         except EspecieJahExisteException as e:
             self.__tela_especies.mensagem(e)
         except KeyError as e:
-            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
+            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao buscar espécie, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao alterar espécie por código: {str(e)}')
 
@@ -235,7 +235,7 @@ class ControladorEspecies:
         except EspecieJahExisteException as e:
             self.__tela_especies.mensagem(e)
         except KeyError as e:
-            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao buscar subespécie, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao alterar subespécie por código: {e}')
        
@@ -267,7 +267,7 @@ class ControladorEspecies:
         except OrigemInvalidaException as e:
             self.__tela_especies.mensagem(e)
         except KeyError as e:
-            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao buscar habilidade, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em espécie: {e}')
 
@@ -300,7 +300,7 @@ class ControladorEspecies:
         except OrigemInvalidaException as e:
             self.__tela_especies.mensagem(e)
         except KeyError as e:
-            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+            self.__tela_especies.mensagem(f'[ERRO DE CHAVE] Erro ao buscar habilidade, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em espécie: {e}')
         
