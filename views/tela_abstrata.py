@@ -3,19 +3,21 @@ import os
 import PySimpleGUI as sg
 
 class TelaAbstrata(ABC):
-    def init_components(self, nome_objeto: str):
-       sg.change_look_and_feel('DarkBrown4')
-       layout = [
-           [sg.Text(f'Gerenciador de {nome_objeto}', font = ('Arial', 25))],
-           [sg.Text('Escolha uma opção', font=('Arial', 15))],
-           [sg.Radio(f'Incluir {nome_objeto}', 'RD1', key = '1')],
-           [sg.Radio(f'Excluir {nome_objeto}', 'RD1', key = '2')],
-           [sg.Radio(f'Listar {nome_objeto}', 'RD1', key = '3')],
-           [sg.Radio(f'Alterar {nome_objeto}', 'RD1', key = '4')],
-           [sg.Radio('Retornar', "RD1", key = '0')],
-           [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+    def init_components(self, nome_objeto: str, layout_extra:list[list]=None, indice_layout_extra: int=0):
+        sg.change_look_and_feel('DarkBrown4')
+        layout = [
+            [sg.Text(f'Gerenciador de {nome_objeto}', font = ('Arial', 25))],
+            [sg.Text('Escolha uma opção', font=('Arial', 15))],
+            [sg.Radio(f'Incluir {nome_objeto}', 'RD1', key = '1')],
+            [sg.Radio(f'Excluir {nome_objeto}', 'RD1', key = '2')],
+            [sg.Radio(f'Listar {nome_objeto}', 'RD1', key = '3')],
+            [sg.Radio(f'Alterar {nome_objeto}', 'RD1', key = '4')],
+            [sg.Radio('Retornar', "RD1", key = '0')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
         ]
-       self.window = sg.Window(f'Gerenciador de {nome_objeto}').Layout(layout)
+        if layout_extra:
+            layout.insert(indice_layout_extra, layout_extra)
+        self.window = sg.Window(f'Gerenciador de {nome_objeto}').Layout(layout)
 
     def mostra_tela(self, opcoes=[], nome_objeto: str = ''):
         if opcoes != []:        
@@ -115,9 +117,9 @@ class TelaAbstrata(ABC):
                       key='-TABELA-')],
             [sg.Button("OK")]
         ]
-        window = sg.Window(f"{nome_objeto} Cadastrados", layout)
-        button, _ = window.read()
-        window.close()
+        self.window = sg.Window(f"{nome_objeto} Cadastrados", layout)
+        button, _ = self.window.read()
+        self.window.close()
 
     @property
     @abstractmethod
