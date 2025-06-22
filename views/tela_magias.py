@@ -14,8 +14,8 @@ class TelaMagias(TelaAbstrata):
         button, values = self.__window.Read()
         return button, values
 
-    def mostra_tela(self, opcoes = [], nome_objeto = 'Magia', layout_extra = None, indice_layout_extra = 0):
-        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra)
+    def mostra_tela(self, opcoes = [], nome_objeto = 'Magia', layout_extra = None, indice_layout_extra = 0, crud=True):
+        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
 
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Magia'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
