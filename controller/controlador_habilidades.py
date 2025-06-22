@@ -35,6 +35,8 @@ class ControladorHabilidades:
     def incluir_habilidade(self):
         try:
             dados_hab = self.__tela_habilidades.pegar_dados_habilidade()
+            if dados_hab == 0:
+                return False
             hab = self.pega_habilidade_por_nome(dados_hab['nome'])
             if hab:
                 raise HabilidadeJahExiste(dados_hab['nome'])

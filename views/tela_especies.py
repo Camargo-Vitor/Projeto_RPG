@@ -22,14 +22,18 @@ class TelaEspecies(TelaAbstrata):
             [sg.Radio(f'Excluir Especie ', 'RD1', enable_events=True, key = '2')],
             [sg.Radio(f'Listar Especie', 'RD1', enable_events=True, key = '3')],
             [sg.Radio(f'Alterar Especie', 'RD1', enable_events=True, key = '4')],
-            [sg.Radio(f'Incluir Subespecie', 'RD1', enable_events=True, key = '5')],
-            [sg.Radio(f'Excluir Subespecie', 'RD1', enable_events=True, key = '6')],
-            [sg.Radio(f'Listar Subespecie', 'RD1', enable_events=True, key = '7')],
-            [sg.Radio(f'Alterar Subespecie', 'RD1', enable_events=True, key = '8')],
+            [sg.Radio(f'Incluir Habilidade em Especie', 'RD1', enable_events=True, key = '5')],
+            [sg.Radio(f'Excluir Habilidade de Especie', 'RD1', enable_events=True, key = '6')],
+            [sg.Radio(f'Incluir Subespecie', 'RD1', enable_events=True, key = '7')],
+            [sg.Radio(f'Excluir Subespecie', 'RD1', enable_events=True, key = '8')],
+            [sg.Radio(f'Listar Subespecie', 'RD1', enable_events=True, key = '9')],
+            [sg.Radio(f'Alterar Subespecie', 'RD1', enable_events=True, key = '10')],
+            [sg.Radio(f'Incluir Habilidade em Subespecie', 'RD1', enable_events=True, key = '11')],
+            [sg.Radio(f'Excluir Habilidade de Subespecie', 'RD1', enable_events=True, key = '12')],
             [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
             [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
+        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud=False)
 
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Especie'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)

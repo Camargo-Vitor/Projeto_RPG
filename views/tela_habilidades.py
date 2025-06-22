@@ -14,11 +14,8 @@ class TelaHabilidades(TelaAbstrata):
         button, values = self.__window.Read()
         return button, values
 
-    def init_components(self, nome_objeto):
-        return super().init_components(nome_objeto)
-
-    def mostra_tela(self, nome_objeto = 'Habilidade'):
-        return super().mostra_tela(nome_objeto=nome_objeto)
+    def mostra_tela(self, opcoes = [], nome_objeto = 'Habilidade', layout_extra = None, indice_layout_extra = 0, crud=True):
+        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
 
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Habilidade'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
@@ -35,8 +32,13 @@ class TelaHabilidades(TelaAbstrata):
         self.__window = sg.Window('Dados Habilidade').Layout(layout)
         while True:
             button, values = self.__window.read()
-            if button in (sg.WIN_CLOSED, "Cancelar", 'Confirmar'):
-                break
+            if button in (sg.WIN_CLOSED, 'Confirmar'):
+                self.close
+                values['nome'] = values['nome'].title().strip()
+                return values
+            elif button == 'Cancelar':
+                self.close()
+                return 0
             check_nome = values['nome'].strip() != ''
             check_nivel = values['nivel'] != ''
             check_pagina = values['pagina'] != ''
@@ -45,12 +47,6 @@ class TelaHabilidades(TelaAbstrata):
                 self.__window['Confirmar'].update(disabled=False)
             else:
                 self.__window['Confirmar'].update(disabled=True)
-            values['nome'] = values['nome'].title().strip()
-        self.close()
-        if button == 'Confirmar':
-            return values
-        else:
-            return
 
     @property
     def window(self):
