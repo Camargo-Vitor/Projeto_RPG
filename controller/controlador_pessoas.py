@@ -50,6 +50,8 @@ class ControladorPessoas:
                 return True 
         except JogadorJahExisteException as e:
             self.__tela_pessoas.mensagem(e)
+        except TypeError as e:
+            self.__tela_pessoas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_pessoas.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
@@ -88,6 +90,8 @@ class ControladorPessoas:
                 return True
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Erro ao excluir jogador, código não encontrado: {str(e)}')
+        except TypeError as e:
+            self.__tela_pessoas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao excluir jogador: {e}')
 
@@ -117,6 +121,8 @@ class ControladorPessoas:
             self.__tela_pessoas.mensagem(e)
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Dado ausente: {str(e)}')
+        except TypeError as e:
+            self.__tela_pessoas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao alterar jogador: {e}')
 
@@ -145,6 +151,8 @@ class ControladorPessoas:
             self.__tela_pessoas.mensagem(e)
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
+        except TypeError as e:
+            self.__tela_pessoas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao adicionar ficha em jogador: {e}')
 
@@ -167,7 +175,8 @@ class ControladorPessoas:
                     jogador.rm_ficha(fichas[identificador_ficha])
                     self.__tela_pessoas.mensagem('Ficha Removida!')
                     return True
-                
+        except TypeError as e:
+            self.__tela_pessoas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_pessoas.mensagem(f'[ERRO DE CHAVE] Elemento não excluido, código não encontado.: {e}')
         except Exception as e:

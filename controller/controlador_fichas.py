@@ -170,7 +170,8 @@ class ControladorFichas:
                 del self.__dict_fichas[identificador]
                 self.__tela_fichas.mensagem('Ficha removida!')
                 return True
-        
+        except TypeError as e:
+            self.__tela_fichas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Erro ao excluir ficha, código não encontrado: {str(e)}')
         except Exception as e:
@@ -194,6 +195,8 @@ class ControladorFichas:
                     ficha.add_item_inventario(item[identificador_item])
                     self.__tela_fichas.mensagem('Item adicionado ao inventário!')
                     return True
+        except TypeError as e:
+            self.__tela_fichas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
@@ -218,6 +221,8 @@ class ControladorFichas:
                     ficha.add_magia(magia[identificador_magia])
                     self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
                     return True
+        except TypeError as e:
+            self.__tela_fichas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
@@ -245,7 +250,8 @@ class ControladorFichas:
                     ficha.rm_item_inventario(itens[identificador_item])
                     self.__tela_fichas.mensagem('Item removido do inventário!')
                     return True
-                
+        except TypeError as e:
+            self.__tela_fichas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')                
         except KeyError as e:
             self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:
@@ -272,6 +278,8 @@ class ControladorFichas:
                     ficha.rm_magia(magias[identificador_magia])
                     self.__tela_fichas.mensagem('Magia removida!')
                     return True
+        except TypeError as e:
+            self.__tela_fichas.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Algum elemento não foi encontrado: {e}')
         except Exception as e:

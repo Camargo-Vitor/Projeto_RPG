@@ -48,6 +48,8 @@ class ControladorMagias:
             
         except MagiaJahExisteException as e:
             self.__tela_magias.mensagem(e)
+        except TypeError as e:
+            self.__tela_magias.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_magias.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
@@ -83,6 +85,8 @@ class ControladorMagias:
 
         except KeyError as e:
             self.__tela_magias.mensagem(f'[ERRO DE CHAVE] Erro ao excluir magia, código não encontrado: {str(e)}')
+        except TypeError as e:
+            self.__tela_magias.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except Exception as e:
             self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao excluir magia: {str(e)}')
 
@@ -106,6 +110,8 @@ class ControladorMagias:
                 raise MagiaJahExisteException(dados_novos['nome'])
         except MagiaJahExisteException  as e:
             self.__tela_magias.mensagem(e)
+        except TypeError as e:
+            self.__tela_magias.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_magias.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:

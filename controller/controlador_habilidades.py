@@ -52,6 +52,8 @@ class ControladorHabilidades:
          
         except HabilidadeJahExiste as e:
             self.__tela_habilidades.mensagem(e)
+        except TypeError as e:
+            self.__tela_habilidades.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_habilidades.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
@@ -111,7 +113,9 @@ class ControladorHabilidades:
                 return True
             
         except KeyError as e:
-            self.__tela_habilidades.mensagem(f'[ERRO DE CHAVE] Erro ao excluir habilidade, código não encontrado: {str(e)}')    
+            self.__tela_habilidades.mensagem(f'[ERRO DE CHAVE] Erro ao excluir habilidade, código não encontrado: {str(e)}')
+        except TypeError as e:
+            self.__tela_habilidades.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except Exception as e:
             self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade: {str(e)}')
 
@@ -136,6 +140,8 @@ class ControladorHabilidades:
                 raise HabilidadeJahExiste(dados_novos['nome'])
         except HabilidadeJahExiste as e:
             self.__tela_habilidades.mensagem(e)
+        except TypeError as e:
+            self.__tela_habilidades.mensagem(f'[ERRO] Algum valor de entrada não foi inserido como esperado.')
         except KeyError as e:
             self.__tela_habilidades.mensagem(f'[ERRO] Dado ausente: {str(e)}')
         except Exception as e:
