@@ -15,7 +15,7 @@ class TelaEspecies(TelaAbstrata):
         return button, values
 
     def mostra_tela(self, opcoes = [], nome_objeto = '', layout_extra = None, indice_layout_extra = 0, crud=False):
-        layout_extra = [
+        layout = [
             [sg.Text(f'Gerenciador de Especies e Subespecies', font = ('Arial', 25))],
             [sg.Text('Escolha uma opção', font=('Arial', 15))],
             [sg.Radio(f'Incluir Especie', 'RD1', enable_events=True, key = '1')],
@@ -33,7 +33,7 @@ class TelaEspecies(TelaAbstrata):
             [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
             [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud=False)
+        return super().mostra_tela(opcoes, nome_objeto, layout, indice_layout_extra, crud=False)
 
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Especie'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
@@ -77,7 +77,9 @@ class TelaEspecies(TelaAbstrata):
             button, values = self.__window.read()
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
-                break
+                self.close()
+                values['nome'] = values['nome'].strip().title()
+                return values
             elif button == 'Cancelar':
                 self.close()
                 return 0

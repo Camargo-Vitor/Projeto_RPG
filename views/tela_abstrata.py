@@ -5,6 +5,7 @@ import PySimpleGUI as sg
 class TelaAbstrata(ABC):
     def init_components(self, nome_objeto: str, layout_extra:list[list]=None, indice_layout_extra: int=0, crud=True):
         sg.change_look_and_feel('DarkBrown4')
+        layout = []
         if crud:
             layout = [
                 [sg.Text(f'Gerenciador de {nome_objeto}', font = ('Arial', 25))],
@@ -34,7 +35,7 @@ class TelaAbstrata(ABC):
 
             return opc
         else:
-            self.init_components(nome_objeto, layout_extra, indice_layout_extra)
+            self.init_components(nome_objeto, layout_extra, indice_layout_extra, crud=crud)
             while True:
                 button, values = self.open()
                 if button in (sg.WIN_CLOSED, 'Cancelar'):

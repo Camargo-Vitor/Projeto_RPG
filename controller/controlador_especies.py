@@ -356,11 +356,8 @@ class ControladorEspecies:
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()
-    
-    def retornar_tela_especie(self):
-        self.abre_tela()
-        
-    def abre_tela_especie(self):
+
+    def abre_tela(self):
         opcoes = {
             1: self.incluir_especie,
             2: self.excluir_especie,
@@ -368,32 +365,12 @@ class ControladorEspecies:
             4: self.alterar_especie_por_cod,
             5: self.add_habilidade_especie,
             6: self.remove_habilidade_especie,
-            0: self.abre_tela
-        }
-        while True:
-            opc = self.__tela_especies.mostra_tela_especie()
-            metodo = opcoes[opc]
-            metodo()
-
-    def abre_tela_subespecie(self):
-        opcoes= {
-            1: self.incluir_subespecie,
-            2: self.excluir_subespecie,
-            3: self.listar_subespecies,
-            4: self.alterar_subespecie_por_cod,
-            5: self.add_habilidade_subespecie,
-            6: self.remove_habilidade_subespecie,
-            0: self.abre_tela
-        }
-        while True:
-            opc = self.__tela_especies.mostra_tela_subespecie()
-            metodo = opcoes[opc]
-            metodo()
-
-    def abre_tela(self):
-        opcoes = {
-            1: self.abre_tela_especie,
-            2: self.abre_tela_subespecie,
+            7: self.incluir_subespecie,
+            8: self.excluir_subespecie,
+            9: self.listar_subespecies,
+            10: self.alterar_subespecie_por_cod,
+            11: self.add_habilidade_subespecie,
+            12: self.remove_habilidade_subespecie,
             0: self.retornar
         }
         while True:
