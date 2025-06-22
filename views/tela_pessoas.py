@@ -1,10 +1,10 @@
 from views.tela_abstrata import TelaAbstrata
 import PySimpleGUI as sg
 
-class TelaItens(TelaAbstrata):
+class TelaPessoas(TelaAbstrata):
     def __init__(self):
         self.__window = None
-        self.init_components('Item')
+        self.init_components('Pessoa')
 
     def close(self):
         self.__window.Close()
@@ -12,6 +12,24 @@ class TelaItens(TelaAbstrata):
     def open(self):
         button, values = self.__window.Read()
         return button, values
+
+    def mostra_tela(self, opcoes = [], nome_objeto = 'Pessoas', layout_extra = None, indice_layout_extra = 0, crud=False):
+        layout = [
+            [sg.Text(f'Gerenciador de Pessoa', font = ('Arial', 25))],
+            [sg.Text('Escolha uma opção', font=('Arial', 15))],
+            [sg.Radio(f'Incluir Jogador', 'RD1', enable_events=True, key = '1')],
+            [sg.Radio(f'Excluir Jogador ', 'RD1', enable_events=True, key = '2')],
+            [sg.Radio(f'Listar Jogador', 'RD1', enable_events=True, key = '3')],
+            [sg.Radio(f'Alterar Jogador', 'RD1', enable_events=True, key = '4')],
+            [sg.Radio(f'Adicionar Ficha', 'RD1', enable_events=True, key = '5')],
+            [sg.Radio(f'Excluir Ficha', 'RD1', enable_events=True, key = '6')],
+            [sg.Radio(f'Acessar Mestre', 'RD1', enable_events=True, key = '7')],
+            [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
+        ]
+        return super().mostra_tela(opcoes, nome_objeto, layout, indice_layout_extra, crud=False)
+    
+    def exibir_tabela(self, cabecalho, dados, nome_objeto = 'Pessoas'):
+        return super().exibir_tabela(cabecalho, dados, nome_objeto)
     '''
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
         print('===== Pessoas =====')
@@ -31,10 +49,10 @@ class TelaItens(TelaAbstrata):
             [sg.Text('Dados Pessoas', font=('Helvica', 25))],
             [sg.Text('Nome', size=(15, 1)), sg.InputText('', key='nome', enable_events=True)],
             [sg.Text('Telefone', size=(15, 1)), sg.InputText('', key='telefone', enable_events=True)],
-            [sg.Text('Cidade', size=(15, 1)), sg.InputText('', key='cidade', enable_events= True)]
+            [sg.Text('Cidade', size=(15, 1)), sg.InputText('', key='cidade', enable_events= True)],
             [sg.Text('Bairro', size=(15, 1)), sg.InputText('', key='bairro', enable_events=True)],
             [sg.Text('Numero', size=(15, 1)), sg.InputText('', key='numero', enable_events=True)],
-            [sg.Text('Cep', size=(15,1)), sg.InputText('', key='cep', enable_events=True)]
+            [sg.Text('Cep', size=(15,1)), sg.InputText('', key='cep', enable_events=True)],
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]            
         ]
 
@@ -72,19 +90,6 @@ class TelaItens(TelaAbstrata):
             values['numero'] = int(values['numero'])
             values['cep'] = int(values['cep'])
             return values
-
-    def mostra_pessoa(self, dados_pessoa: dict):
-        print(f"{dados_pessoa['cod']:^4}", end=' | ')
-        print(f"{dados_pessoa['nome']:^16}", end=' | ')
-        print(f"{dados_pessoa['telefone']:^13}", end=' | ')
-        print(f"{dados_pessoa['cidade']:^16}", end=' | ')
-        print(f"{dados_pessoa['bairro']:^12}", end=' | ')
-        print(f"{dados_pessoa['numero']:^6}", end=' | ')
-        print(f"{dados_pessoa['cep']:^10}", end=' |')
-
-    def mostra_jogador(self, dados_jogador: dict):
-        self.mostra_pessoa(dados_jogador)
-        print(f"{dados_jogador['personagens']}")
 
     @property
     def window(self):
