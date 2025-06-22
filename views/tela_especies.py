@@ -96,9 +96,29 @@ class TelaEspecies(TelaAbstrata):
 
 
     def pegar_dados_subespecie(self, especie: str):
-        print('===== Dados Subespecie =====')
-        nome = self.le_str(f'Nome: {especie} ')
-        return {'nome': nome}
+        layout = [
+            [sg.Text('Dados Subespecie', font = ('Helvica', 25))],
+            [sg.Text(f'Nome {especie}...', size = (15, 1)), sg.InputText(key='nome', enable_events=True)],
+            [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
+        ]
+
+        self.__window = sg.Window('Dados Especie').Layout(layout)
+
+        while True:
+            button, values = self.open()
+
+            if button in (sg.WIN_CLOSED, 'Confirmar'):
+                self.close()
+                values['nome'] = values['nome'].strip().title()
+                return values
+            elif button == 'Cancelar':
+                self.close()
+                return 0
+
+            if values['nome'].strip() != '':
+                self.__window['Confirmar'].update(disabled=False)
+            else:
+                self.__window['Confirmar'].update(disabled=True)
     
     def mostra_especie(self, dados_especie: dict):
         print(' Especie '.center(60,'='))

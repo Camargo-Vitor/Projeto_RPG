@@ -63,6 +63,8 @@ class ControladorEspecies:
     def incluir_especie(self):
         try:
             dados_especie = self.__tela_especies.pegar_dados_especie()
+            if dados_especie == 0:
+                return False
             e = self.pega_especie_por_nome(dados_especie['nome'])
             if e:
                 raise EspecieJahExisteException(dados_especie['nome'])
@@ -93,6 +95,8 @@ class ControladorEspecies:
                 else:
                     especie = self.__dict_especie[identificador]
                     dados_subespecie = self.__tela_especies.pegar_dados_subespecie(especie.nome)
+                    if dados_subespecie == 0:
+                        return False
                     s = self.pega_subespecie_por_sub_nome(dados_subespecie['nome'])
 
                     if s:
@@ -119,34 +123,47 @@ class ControladorEspecies:
 
     def listar_especies(self):
         try:
-            for key, especie in self.__dict_especie.items():
-                self.__tela_especies.mostra_especie(
-                    {
-                        'cod': key,
-                        'nome': especie.nome,
-                        'deslocamento': especie.deslocamento,
-                        'altura': especie.altura,
-                        'habilidades': [hab.nome for hab in especie.habilidades]             
-                    }
-                )
+            dados = []
 
+            for key, especie in self.__dict_especie.items():
+                linha = [
+                    key,
+                    especie.nome,
+                    especie.deslocamento,
+                    especie.altura,
+                    ', '.join(hab.nome for hab in especie.habilidades)
+                ]
+                dados.append(linha)
+            HEADER = ['Código', 'Nome', 'Deslocamento', 'Altura', 'Habilidades']
+            self.__tela_especies.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Especie')
         except Exception as e:
-            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as especies: {str(e)}')
+            self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as espécies: {str(e)}')
 
     def listar_subespecies(self):
         try:
-            for key, subespecie in self.__dict_subespecie.items():
-                self.__tela_especies.mostra_subespecie(
-                    {
-                        'cod': key,
-                        'nome': subespecie.nome,
-                        'deslocamento': subespecie.deslocamento,
-                        'altura': subespecie.altura,
-                        'habilidades' : [hab.nome for hab in subespecie.habilidades],
-                        'habilidades_esp' : [hab.nome for hab in subespecie.hab_especificas]
-                    }
-                )
+            dados = []
 
+            for key, subespecie in self.__dict_subespecie.items():
+                habilidades = []
+                for hab in subespecie.habilidades:
+                    habilidades.append(hab.nome)
+
+                habilidades_esp = []
+                for hab in subespecie.hab_especificas:
+                    habilidades_esp.append(hab.nome)
+
+                linha = [
+                    key,
+                    subespecie.nome,
+                    subespecie.deslocamento,
+                    subespecie.altura,
+                    ', '.join(habilidades),
+                    ', '.join(habilidades_esp)
+                ]
+                dados.append(linha)
+
+            HEADER = ['Código', 'Nome', 'Deslocamento', 'Altura', 'Habilidades', 'Habilidades Específicas']
+            self.__tela_especies.exibir_tabela(cabecalho=HEADER, dados=dados)
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as subespécies: {str(e)}')
 
