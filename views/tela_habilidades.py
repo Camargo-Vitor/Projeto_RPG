@@ -33,7 +33,7 @@ class TelaHabilidades(TelaAbstrata):
         while True:
             button, values = self.__window.read()
             if button in (sg.WIN_CLOSED, 'Confirmar'):
-                self.close
+                self.close()
                 values['nome'] = values['nome'].title().strip()
                 return values
             elif button == 'Cancelar':
