@@ -1,14 +1,34 @@
 from views.tela_abstrata import TelaAbstrata
+import PySimpleGUI as sg
 
 
 class TelaEspecies(TelaAbstrata):
-    def mostra_tela(self, opcoes = [1, 2, 0]):
-        print('===== Especie/Subespecie =====')
-        print('1. Gerir Especie')
-        print('2. Gerir Subespecie')
-        print('0. Retornar')
-        return super().mostra_tela(opcoes)
+    def __init__(self):
+        self.__window = None
+        self.init_components('Especie')
     
+    def close(self):
+        self.__window.Close()
+
+    def open(self):
+        button, values = self.__window.Read()
+        return button, values
+    """
+    def init_components(self, nome_objeto = 'Especie', layout_extra = None, indice_layout_extra = 0):
+        layout_extra = [
+            [sg.Text('a')]
+            [sg.Radio(f'Remover Habilidades em {nome_objeto}', 'RD1', key='6')]
+        ]
+        self.__window.extend_layout(container=layout_extra, rows=[])
+        return super().init_components(nome_objeto = 'Especie', layout_extra = layout_extra, indice_layout_extra = 7)
+    """
+
+    def mostra_tela(self, nome_objeto='Especie'):
+        return super().mostra_tela(nome_objeto=nome_objeto)
+
+    def exibir_tabela(self, cabecalho, dados, nome_objeto='Especie'):
+        return super().exibir_tabela(cabecalho, dados, nome_objeto)
+    '''
     def mostra_tela_especie(self, opcoes = [1, 2, 3, 4, 5, 6, 0]):
         print('===== Especie =====')
         print('1. Criar Especie')
@@ -30,20 +50,40 @@ class TelaEspecies(TelaAbstrata):
         print('6. Remover Habilidade')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
-    
+    '''
     def pegar_dados_especie(self):
-        print('===== Dados Especie =====')
-        nome = self.le_str('Nome: ')
-        deslocamento = self.le_int_ou_float('Deslocamento : ', tipo= 'float')
-        altura = self.le_int_ou_float('Altura(cm): ', positivo= True)
-        habilidades = []
-        return {
-            'nome': nome, 
-            'deslocamento': deslocamento,
-            'altura': altura,
-            'habilidades': habilidades
-            }
-    
+        layout = [
+            [sg.Text('Dados Especie', font = ('Helvica', 25))],
+            [sg.Text('Nome', size = (15, 1)), sg.InputText('', key='nome', enable_events=True)],
+            [sg.Text('Deslocamento', size=(15, 1)),
+            sg.Combo(values=[i/10 for i in range(60, 600, 15)], enable_events=True, readonly=True, key='deslocamento')],
+            [sg.Text('Altura (cm)', size = (15, 1)), 
+            sg.Slider(range = (60, 240), default_value= 85, orientation= 'h', key='altura')],
+            [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
+        ]
+
+        self.__window = sg.Window('Dados Especie').Layout(layout)
+
+        while True:
+            button, values = self.__window.read()
+
+            if button in (sg.WIN_CLOSED, 'Confirmar'):
+                break
+            elif button == 'Cancelar':
+                self.close()
+                return 0
+            
+            check_nome = values['nome'].strip() != ''
+            check_deslocamento = values['deslocamento'] != ''
+            check_altura = values['altura'] != ''
+            
+
+            if all([check_nome, check_deslocamento, check_altura]):
+                self.__window['Confirmar'].update(disabled=False)
+            else:
+                self.__window['Confirmar'].update(disabled=True)
+
+
     def pegar_dados_subespecie(self, especie: str):
         print('===== Dados Subespecie =====')
         nome = self.le_str(f'Nome: {especie} ')
@@ -66,8 +106,8 @@ class TelaEspecies(TelaAbstrata):
 
     @property
     def window(self):
-        pass
+        return self.__window
 
     @window.setter
     def window(self, window):
-        pass
+        self.__window = window
