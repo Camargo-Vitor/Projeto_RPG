@@ -58,26 +58,26 @@ class ControladorPessoas:
             self.__tela_pessoas.mensagem(f"[ERRO] Dado ausente: {str(e)}")
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao incluir jogador: {str(e)}')
-    
+
     def listar_jogador(self):
         try:
-            self.__tela_pessoas.mensagem(f'{"Cod":^4} | {"Nome":^16} | {"Telefone":^13} | {"Cidade":^16} | {"Bairro":^12} | {"Numero":^6} | {"Cep":^10} | {"Personagens":^12}')
+            dados = []
             for cod, jogador in self.__jogadores.items():
-                self.__tela_pessoas.mostra_jogador(
-                    {
-                    'cod': cod,
-                    'nome': jogador.nome,
-                    'telefone': jogador.telefone,
-                    'cidade': jogador.endereco.cidade,
-                    'bairro': jogador.endereco.bairro,
-                    'numero': jogador.endereco.numero,
-                    'cep': jogador.endereco.cep,
-                    'personagens': [jogador.nome for jogador in jogador.personagens]
-                }
-                )
-
+                linha = [
+                    cod,
+                    jogador.nome,
+                    jogador.telefone,
+                    jogador.endereco.cidade,
+                    jogador.endereco.bairro,
+                    jogador.endereco.numero,
+                    jogador.endereco.cep,
+                    ', '.join(p.nome for p in jogador.personagens)
+                ]
+                dados.append(linha)
+            HEADER = ["Cod", "Nome", "Telefone", "Cidade", "Bairro", "Número", "CEP", "Personagens"]
+            self.__tela_pessoas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Persoangem')
         except Exception as e:
-            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao listar as jogador: {str(e)}')
+            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao listar os jogadores: {str(e)}')
 
     def excluir_jogador(self):
         try:
@@ -186,36 +186,27 @@ class ControladorPessoas:
 
     def acessar_mestre(self, alterar=False):
         try:
-            infos_mestre = {
-                'cod': 0,
-                'nome': self.__mestre.nome,
-                'cidade': self.__mestre.endereco.cidade,
-                'bairro': self.__mestre.endereco.bairro,
-                'numero': self.__mestre.endereco.numero,
-                'cep': self.__mestre.endereco.cep,
-                'telefone': self.__mestre.telefone
-            }
-            self.__tela_pessoas.mensagem(
-                f'{"Cod":^4} | {"Nome":^16} | {"Telefone":^13} | {"Cidade":^16} | {"Bairro":^12} | {"Numero":^6} | {"Cep":^10} |')
-            self.__tela_pessoas.mostra_pessoa(infos_mestre)
-            self.__tela_pessoas.mensagem('')
-            alterar = self.__tela_pessoas.le_int_ou_float('Deseja alterar mestre? Sim(1), Não(0): ', conjunto_alvo=[0, 1])
             if alterar:
-                dados_novos = self.__tela_pessoas.pegar_dados_pessoa()
-                self.__mestre = Mestre(
-                    dados_novos['nome'],
-                    dados_novos['telefone'],
-                    dados_novos['cidade'],
-                    dados_novos['bairro'],
-                    dados_novos['numero'],
-                    dados_novos['cep']
+                # Tela retorna apenas os dados preenchidos, como dicionário
+                dados_novos = self.__tela_pessoas.exibir_mestre(self.__mestre)
+
+                if dados_novos:
+                    self.__mestre = Mestre(
+                        nome=dados_novos["nome"],
+                        telefone=dados_novos["telefone"],
+                        cidade=dados_novos["cidade"],
+                        bairro=dados_novos["bairro"],
+                        numero=dados_novos["numero"],
+                        cep=dados_novos["cep"]
                     )
-                self.__tela_pessoas.mensagem('Mestre alterado com sucesso!')
-                return True
+                    self.__tela_pessoas.mensagem("Mestre alterado com sucesso!")
+                    return True
+                else:
+                    return False
             else:
                 return False
         except Exception as e:
-            self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao alterar mestre: {e}')
+            self.__tela_pessoas.mensagem(f"[ERRO INESPERADO] Erro ao acessar mestre: {e}")
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()

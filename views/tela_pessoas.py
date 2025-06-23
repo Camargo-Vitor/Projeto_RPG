@@ -24,12 +24,47 @@ class TelaPessoas(TelaAbstrata):
             [sg.Radio(f'Adicionar Ficha', 'RD1', enable_events=True, key = '5')],
             [sg.Radio(f'Excluir Ficha', 'RD1', enable_events=True, key = '6')],
             [sg.Radio(f'Acessar Mestre', 'RD1', enable_events=True, key = '7')],
+            [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
             [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
         return super().mostra_tela(opcoes, nome_objeto, layout, indice_layout_extra, crud=False)
     
     def exibir_tabela(self, cabecalho, dados, nome_objeto = 'Pessoas'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
+    
+
+    def exibir_mestre(self, mestre):
+        try:
+            layout = [
+                [sg.Text("Dados do Mestre", font=("Arial", 16))],
+                [sg.Text("Nome:", size=(10, 1)), sg.InputText(mestre.nome, key="nome")],
+                [sg.Text("Telefone:", size=(10, 1)), sg.InputText(mestre.telefone, key="telefone")],
+                [sg.Text("Cidade:", size=(10, 1)), sg.InputText(mestre.endereco.cidade, key="cidade")],
+                [sg.Text("Bairro:", size=(10, 1)), sg.InputText(mestre.endereco.bairro, key="bairro")],
+                [sg.Text("Número:", size=(10, 1)), sg.InputText(mestre.endereco.numero, key="numero")],
+                [sg.Text("CEP:", size=(10, 1)), sg.InputText(mestre.endereco.cep, key="cep")],
+                [sg.Button("Salvar"), sg.Button("Cancelar")]
+            ]
+
+            window = sg.Window("Alterar Mestre", layout)
+            while True:
+                event, values = window.read()
+                if event in (sg.WINDOW_CLOSED, "Cancelar"):
+                    window.close()
+                    return False
+                elif event == "Salvar":
+                    window.close()
+                    return {
+                        "nome": values["nome"],
+                        "telefone": values["telefone"],
+                        "cidade": values["cidade"],
+                        "bairro": values["bairro"],
+                        "numero": values["numero"],
+                        "cep": values["cep"]
+                    }
+        except Exception as e:
+            sg.popup_error(f"[ERRO INESPERADO] Erro ao exibir mestre: {e}")
+            return False
     '''
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
         print('===== Pessoas =====')
@@ -78,18 +113,18 @@ class TelaPessoas(TelaAbstrata):
             if all([check_nome, check_telefone, check_cidade, check_bairro, check_numero, check_cep]):
                 self.__window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Conformar'].update(disabled=True)
+                self.__window['Confirmar'].update(disabled=True)
 
-            self.close()
+        self.close()
 
             
-            values['nome'] = values['nome'].title().strip()
-            values['telefone'] = int(values['telefone'])
-            values['cidade'] = values['cidade'].title().strip()
-            values['bairro'] = values['bairro'].title().strip()
-            values['numero'] = int(values['numero'])
-            values['cep'] = int(values['cep'])
-            return values
+        values['nome'] = values['nome'].title().strip()
+        values['telefone'] = int(values['telefone'])
+        values['cidade'] = values['cidade'].title().strip()
+        values['bairro'] = values['bairro'].title().strip()
+        values['numero'] = int(values['numero'])
+        values['cep'] = int(values['cep'])
+        return values
 
     @property
     def window(self):

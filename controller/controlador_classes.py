@@ -56,27 +56,45 @@ class ControladorClasses:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao incluir classe: {str(e)}')
 
     
-    def listar_classes_e_subclasses(self, classes=True, subclasses=True):
+    def listar_classes(self):
         try:
-            for key, classe in self.__dict__classes.items():
-                self.__tela_classes.mostra_classe_e_subclasse(
-                    {
-                        'cod': key,
-                        'nome': classe.nome,
-                        'dado': classe.dado_vida,
-                        'habilidades': [hab.nome for hab in classe.habilidades],
-                        'nomes_sub': [sub.nome for sub in classe.subclasses],
-                        'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]
-                    }, 
-                    classe=classes, subclasse=subclasses
-                )
+            dados = []
+            for cod, classe in self.__dict__classes.items():
+                linha = [
+                    cod,
+                    classe.nome,
+                    classe.dado_vida,
+                    ', '.join(hab.nome for hab in classe.habilidades)
+                ]
+                dados.append(linha)
+
+            HEADER = ["Cod", "Nome", "Dado Vida", "Habilidades"]
+            self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Classe')
 
         except Exception as e:
-            self.__tela_classes.mensagem(f'ERRO INESPERADO Erro ao listar classe: {e}')
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao listar classes: {str(e)}')
+
+    def listar_classes_e_sub_classe(self):
+            dados = []
+            for classe in self.__dict__classes.values():
+                linha = [
+                    classe.nome,
+                    classe.subclasses[0].nome, 
+                    classe.subclasses[1].nome,
+                    classe.subclasses[2].nome,
+                    classe.subclasses[0].hab_especificas,
+                    classe.subclasses[1].hab_especificas,
+                    classe.subclasses[2].hab_especificas
+                ]
+                dados.append(linha)
+
+            HEADER = ["Nome", "1ª Subclasse", "2ª Subclassse", "3ª Subclasse", 'hab 1ª', 'hab 2ª', 'hab 3ª']
+            self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Subclasse')
+                
 
     def excluir_classe(self):
         try:
-            self.listar_classes_e_subclasses(subclasses=False)
+            self.listar_classes()
             cod_validos = list(self.__dict__classes.keys()) + [0]
             identificador = self.__tela_classes.selecionar_obj_por_cod('classe', cod_validos)
             if identificador == 0:
@@ -92,14 +110,14 @@ class ControladorClasses:
 
     def alterar_dados_base_classe(self):
         try:
-            self.listar_classes_e_subclasses(subclasses=False)
+            self.listar_classes()
             codigos_validos = list(self.__dict__classes.keys()) + [0]
             identificador = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos)
             if identificador == 0:
                 return False
             else:
                 classe = self.__dict__classes[identificador]
-                dados_novos = self.__tela_classes.pegar_dados_classes(basico=True)
+                dados_novos = self.__tela_classes.pegar_dados_classes()
                 e = self.pega_classe_por_nome(dados_novos['nome'])
                 if e is None:
                     classe.nome = dados_novos['nome']
@@ -116,7 +134,7 @@ class ControladorClasses:
 
     def adiciona_hab_classe(self):
         try:
-            self.listar_classes_e_subclasses(subclasses=False)
+            self.listar_classes()
             codigos_validos_class = list(self.__dict__classes.keys()) + [0]
             identificador_class = self.__tela_classes.selecionar_obj_por_cod('classes', codigos_validos_class)
             if identificador_class == 0:
@@ -148,7 +166,7 @@ class ControladorClasses:
 
     def adiciona_hab_subclasse(self):
         try:
-            self.listar_classes_e_subclasses(subclasses=False)
+            self.listar_classes_e_sub_classe()
             codigos_validos_class = list(self.__dict__classes.keys()) + [0]
             identificador_class= self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_class)
             if identificador_class== 0:
@@ -159,14 +177,11 @@ class ControladorClasses:
                 infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
                          'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
                 self.__tela_classes.mostra_classe_e_subclasse(infos, classe=False)
-                identificador_sub = self.__tela_classes.le_int_ou_float(
-                    'Digite qual a subclasse (1, 2 ou 3 - de cima para baixo): ',
-                    conjunto_alvo=[1, 2, 3]
-                )
+                identificador_sub = self.__tela_classes.ler_subclasse()
                 if identificador_sub == 0:
                     return False
                 else:
-                    subclasse = classe.subclasses[identificador_sub - 1]    
+                    subclasse = classe.subclasses[identificador_sub]    
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
                     codigos_validos_sub = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
                     identificador_hab = self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_sub)
@@ -191,7 +206,7 @@ class ControladorClasses:
 
     def remover_hab_classe(self):
         try:
-            self.listar_classes_e_subclasses(subclasses=False)
+            self.listar_classes()
             codigos_validos = list(self.__dict__classes.keys()) + [0]
             identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos),
             if identificador_class == 0:
@@ -218,7 +233,7 @@ class ControladorClasses:
 
     def remover_hab_subclasse(self):
         try:
-            self.listar_classes_e_subclasses(subclasses=False)
+            self.listar_classes()
             codigos_validos_class = list(self.__dict__classes.keys()) + [0]
             identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos_class)
             if identificador_class == 0:
@@ -260,12 +275,13 @@ class ControladorClasses:
         opcoes = {
             1: self.incluir_classe,
             2: self.excluir_classe,
-            3: self.listar_classes_e_subclasses,
+            3: self.listar_classes,
             4: self.alterar_dados_base_classe,
             5: self.adiciona_hab_classe,
             6: self.remover_hab_classe,
             7: self.adiciona_hab_subclasse,
             8: self.remover_hab_subclasse,
+            9: self.listar_classes_e_sub_classe,
             0: self.retornar
         }
 
