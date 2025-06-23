@@ -68,64 +68,46 @@ class ControladorFichas:
         return magias
 
     def incluir_ficha(self):
-        try:
-            #dados basicos
-            dados__basicos_ficha = self.__tela_fichas.pegar_dados_basicos_ficha()
-            if dados__basicos_ficha == 0:
-                return False
+        dados = self.__tela_fichas.pegar_dados_ficha(
+            [classe.nome for classe in self.__controlador_sistema.controlador_classes.dict_classes.values()],
+            [especie.nome for especie in self.__controlador_sistema.controlador_especies.dict_subespecie.values()]
+        )
+        for classe in self.__controlador_sistema.controlador_classes.dict_classes.values():
+            if classe.nome == dados['classe']:
+                classe_ficha = classe
 
-            #classe
-            self.__controlador_sistema.controlador_classes.listar_classes_e_subclasses()
-            codigos_validos_class = list(self.__controlador_sistema.controlador_classes.dict_classes.keys()) + [0]
-            codigo_classe = self.__tela_fichas.selecionar_obj_por_cod('Digite o código da classe: ', codigos_validos_class)
-            if codigo_classe == 0:
-                return False
-            else:
-                classe = self.__controlador_sistema.controlador_classes.dict_classes[codigo_classe]
+        for subespecie in self.__controlador_sistema.controlador_especies.dict_subespecie.values():
+            if subespecie.nome == dados['subespecie']:
+                subespecie_ficha = subespecie
 
-            #subespecie
-            self.__controlador_sistema.controlador_especies.listar_subespecies()
-            codigos_valido_sub_esp = list(self.__controlador_sistema.controlador_especies.dict_subespecie.keys()) + [0]
-            codigo_subespecie = self.__tela_fichas.le_int_ou_float('Digite o código da subespecie: ', codigos_valido_sub_esp)
-            if codigo_subespecie == 0:
-                return False
-            else:
-                subespecie = self.__controlador_sistema.controlador_especies.dict_subespecie[codigo_subespecie]
-
-            #atributos
-            atributos = self.__tela_fichas.pegar_dados_atributos()
-            
-            #pericias
-            pericias_treinadas = self.__tela_fichas.pegar_dados_pericias()
-
-            nova_ficha = Ficha(
-                dados__basicos_ficha['nome_personagem'],
-                dados__basicos_ficha['descricao_fisica'],
-                dados__basicos_ficha['historia'],
-                dados__basicos_ficha['moedas'],
-                classe,
-                subespecie,
-                pericias_treinadas,
-                atributos)
-
-            self.__dict_fichas[self.__cod] = nova_ficha
-            self.__cod += 1
-            return True
-
-        except Exception as e:
-            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao criar Ficha: {e} ({type(e).__name__})')
+        nova_ficha = Ficha(
+            dados['nome'],
+            dados['descricao_fisica'],
+            dados['historia'],
+            dados['moedas'],
+            classe_ficha,
+            subespecie_ficha,
+            dados['pericias_treinadas'],
+            dados['atributos']
+        )
+        self.__dict_fichas[self.__cod] = nova_ficha
+        self.__tela_fichas.mensagem('SUCESSO')
 
     def listar_fichas(self, selecao=True):
         try:
             cod_valido_ficha = list(self.__dict_fichas.keys()) + [0]
-            self.__tela_fichas.mensagem(f"{'Cod':^4} | {'Nome':^16}")
+
+            dados = []
             for key, ficha in self.__dict_fichas.items():
-                self.__tela_fichas.mostra_ficha_basica(
-                    {
-                        'cod': key,
-                        'nome': ficha.nome
-                    }
-                )
+                linha = [
+                    key,
+                    ficha.nome
+                ]
+                dados.append(linha)
+
+            HEADER = ['Cód', 'Nome Personagem']
+            self.__tela_fichas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Ficha')
+
             if selecao:
                 identificador = self.__tela_fichas.selecionar_obj_por_cod(f'fichas', cod_valido_ficha)
                 if identificador == 0:
@@ -142,7 +124,7 @@ class ControladorFichas:
                             'fisico': ficha.fisico,
                             'altura': ficha.altura,
                             'historia': ficha.historia,
-                            'moedas': ficha.moedas,
+                            'moedas': 0,
                             'classe': ficha.classe.nome,
                             'subclasse': 'Não há' if ficha.subclasse == None else ficha.subclasse.nome,
                             'especie': ficha.especie.nome,
@@ -178,6 +160,7 @@ class ControladorFichas:
             self.__tela_fichas.mensagem(f'[ERRO DE CHAVE] Erro ao excluir ficha, código não encontrado: {str(e)}')
         except Exception as e:
             self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao excluir ficha: {str(e)}')
+
     def adicionar_item_ficha(self):
         try:
             self.listar_fichas(selecao=False)
@@ -314,9 +297,7 @@ class ControladorFichas:
             return False
         else:
             ficha = self.__dict_fichas[identificador_ficha]
-            valor = self.__tela_fichas.le_int_ou_float(
-                'Digite o valor de vida a ser alterado (Utilize números negativos para subtrair vida): '
-            )
+            valor = self.__tela_fichas.ler_vida_alterada()
             vida_antiga = ficha.vida_atual
             ficha.vida_atual += valor
             self.__tela_fichas.mensagem(f'Vida alterada {vida_antiga} -> {ficha.vida_atual}')
@@ -419,6 +400,23 @@ class ControladorFichas:
             'mais_hab': (personagem_com_mais_hab.nome, len(self.selecionar_habilidades_ativas_em_ficha(ficha)))
         }
 
+        HEADER = ['Métrica', 'Valor', 'Detalhe']
+        dados = [
+            ["Maior Nível", personagem_com_maior_nivel.nome, personagem_com_maior_nivel.nivel],
+            ["Mais Ouro", personagem_mais_ouro.nome, personagem_mais_ouro.moedas],
+            ["Mais Itens", personagem_mais_itens.nome, len(personagem_mais_itens.inventario)],
+            ["Maior Deslocamento", personagem_maior_deslocamento.nome, personagem_maior_deslocamento.deslocamento],
+            ["Mais Magias", personagem_mais_magias.nome, len(self.selecionar_magias_ativas_em_ficha(personagem_mais_magias))],
+            ["Maior Vida", personagem_maior_vida.nome, personagem_maior_vida.vida],
+            ["Maior Dado de Vida", personagem_com_maior_dado_de_vida.nome, personagem_com_maior_dado_de_vida.classe.dado_vida],
+            ["Classe Mais Comum", classe_mais_comum, qtd_classe_mais_comum],
+            ["Perícia Mais Comum", pericia_mais_comum, qtd_pericia_mais_comum],
+            ["Maior Atributo", '-', maior_atributo],
+            ["Média de Magias", "-", round(media_magias, 2)],
+            ["Mais Habilidades", personagem_com_mais_hab.nome, len(self.selecionar_habilidades_ativas_em_ficha(ficha))]
+        ]
+
+        self.__tela_fichas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Relatório de Fichas')
         self.__tela_fichas.mostra_relatorio(dados_relatorio)
         return dados_relatorio
 

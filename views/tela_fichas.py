@@ -1,7 +1,21 @@
 from views.tela_abstrata import TelaAbstrata
 from random import randint
+import PySimpleGUI as sg
+
 
 class TelaFichas(TelaAbstrata):
+    def __init__(self):
+        self.__window: sg.Window = None
+        self.init_components('Ficha')
+
+    def close(self):
+        self.__window.Close()
+
+    def open(self):
+        button, values = self.__window.Read()
+        return button, values
+
+    '''
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0]):
         print('===== Fichas =====')
         print('1. Incluir Ficha')
@@ -16,6 +30,103 @@ class TelaFichas(TelaAbstrata):
         print('10. Relatório de fichas')
         print('0. Retornar')
         return super().mostra_tela(opcoes)
+    '''
+    def mostra_tela(self, opcoes = [], nome_objeto = 'Ficha', layout_extra = None, indice_layout_extra = 0, crud=False):
+        layout = [
+            [sg.Text(f'Gerenciador de Fichas', font = ('Arial', 25))],
+            [sg.Text('Escolha uma opção', font=('Arial', 15))],
+            [sg.Radio(f'Incluir Ficha', 'RD1', enable_events=True, key = '1')],
+            [sg.Radio(f'Excluir Ficha', 'RD1', enable_events=True, key = '2')],
+            [sg.Radio(f'Listar Fichas', 'RD1', enable_events=True, key = '3')],
+            [sg.Radio(f'Alterar vida de uma Ficha', 'RD1', enable_events=True, key = '4')],
+            [sg.Radio(f'Subir nivel de uma Ficha', 'RD1', enable_events=True, key = '5')],
+            [sg.Radio(f'Adicionar Item em Ficha', 'RD1', enable_events=True, key = '6')],
+            [sg.Radio(f'Remover Item em Ficha', 'RD1', enable_events=True, key = '7')],
+            [sg.Radio(f'Adicionar Magia em Ficha', 'RD1', enable_events=True, key = '8')],
+            [sg.Radio(f'Remover Magia em Ficha', 'RD1', enable_events=True, key = '9')],
+            [sg.Radio(f'Relatorio Fichas', 'RD1', enable_events=True, key = '10')],
+            [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
+            [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
+        ]
+        return super().mostra_tela(opcoes, nome_objeto, layout, indice_layout_extra, crud)
+
+    def pegar_dados_ficha(self, classes: list[str], subespecies: list[str]):
+        dic_num_pericias = {
+            1: 'atletismo', 2: 'prestidigitacao', 3: 'acrobacia', 4: 'furtividade',
+            5: 'arcanismo', 6: 'historia', 7: 'investigacao', 8: 'natureza', 9: 'religiao',
+            10: 'percepcao', 11: 'lidar com animais', 12: 'intuicao', 13: 'sobrevivencia',
+            14: 'medicina', 15: 'persuasao', 16: 'intimidacao', 17: 'performance', 18: 'enganacao'
+        }
+
+        lista_pericias = [(k, v.title()) for k, v in dic_num_pericias.items()]
+
+        valores_sorteados = [sum(sorted([randint(1, 6) for _ in range(4)])[1:]) for _ in range(6)]
+        ATRIBUTOS = ['forca', 'destreza', 'constituicao', 'inteligencia', 'sabedoria', 'carisma']
+
+        layout = [
+            [sg.Text('Criar Ficha', font=('Helvetica', 20))],
+            [sg.Text('Nome:'), sg.Input(key='nome', enable_events=True)],
+            [sg.Text('Descrição Física:'), sg.Multiline(size=(35, 3), key='descricao_fisica', enable_events=True)],
+            [sg.Text('História:'), sg.Multiline(size=(35, 3), key='historia', enable_events=True)],
+            [sg.Text('Moedas:'), sg.Input(key='moedas', enable_events=True)],
+            [sg.Text('Classe:'), sg.Combo(classes, key='classe', readonly=True, enable_events=True)],
+            [sg.Text('Subespécie:'), sg.Combo(subespecies, key='subespecie', readonly=True, enable_events=True)],
+
+            [sg.Text('Selecione 5 perícias:')],
+            [sg.Checkbox(nome, key=num, enable_events=True) for num, nome in lista_pericias[:6]],
+            [sg.Checkbox(nome, key=num, enable_events=True) for num, nome in lista_pericias[6:12]],
+            [sg.Checkbox(nome, key=num, enable_events=True) for num, nome in lista_pericias[12:]],
+
+            [sg.Text(f'Valores sorteados: {valores_sorteados}')],
+        ]
+
+        for atributo in ATRIBUTOS:
+            layout.append([
+                sg.Text(f'{atributo.title()}:'),
+                sg.Combo(values=valores_sorteados.copy(), key=f'atributo_{atributo}', readonly=True, enable_events=True)
+            ])
+
+        layout.append([sg.Button('Confirmar', key='Confirmar', disabled=True), sg.Cancel('Cancelar')])
+
+        window = sg.Window('Nova Ficha', layout)
+
+        while True:
+            event, values = window.read()
+            if event in (sg.WIN_CLOSED, 'Cancelar'):
+                window.close()
+                return 0
+
+            check_inputs = all([
+                values['nome'].strip(),
+                values['descricao_fisica'].strip(),
+                values['historia'].strip(),
+                values['classe'],
+                values['subespecie'],
+                values['moedas'].isdigit(),
+                sum([values[k] for k in dic_num_pericias]) == 5,
+                all([values[f'atributo_{a}'] != '' for a in ATRIBUTOS])
+            ])
+
+            window['Confirmar'].update(disabled=not check_inputs)
+
+            if event == 'Confirmar':
+                pericias_treinadas = [dic_num_pericias[k] for k in dic_num_pericias if values[k]]
+                atributos_distribuidos = [int(values[f'atributo_{a}']) for a in ATRIBUTOS]
+                if sorted(atributos_distribuidos) != sorted(valores_sorteados):
+                    sg.popup_error('Cada valor sorteado deve ser usado exatamente uma vez!')
+                    continue
+
+                window.close()
+                return {
+                    'nome': values['nome'].strip().title(),
+                    'descricao_fisica': values['descricao_fisica'].strip(),
+                    'historia': values['historia'].strip(),
+                    'classe': values['classe'],
+                    'subespecie': values['subespecie'],
+                    'moedas': int(values['moedas']),
+                    'pericias_treinadas': pericias_treinadas,
+                    'atributos': atributos_distribuidos
+                }
 
     def pegar_dados_basicos_ficha(self):
         print(' Dados Básicos Ficha '.center(60, '='))
@@ -84,6 +195,35 @@ class TelaFichas(TelaAbstrata):
             valores_validos.remove(num_pericia)
         return pericias_treinadas
 
+    def ler_vida_alterada(self):
+        layout = [
+            [sg.Text("Alterar Vida", font=("Arial", 24))],
+            [sg.Radio('Dano', 'RD1', enable_events=True, key='dano'),
+             sg.Radio('Cura', 'RD1', enable_events=True, key='cura')],
+            [sg.Text('Vida: '), sg.InputText(size=(15, 1), enable_events=True, key='vida')],
+            [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
+        ]
+
+        self.__window = sg.Window('Alterar vida').Layout(layout)
+
+        while True:
+            button, values = self.open()
+
+            if button in (sg.WIN_CLOSED, 'Confirmar'):
+                self.close()
+                if values['dano']:
+                    return -int(values['vida'])
+                elif values['cura']:
+                    return +int(values['vida'])
+            elif button == 'Cancelar':
+                self.close()
+                return 0
+
+            if values['vida'].isnumeric() and (values['dano'] or values['cura']):
+                self.__window['Confirmar'].update(disabled=False)
+            else:
+                self.__window['Confirmar'].update(disabled=True)
+
     def pegar_dados_atributos(self):
         print('==== Atributos ====')
         valores_sorteados = []
@@ -107,35 +247,44 @@ class TelaFichas(TelaAbstrata):
             valores_sorteados.remove(num_escolhido)
 
         return sequencia_escolhida
-    
-    def mostra_ficha_basica(self, dados_ficha: dict):
-        print(f"{dados_ficha['cod']:^4}", end= ' | ')
-        print(f"{dados_ficha['nome']:^16}")
         
     def mostra_ficha_inteira(self, dados_ficha: dict):
-        print(f"Nome: {dados_ficha['nome']}")
-        print(f"Nivel: {dados_ficha['nivel']:^4}")
-        print(f"Vida: {dados_ficha['vida_atual']}/{dados_ficha['vida']}")
-        print(f"Moedas: {dados_ficha['moedas']}")
-        print(f"Descrição física: {dados_ficha['fisico']}")
-        print(f"História: {dados_ficha['historia']}")
-        print(f"Altura: {dados_ficha['altura']}")
-        print(f"Deslocamento: {dados_ficha['deslocamento']}")
-        print(f"Pericias Treinadas: {dados_ficha['pericias']}")
-        print(f"Classe: {dados_ficha['classe']}")
-        print(f"Subclasse: {dados_ficha['subclasse']}")
-        print(f"Especie: {dados_ficha['especie']}")
-        print('><' * 8 + 'Atributos' + '><' * 8)
-        print(f"Forca: {dados_ficha['forca']}")
-        print(f"Destreza: {dados_ficha['destreza']}")
-        print(f"Constituição: {dados_ficha['constituicao']}")
-        print(f"Inteligência: {dados_ficha['inteligencia']}")
-        print(f"Sabedoria: {dados_ficha['sabedoria']}")
-        print(f"Carisma: {dados_ficha['carisma']}")
-        print('><' * 8 + 'Utilitários' + '><' * 8)
-        print(f"Inventário: {dados_ficha['inventario']}")
-        print(f"Magias: {dados_ficha['magias']}")
-        print(f"Habilidades: {dados_ficha['habilidades']}")
+        atributos = [
+            ['Força', dados_ficha['forca']],
+            ['Destreza', dados_ficha['destreza']],
+            ['Constituição', dados_ficha['constituicao']],
+            ['Inteligência', dados_ficha['inteligencia']],
+            ['Sabedoria', dados_ficha['sabedoria']],
+            ['Carisma', dados_ficha['carisma']]
+        ]
+
+        layout = [
+            [sg.Text('FICHA DE PERSONAGEM', font=('Helvetica', 20), justification='center', expand_x=True)],
+            [sg.Text(f"Nome: {dados_ficha['nome']}", size=(40,1)), sg.Text(f"Nível: {dados_ficha['nivel']}")],
+            [sg.Text(f"Classe: {dados_ficha['classe']}"), sg.Text(f"Subclasse: {dados_ficha['subclasse']}")],
+            [sg.Text(f"Espécie: {dados_ficha['especie']}"), sg.Text(f"Deslocamento: {dados_ficha['deslocamento']} metros"), sg.Text(f"Altura: {dados_ficha['altura']} cm")],
+            [sg.Text(f"Vida: {dados_ficha['vida_atual']}/{dados_ficha['vida']}"), sg.Text(f"Moedas: {dados_ficha['moedas']}")],
+            
+            [sg.Frame('Atributos', [[sg.Column([[sg.Text(attr, size=(12,1)), sg.Text(valor)] for attr, valor in atributos])]])],
+
+            [sg.Text('Perícias treinadas:'), sg.Multiline('\n'.join(dados_ficha['pericias']), size=(45, 3), disabled=True)],
+            [sg.Text('Inventário:'), sg.Multiline('\n'.join(dados_ficha['inventario']), size=(45, 3), disabled=True)],
+            [sg.Text('Magias:'), sg.Multiline('\n'.join(dados_ficha['magias']), size=(45, 3), disabled=True)],
+            [sg.Text('Habilidades:'), sg.Multiline('\n'.join(dados_ficha['habilidades']), size=(45, 3), disabled=True)],
+
+            [sg.Text('Descrição Física:'), sg.Multiline(dados_ficha['fisico'], size=(45, 3), disabled=True)],
+            [sg.Text('História:'), sg.Multiline(dados_ficha['historia'], size=(45, 5), disabled=True)],
+
+            [sg.Button('Fechar')]
+        ]
+
+        window = sg.Window('Visualização da Ficha', layout, modal=True)
+
+        while True:
+            event, _ = window.read()
+            if event in (sg.WINDOW_CLOSED, 'Fechar'):
+                break
+        window.close()
 
     def mostra_relatorio(self, dados):
         print("\n" + "=" * 30)
@@ -157,8 +306,9 @@ class TelaFichas(TelaAbstrata):
 
     @property
     def window(self):
-        pass
+        return self.__window
 
     @window.setter
     def window(self, window):
-        pass
+        if isinstance(window, sg.Window):
+            self.__window = window
