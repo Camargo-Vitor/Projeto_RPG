@@ -3,16 +3,8 @@ import PySimpleGUI as sg
 
 
 class TelaMagias(TelaAbstrata):
-    def __init__(self):
-        self.__window = None
-        self.init_components('Magia')
-
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
+    def __init__(self, nome_objeto='Magia'):
+        super().__init__(nome_objeto)
 
     def mostra_tela(self, opcoes = [], nome_objeto = 'Magia', layout_extra = None, indice_layout_extra = 0, crud=True):
         return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
@@ -28,30 +20,21 @@ class TelaMagias(TelaAbstrata):
             [sg.Text('Pagina', size = (15, 1)), sg.Combo(values=([i for i in range(1, 385)]), enable_events=True, readonly=True, key='pagina')],
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        self.__window = sg.Window('Dados Magia').Layout(layout)
+        self.init_components('Nova Magia', layout, crud=False)
         while True:
-            button, values = self.__window.read()
+            button, values = self.open()
             if button in (sg.WIN_CLOSED, "Cancelar", 'Confirmar'):
                 break
             check_nome = values['nome'].strip() != ''
             check_nivel = values['nivel'] != ''
             check_pagina = values['pagina'] != ''
             if all([check_nome, check_nivel, check_pagina]):
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
+                self.window['Confirmar'].update(disabled=True)
             values['nome'] = values['nome'].title().strip()      
         self.close()
         if button == 'Confirmar':
             return values
         else:
             return
-    
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        if isinstance(window, sg.Window):
-            self.__window = window

@@ -3,16 +3,8 @@ import PySimpleGUI as sg
 
 
 class TelaItens(TelaAbstrata):
-    def __init__(self):
-        self.__window = None
-        self.init_components('Item')
-
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
+    def __init__(self, nome_objeto='Item'):
+        super().__init__(nome_objeto)
 
     def mostra_tela(self, opcoes = [], nome_objeto = 'Item', layout_extra = None, indice_layout_extra = 0, crud=True):
         return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
@@ -33,13 +25,18 @@ class TelaItens(TelaAbstrata):
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
 
-        self.__window = sg.Window('Dados Item').Layout(layout)
+        super().init_components('Novo Item', layout_extra=layout, crud=False)
 
         while True:
-            button, values = self.__window.read()
+            button, values = self.open()
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
-                break
+                self.close()
+                values['nome'] = values['nome'].title().strip()
+                values['raridade'] = values['raridade'].title().strip()
+                values['valor'] = int(values['valor'])
+                return values
+
             elif button == 'Cancelar':
                 self.close()
                 return 0
@@ -50,22 +47,6 @@ class TelaItens(TelaAbstrata):
             check_valor = values['valor'] != ''
 
             if all([check_nome, check_raridade, check_pagina, check_valor]):
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
-
-        self.close()
-
-        values['nome'] = values['nome'].title().strip()
-        values['raridade'] = values['raridade'].title().strip()
-        values['valor'] = int(values['valor'])
-        return values
-
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        if isinstance(window, sg.Window):
-            self.__window = window
+                self.window['Confirmar'].update(disabled=True)

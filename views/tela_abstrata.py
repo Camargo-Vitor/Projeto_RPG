@@ -3,6 +3,17 @@ import os
 import PySimpleGUI as sg
 
 class TelaAbstrata(ABC):
+    def __init__(self, nome_objeto: str):
+        self.__window: sg.Window = None
+        self.init_components(nome_objeto)
+
+    def close(self):
+        self.__window.Close()
+
+    def open(self):
+        button, values = self.__window.Read()
+        return button, values
+
     def init_components(self, nome_objeto: str, layout_extra:list[list]=None, indice_layout_extra: int=0, crud=True):
         sg.change_look_and_feel('DarkBrown4')
         layout = []
@@ -19,8 +30,8 @@ class TelaAbstrata(ABC):
             ]
         elif layout_extra:
             layout.insert(indice_layout_extra, layout_extra)
-        self.window = sg.Window(f'Gerenciador de {nome_objeto}').Layout(layout)
-
+        self.__window = sg.Window(f'Gerenciador de {nome_objeto}').Layout(layout)
+        
     def mostra_tela(self, opcoes:list = [], nome_objeto: str = '', layout_extra:list[list]=None, indice_layout_extra: int=0, crud=True):
         if opcoes != []:        
             opc = self.le_int_ou_float(
@@ -37,20 +48,26 @@ class TelaAbstrata(ABC):
         else:
             self.init_components(nome_objeto, layout_extra, indice_layout_extra, crud=crud)
             while True:
-                button, values = self.open()
-                if button in (sg.WIN_CLOSED, 'Cancelar'):
+                ret = self.logica_confirmacao()
+                if ret or ret == 0:
+                    return ret
+
+    def logica_confirmacao(self):       
+        button, values = self.open()
+        if button in (sg.WIN_CLOSED, 'Cancelar'):
+            self.close()
+            return 0
+        elif any(values[key] for key in self.__window.key_dict.keys()):
+            self.__window['Confirmar'].update(disabled=False)
+        else:
+            self.__window['Confirmar'].update(disabled=True)
+        if button == 'Confirmar':
+            for key, opc in values.items():
+                if opc:
+                    escolha = int(key)
                     self.close()
-                    return 0
-                elif any(values[key] for key in self.window.key_dict.keys()):
-                    self.window['Confirmar'].update(disabled=False)
-                else:
-                    self.window['Confirmar'].update(disabled=True)
-                if button == 'Confirmar':
-                    for key, opc in values.items():
-                        if opc:
-                            escolha = int(key)
-                            self.close()
-                            return escolha
+                    return escolha
+        return None
 
     def le_int_ou_float(self, mensagem: str, conjunto_alvo: list=None, positivo: bool=False, tipo: str='int'):
         while True:
@@ -99,8 +116,8 @@ class TelaAbstrata(ABC):
             [sg.Text('ID: ', size=(15, 1)), sg.InputText('', key='codigo')],
             [sg.Submit('Confirmar'), sg.Cancel('Cancelar')]
         ]
-        self.window = sg.Window('Seleção de Magia').Layout(layout)
-        button, values = self.window.Read()
+        self.__window = sg.Window('Seleção de Magia').Layout(layout)
+        button, values = self.__window.Read()
         try:
             values['codigo'] = int(values['codigo'])
             if values['codigo'] not in total_codigos:
@@ -126,19 +143,13 @@ class TelaAbstrata(ABC):
                       key='-TABELA-')],
             [sg.Button("OK")]
         ]
-        self.window = sg.Window(f"{nome_objeto} Cadastrados", layout)
-        button, _ = self.window.read()
-        self.window.close()
-
-    @property
-    @abstractmethod
-    def window(self):
-        pass
-
-    @window.setter
-    @abstractmethod
-    def window(self, window):
-        pass
+        self.__window = sg.Window(f"{nome_objeto} Cadastrados", layout)
+        button, _ = self.open()
+        self.__window.close()
 
     def mensagem(self, msg):
         sg.popup("", msg)
+
+    @property
+    def window(self):
+        return self.__window

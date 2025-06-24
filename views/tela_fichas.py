@@ -4,16 +4,8 @@ import PySimpleGUI as sg
 
 
 class TelaFichas(TelaAbstrata):
-    def __init__(self):
-        self.__window: sg.Window = None
-        self.init_components('Ficha')
-
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
+    def __init__(self, nome_objeto='Ficha'):
+        super().__init__(nome_objeto)
 
     '''
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0]):
@@ -88,12 +80,12 @@ class TelaFichas(TelaAbstrata):
 
         layout.append([sg.Button('Confirmar', key='Confirmar', disabled=True), sg.Cancel('Cancelar')])
 
-        window = sg.Window('Nova Ficha', layout)
+        self.init_components('Nova ficha', layout, crud=False)
 
         while True:
-            event, values = window.read()
+            event, values = self.open()
             if event in (sg.WIN_CLOSED, 'Cancelar'):
-                window.close()
+                self.close()
                 return 0
 
             check_inputs = all([
@@ -107,7 +99,7 @@ class TelaFichas(TelaAbstrata):
                 all([values[f'atributo_{a}'] != '' for a in ATRIBUTOS])
             ])
 
-            window['Confirmar'].update(disabled=not check_inputs)
+            self.window['Confirmar'].update(disabled=not check_inputs)
 
             if event == 'Confirmar':
                 pericias_treinadas = [dic_num_pericias[k] for k in dic_num_pericias if values[k]]
@@ -116,7 +108,7 @@ class TelaFichas(TelaAbstrata):
                     sg.popup_error('Cada valor sorteado deve ser usado exatamente uma vez!')
                     continue
 
-                window.close()
+                self.window.close()
                 return {
                     'nome': values['nome'].strip().title(),
                     'descricao_fisica': values['descricao_fisica'].strip(),
@@ -204,7 +196,7 @@ class TelaFichas(TelaAbstrata):
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
 
-        self.__window = sg.Window('Alterar vida').Layout(layout)
+        self.init_components('Altera vida', layout, crud=False)
 
         while True:
             button, values = self.open()
@@ -220,9 +212,9 @@ class TelaFichas(TelaAbstrata):
                 return 0
 
             if values['vida'].isnumeric() and (values['dano'] or values['cura']):
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
+                self.window['Confirmar'].update(disabled=True)
 
     def pegar_dados_atributos(self):
         print('==== Atributos ====')
@@ -303,12 +295,3 @@ class TelaFichas(TelaAbstrata):
         print(f">> Maior atributo registrado: {dados['maior_atributo']}")
         print(f">> Média de magias por personagem: {dados['media_magias']}")
         print("=" * 30 + "\n")
-
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        if isinstance(window, sg.Window):
-            self.__window = window

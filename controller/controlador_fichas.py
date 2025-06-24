@@ -195,15 +195,15 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                magia = self.__controlador_sistema.controlador_magias.dict_magias
+                magias = self.__controlador_sistema.controlador_magias.magia_DAO.cache
                 self.__controlador_sistema.controlador_magias.listar_magias()
-                codigos_validos_magia = list(magia.keys()) + [0]
+                codigos_validos_magia = list(magias.keys()) + [0]
                 identificador_magia = self.__tela_fichas.selecionar_obj_por_cod('magia', codigos_validos_magia)
                 if identificador_magia == 0:
                     return False
                 else:
                     ficha = self.__dict_fichas[identificador_ficha]
-                    ficha.add_magia(magia[identificador_magia])
+                    ficha.add_magia(magias[identificador_magia])
                     self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
                     return True
         except TypeError as e:

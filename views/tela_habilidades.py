@@ -3,16 +3,8 @@ import PySimpleGUI as sg
 
 
 class TelaHabilidades(TelaAbstrata):
-    def __init__(self):
-        self.__window = None
-        self.init_components('Habilidade')
-
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
+    def __init__(self, nome_objeto='Habilidade'):
+        super().__init__(nome_objeto)
 
     def mostra_tela(self, opcoes = [], nome_objeto = 'Habilidade', layout_extra = None, indice_layout_extra = 0, crud=True):
         return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
@@ -29,7 +21,7 @@ class TelaHabilidades(TelaAbstrata):
             [sg.Text('Origem', size = (15, 1)), sg.InputCombo(('classe', 'subclasse', 'especie', 'subespecie'), size=(20, 1), readonly=True, key='origem', enable_events=True)],
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        self.__window = sg.Window('Dados Habilidade').Layout(layout)
+        self.init_components('Nova Habilidade', layout, crud=False)
         while True:
             button, values = self.__window.read()
             if button in (sg.WIN_CLOSED, 'Confirmar'):
@@ -44,15 +36,6 @@ class TelaHabilidades(TelaAbstrata):
             check_pagina = values['pagina'] != ''
             check_origem = values['origem'].strip() != ''
             if all([check_nome, check_nivel, check_pagina, check_origem]):
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
-
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        if isinstance(window, sg.Window):
-            self.__window = window
+                self.window['Confirmar'].update(disabled=True)
