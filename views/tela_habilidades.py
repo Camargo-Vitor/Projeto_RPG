@@ -23,7 +23,7 @@ class TelaHabilidades(TelaAbstrata):
         ]
         self.init_components('Nova Habilidade', layout, crud=False)
         while True:
-            button, values = self.__window.read()
+            button, values = self.open()
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 self.close()
                 values['nome'] = values['nome'].title().strip()

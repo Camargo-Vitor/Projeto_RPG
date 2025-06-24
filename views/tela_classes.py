@@ -2,16 +2,9 @@ from views.tela_abstrata import TelaAbstrata
 import PySimpleGUI as sg
 
 class TelaClasses(TelaAbstrata):
-    def __init__(self):
-        self.__window = None
-        self.init_components('Classe')
-    
-    def close(self):
-        self.__window.Close()
+    def __init__(self, nome_objeto='classe'):
+        super().__init__(nome_objeto)
 
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
     """
     def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 8, 0]):
         print('===== Classes =====')
@@ -59,10 +52,10 @@ class TelaClasses(TelaAbstrata):
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
             ]
         
-        self.__window = sg.Window('Dados Especie').Layout(layout)
+        self.init_components('Nova classe', layout, crud=False)
 
         while True:
-            button, values = self.__window.read()
+            button, values = self.open()
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 self.close()
@@ -85,9 +78,9 @@ class TelaClasses(TelaAbstrata):
             
 
             if all([check_nome, check_dado, check_nome_sub1, check_nome_sub2, check_nome_sub3]):
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
+                self.window['Confirmar'].update(disabled=True)
 
     def ler_subclasse(self):
         layout = [
@@ -97,7 +90,7 @@ class TelaClasses(TelaAbstrata):
             [sg.Button('Confirmar'), sg.Button('Cancelar')]
         ]
 
-        self.__window = sg.Window('Selecionar Subclasse', layout)
+        self.init_components('Nova subclasse', layout, crud=False)
 
         while True:
             button, values = self.open()
@@ -125,11 +118,3 @@ class TelaClasses(TelaAbstrata):
                 print(f"{str(dados_classe['nomes_sub'][a]):^13}", end= ' | ')
                 print(f"{str(dados_classe['habilidades_sub'][a]):^13}")
         print('=' *60)
-    
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        self.__window = window

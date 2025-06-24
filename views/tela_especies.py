@@ -3,16 +3,8 @@ import PySimpleGUI as sg
 
 
 class TelaEspecies(TelaAbstrata):
-    def __init__(self):
-        self.__window = None
-        self.init_components('Especie')
-    
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
+    def __init__(self, nome_objeto='Especie'):
+        super().__init__(nome_objeto)
 
     def mostra_tela(self, opcoes = [], nome_objeto = '', layout_extra = None, indice_layout_extra = 0, crud=False):
         layout = [
@@ -71,10 +63,10 @@ class TelaEspecies(TelaAbstrata):
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
 
-        self.__window = sg.Window('Dados Especie').Layout(layout)
+        self.init_components('Nova especie', layout, crud=False)
 
         while True:
-            button, values = self.__window.read()
+            button, values = self.open()
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 self.close()
@@ -90,10 +82,9 @@ class TelaEspecies(TelaAbstrata):
             
 
             if all([check_nome, check_deslocamento, check_altura]):
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
-
+                self.window['Confirmar'].update(disabled=True)
 
     def pegar_dados_subespecie(self, especie: str):
         layout = [
@@ -102,7 +93,7 @@ class TelaEspecies(TelaAbstrata):
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
 
-        self.__window = sg.Window('Dados Especie').Layout(layout)
+        self.init_components('Nova Supespecie', layout, crud=False)
 
         while True:
             button, values = self.open()
@@ -116,9 +107,9 @@ class TelaEspecies(TelaAbstrata):
                 return 0
 
             if values['nome'].strip() != '':
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
+                self.window['Confirmar'].update(disabled=True)
     
     def mostra_especie(self, dados_especie: dict):
         print(' Especie '.center(60,'='))
@@ -134,11 +125,3 @@ class TelaEspecies(TelaAbstrata):
         self.mostra_especie(dados_subespecie)
         print(f'===== Habilidades específicas ====='.center(60, '='))
         print(f"{str(dados_subespecie['habilidades_esp'])}")
-
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        self.__window = window
