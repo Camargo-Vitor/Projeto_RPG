@@ -2,6 +2,7 @@ from model.classe import Classe
 from model.exceptions.exception_classe import *
 from model.exceptions.excpetion_habilidades import *
 from views.tela_classes import TelaClasses
+from DAOs.classe_dao import ClasseDao
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -12,20 +13,10 @@ class ControladorClasses:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_classes = TelaClasses()
-        # O dicionário de "Classes" iniciaria normalmente vazio, porém
-        # para demonstração, utilzaremos alguns objetos já instanciados. 
-        # Estes objetos receberão códigos acima de 999.
-        self.__dict__classes : dict[int, Classe] = {
-            1000: Classe('Mago', 6, ['Invocador', 'Ilusionista', 'Divino']),
-            1001: Classe('Paladino', 10, ['Devoção', 'Anciões', 'Vingança']),
-            1002: Classe('Barbáro', 12, ['Totêmico', 'Furioso', 'Zealot']),
-            1003: Classe('Bruxo', 8, ['Arquifada', 'Corruptor', 'Grande Antigo'])
-        }
-        
-        self.__cod = 1
+        self.__classe_DAO = ClasseDao()
 
     def pega_classe_por_nome(self, nome: str):
-        for classe in self.__dict__classes.values():
+        for classe in self.__classe_DAO.get_all():
             if classe.nome== nome:
                 return classe
         return None
@@ -44,8 +35,7 @@ class ControladorClasses:
                     dados_classe['dado'],
                     dados_classe['nomes_sub']
                 )
-                self.__dict__classes[self.__cod] = classe
-                self.__cod += 1
+                self.__classe_DAO.add(classe)
                 self.__tela_classes.mensagem('Classe criada com sucesso!')
                 return True
         except ClasseJahExisteException as e:
@@ -59,7 +49,7 @@ class ControladorClasses:
     def listar_classes(self):
         try:
             dados = []
-            for cod, classe in self.__dict__classes.items():
+            for cod, classe in self.__classe_DAO.cache.items():
                 linha = [
                     cod,
                     classe.nome,
@@ -76,7 +66,7 @@ class ControladorClasses:
 
     def listar_classes_e_sub_classe(self):
             dados = []
-            for classe in self.__dict__classes.values():
+            for classe in self.classe_DAO.get_all():
                 linha = [
                     classe.nome,
                     classe.subclasses[0].nome, 
@@ -95,12 +85,12 @@ class ControladorClasses:
     def excluir_classe(self):
         try:
             self.listar_classes()
-            cod_validos = list(self.__dict__classes.keys()) + [0]
+            cod_validos = list(self.__classe_DAO.get_keys()) + [0]
             identificador = self.__tela_classes.selecionar_obj_por_cod('classe', cod_validos)
             if identificador == 0:
                 return False
             else:
-                del self.__dict__classes[identificador]
+                self.__classe_DAO.remove(identificador)
                 self.__tela_classes.mensagem('Classe removida!')
                 return True
         except KeyError as e:
@@ -111,12 +101,12 @@ class ControladorClasses:
     def alterar_dados_base_classe(self):
         try:
             self.listar_classes()
-            codigos_validos = list(self.__dict__classes.keys()) + [0]
+            codigos_validos = list(self.__classe_DAO.get_keys()) + [0]
             identificador = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos)
             if identificador == 0:
                 return False
             else:
-                classe = self.__dict__classes[identificador]
+                classe = self.__classe_DAO.cache[identificador]
                 dados_novos = self.__tela_classes.pegar_dados_classes()
                 e = self.pega_classe_por_nome(dados_novos['nome'])
                 if e is None:
@@ -135,19 +125,19 @@ class ControladorClasses:
     def adiciona_hab_classe(self):
         try:
             self.listar_classes()
-            codigos_validos_class = list(self.__dict__classes.keys()) + [0]
+            codigos_validos_class = list(self.__classe_DAO.get_keys()) + [0]
             identificador_class = self.__tela_classes.selecionar_obj_por_cod('classes', codigos_validos_class)
             if identificador_class == 0:
                 return False
             else:
-                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='classe')
-                codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
+                codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get_keys()) + [0]
                 identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidade', codigos_validos_hab)
                 if identificador_hab == 0:
                     return False
                 elif habilidades[identificador_hab].origem == 'classe':
-                    classe = self.__dict__classes[identificador_class]
+                    classe = self.__classe_DAO.cache[identificador_class]
                     if habilidades[identificador_hab].nome in [hab.nome for hab in classe.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     classe.add_hab(habilidades[identificador_hab])
@@ -167,13 +157,13 @@ class ControladorClasses:
     def adiciona_hab_subclasse(self):
         try:
             self.listar_classes_e_sub_classe()
-            codigos_validos_class = list(self.__dict__classes.keys()) + [0]
+            codigos_validos_class = list(self.__classe_DAO.get_keys()) + [0]
             identificador_class= self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_class)
             if identificador_class== 0:
                 return False
             else:
-                classe = self.__dict__classes[identificador_class]
-                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
+                classe = self.__classe_DAO.cache[identificador_class]
+                habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
                 infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
                          'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
                 self.__tela_classes.mostra_classe_e_subclasse(infos, classe=False)
@@ -183,7 +173,7 @@ class ControladorClasses:
                 else:
                     subclasse = classe.subclasses[identificador_sub]    
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
-                    codigos_validos_sub = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
+                    codigos_validos_sub = list(self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get_keys()) + [0]
                     identificador_hab = self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_sub)
                 if identificador_hab == 0:
                     return False
@@ -207,13 +197,13 @@ class ControladorClasses:
     def remover_hab_classe(self):
         try:
             self.listar_classes()
-            codigos_validos = list(self.__dict__classes.keys()) + [0]
+            codigos_validos = list(self.__classe_DAO.get_keys()) + [0]
             identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos),
             if identificador_class == 0:
                 return False
             else:
-                habilidades = self.__controlador_sistema.controlador_habilidades.dict_habilidades
-                classe = self.__dict__classes[identificador_class]
+                habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
+                classe = self.__classe_DAO.cache[identificador_class]
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades('classe')
                 codigos_validos_hab = list(habilidades.keys()) + [0]
                 identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidades', codigos_validos_hab)
@@ -234,12 +224,12 @@ class ControladorClasses:
     def remover_hab_subclasse(self):
         try:
             self.listar_classes()
-            codigos_validos_class = list(self.__dict__classes.keys()) + [0]
+            codigos_validos_class = list(self.__classe_DAO.get_keys()) + [0]
             identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos_class)
             if identificador_class == 0:
                 return False
             else:
-                classe = self.__dict__classes[identificador_class]
+                classe = self.__classe_DAO.cache[identificador_class]
                 infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
                          'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
                 self.__tela_classes.mostra_classe_e_subclasse(infos, classe=False)
@@ -253,12 +243,12 @@ class ControladorClasses:
                     subclasse = classe.subclasses[identificador_sub-1]
     
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
-                    codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.dict_habilidades.keys()) + [0]
+                    codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get_keys()) + [0]
                     identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidade', codigos_validos_hab)
                     if identificador_hab == 0:
                         return False
                     else:
-                        habilidade = self.__controlador_sistema.controlador_habilidades.dict_habilidades[identificador_hab]
+                        habilidade = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache[identificador_hab]
                         subclasse.rm_hab(habilidade[identificador_hab])
                         self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                         return True
@@ -297,7 +287,7 @@ class ControladorClasses:
     @property
     def tela_classes(self):
         return self.__tela_classes
-    
+
     @property
-    def dict_classes(self):
-        return self.__dict__classes
+    def classe_DAO(self):
+        return self.__classe_DAO
