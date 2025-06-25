@@ -78,7 +78,7 @@ class TelaEspecies(TelaAbstrata):
             
             check_nome = values['nome'].strip() != ''
             check_deslocamento = values['deslocamento'] != ''
-            check_altura = values['altura'] != ''
+            check_altura = int(values['altura']) != ''
             
 
             if all([check_nome, check_deslocamento, check_altura]):
