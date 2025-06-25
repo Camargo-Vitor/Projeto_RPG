@@ -101,7 +101,7 @@ class ControladorHabilidades:
             if identificador == 0:
                 return
             else:
-                del self.__habilidade_DAO.remove(identificador)
+                self.__habilidade_DAO.remove(identificador)
                 self.__tela_habilidades.mensagem('Habilidade removida!')
                 return True
             
@@ -119,7 +119,7 @@ class ControladorHabilidades:
             identificador = self.__tela_habilidades.selecionar_obj_por_cod('habilidades', cod_validos)
             if identificador == 0:
                 return False
-            habilidade = self.__habilidade_DAO[identificador]
+            habilidade = self.__habilidade_DAO.cache[identificador]
             dados_novos = self.__tela_habilidades.pegar_dados_habilidade()
             i = self.pega_habilidade_por_nome(dados_novos['nome'])
             if i is None:
