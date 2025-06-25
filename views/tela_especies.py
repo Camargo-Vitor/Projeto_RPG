@@ -71,6 +71,7 @@ class TelaEspecies(TelaAbstrata):
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 self.close()
                 values['nome'] = values['nome'].strip().title()
+                values['altura'] = int(values['altura'])
                 return values
             elif button == 'Cancelar':
                 self.close()
@@ -78,7 +79,7 @@ class TelaEspecies(TelaAbstrata):
             
             check_nome = values['nome'].strip() != ''
             check_deslocamento = values['deslocamento'] != ''
-            check_altura = int(values['altura']) != ''
+            check_altura = values['altura'] != ''
             
 
             if all([check_nome, check_deslocamento, check_altura]):

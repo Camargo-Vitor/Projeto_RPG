@@ -4,7 +4,7 @@ from model.subespecie import Subespecie
 from model.exceptions.exception_especies import *
 from model.exceptions.excpetion_habilidades import *
 from DAOs.especie_dao import EspecieDao
-from DAOs.subespecie import SubepecieDao
+from DAOs.subespecie_dao import SubepecieDao
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -63,7 +63,7 @@ class ControladorEspecies:
     def incluir_subespecie(self):
             try:
                 self.listar_especies()
-                cod_validos = list(self.__subespecie_DAO.get_keys()) + [0]
+                cod_validos = list(self.__especie_DAO.get_keys()) + [0]
                 identificador = self.__tela_especies.selecionar_obj_por_cod('especie', cod_validos)
                 if identificador == 0:
                     return False
@@ -116,28 +116,30 @@ class ControladorEspecies:
     def listar_subespecies(self):
         try:
             dados = []
+            if self.__subespecie_DAO.cache:
+                for key, subespecie in self.__subespecie_DAO.cache.items():
+                    habilidades = []
+                    for hab in subespecie.habilidades:
+                        habilidades.append(hab.nome)
 
-            for key, subespecie in self.__subespecie_DAO.cache.items():
-                habilidades = []
-                for hab in subespecie.habilidades:
-                    habilidades.append(hab.nome)
+                    habilidades_esp = []
+                    for hab in subespecie.hab_especificas:
+                        habilidades_esp.append(hab.nome)
 
-                habilidades_esp = []
-                for hab in subespecie.hab_especificas:
-                    habilidades_esp.append(hab.nome)
+                    linha = [
+                        key,
+                        subespecie.nome,
+                        subespecie.deslocamento,
+                        subespecie.altura,
+                        ', '.join(habilidades),
+                        ', '.join(habilidades_esp)
+                    ]
+                    dados.append(linha)
 
-                linha = [
-                    key,
-                    subespecie.nome,
-                    subespecie.deslocamento,
-                    subespecie.altura,
-                    ', '.join(habilidades),
-                    ', '.join(habilidades_esp)
-                ]
-                dados.append(linha)
-
-            HEADER = ['Código', 'Nome', 'Deslocamento', 'Altura', 'Habilidades', 'Habilidades Específicas']
-            self.__tela_especies.exibir_tabela(cabecalho=HEADER, dados=dados)
+                HEADER = ['Código', 'Nome', 'Deslocamento', 'Altura', 'Habilidades', 'Habilidades Específicas']
+                self.__tela_especies.exibir_tabela(cabecalho=HEADER, dados=dados)
+            else:
+                raise Exception('Lista vazia') # criar exception'
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as subespécies: {str(e)}')
 
@@ -268,7 +270,7 @@ class ControladorEspecies:
             identificador_sub = self.__tela_especies.selecionar_obj_por_cod('subespecie', cod_validos_sub)
             if identificador_sub == 0:
                 return False
-            habilidades = self.__controlador_sistema.controlador_habilidades.__habilidade_DAO.cache
+            habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
             cod_validos_hab = list(habilidades.keys()) + [0]
             self.__controlador_sistema.controlador_habilidades.listar_habilidades('subespecie')
             identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)

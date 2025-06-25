@@ -72,9 +72,9 @@ class ControladorClasses:
                     classe.subclasses[0].nome, 
                     classe.subclasses[1].nome,
                     classe.subclasses[2].nome,
-                    classe.subclasses[0].hab_especificas,
-                    classe.subclasses[1].hab_especificas,
-                    classe.subclasses[2].hab_especificas
+                    [hab.nome for hab in classe.subclasses[0].hab_especificas],
+                    [hab.nome for hab in classe.subclasses[1].hab_especificas],
+                    [hab.nome for hab in classe.subclasses[2].hab_especificas]
                 ]
                 dados.append(linha)
 
@@ -156,10 +156,10 @@ class ControladorClasses:
 
     def adiciona_hab_subclasse(self):
         try:
-            self.listar_classes_e_sub_classe()
+            self.listar_classes()
             codigos_validos_class = list(self.__classe_DAO.get_keys()) + [0]
-            identificador_class= self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_class)
-            if identificador_class== 0:
+            identificador_class= self.__tela_classes.selecionar_obj_por_cod('Classe', codigos_validos_class)
+            if identificador_class == 0:
                 return False
             else:
                 classe = self.__classe_DAO.cache[identificador_class]

@@ -86,7 +86,7 @@ class TelaClasses(TelaAbstrata):
         layout = [
             [sg.Text("Escolher Subclasse", font=('Arial', 20))],
             [sg.Text('Subclasses:', size=(15, 1)),
-            sg.Combo(values=[str(a) for a in range(1, 4)], key="subclasse", readonly=True)],
+            sg.Combo(values=[a for a in range(1, 4)], key="cod_subclasse", readonly=True)],
             [sg.Button('Confirmar'), sg.Button('Cancelar')]
         ]
 
@@ -97,7 +97,7 @@ class TelaClasses(TelaAbstrata):
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 self.close()
-                return values
+                return values['cod_subclasse'] - 1
             elif button == 'Cancelar':
                 self.close()
                 return 0
