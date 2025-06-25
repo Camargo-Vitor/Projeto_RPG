@@ -1,6 +1,7 @@
 from model.habilidade import Habilidade
 from model.exceptions.excpetion_habilidades import *
 from views.tela_habilidades import TelaHabilidades
+from DAOs.habilidade_dao import HabilidadeDao
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -11,21 +12,12 @@ class ControladorHabilidades:
 
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
-        # O dicionário de "Habilidades" iniciaria normalmente vazio, porém
-        # para demonstração, utilzaremos alguns objetos já instanciados. 
-        # Estes objetos receberão códigos acima de 999.
-        self.__dict_habilidades: dict[int, Habilidade] = {
-            1000: Habilidade('Hab_especie', 1, 45, 'especie'),
-            1001: Habilidade('Hab_subespecie', 2, 46, 'subespecie'),
-            1002: Habilidade('Hab_classe', 1, 67, 'classe'),
-            1003: Habilidade('Hab_subclasse', 1, 68, 'subclasse')
-        }
+        self.__habilidade_DAO = HabilidadeDao()
         self.__tela_habilidades = TelaHabilidades()
-        self.__cod = 1
 
     def pega_habilidade_por_nome(self, nome: str):
         try:
-            for hab in self.__dict_habilidades.values():
+            for hab in self.__habilidade_DAO.get_all():
                 if hab.nome == nome:
                     return hab
             return None
@@ -47,8 +39,7 @@ class ControladorHabilidades:
                     dados_hab['pagina'],
                     dados_hab['origem']
                 )
-                self.__dict_habilidades[self.__cod] = nova_habilidade
-                self.__cod += 1
+                self.__habilidade_DAO.add(nova_habilidade)
                 self.__tela_habilidades.mensagem('Habilidade criada com sucesso!')
                 return True
          
@@ -65,23 +56,23 @@ class ControladorHabilidades:
         try:
             if origem == 'todas':
                 habilidades_filtradas = {
-                    k: h for k, h in self.__dict_habilidades.items()
+                    k: h for k, h in self.__habilidade_DAO.cache.items()
                 }
             elif origem == 'classe':
                 habilidades_filtradas = {
-                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'classe'
+                    k: h for k, h in self.__habilidade_DAO.cache.items() if h.origem == 'classe'
                 }
             elif origem == 'subclasse':
                 habilidades_filtradas = {
-                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'subclasse'
+                    k: h for k, h in self.__habilidade_DAO.cache.items() if h.origem == 'subclasse'
                 }
             elif origem == 'especie':
                 habilidades_filtradas = {
-                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'especie'
+                    k: h for k, h in self.__habilidade_DAO.cache.items() if h.origem == 'especie'
                 }
             elif origem == 'subespecie':
                 habilidades_filtradas = {
-                    k: h for k, h in self.__dict_habilidades.items() if h.origem == 'subespecie'
+                    k: h for k, h in self.__habilidade_DAO.cache.items() if h.origem == 'subespecie'
                 }
             else:
                 raise ValueError("[ERRO] Origem inválida")
@@ -105,12 +96,12 @@ class ControladorHabilidades:
     def excluir_habilidade(self):
         try:
             self.listar_habilidades()
-            cod_validos = list(self.__dict_habilidades.keys()) + [0]
+            cod_validos = list(self.__habilidade_DAO.get_keys()) + [0]
             identificador = self.__tela_habilidades.selecionar_obj_por_cod('habilidade', cod_validos)
             if identificador == 0:
                 return
             else:
-                del self.__dict_habilidades[identificador]
+                del self.__habilidade_DAO.remove(identificador)
                 self.__tela_habilidades.mensagem('Habilidade removida!')
                 return True
             
@@ -124,11 +115,11 @@ class ControladorHabilidades:
     def alterar_habilidade_por_cod(self):
         self.listar_habilidades()
         try:
-            cod_validos = list(self.__dict_habilidades.keys()) + [0]
+            cod_validos = list(self.__habilidade_DAO.get_keys()) + [0]
             identificador = self.__tela_habilidades.selecionar_obj_por_cod('habilidades', cod_validos)
             if identificador == 0:
                 return False
-            habilidade = self.__dict_habilidades[identificador]
+            habilidade = self.__habilidade_DAO[identificador]
             dados_novos = self.__tela_habilidades.pegar_dados_habilidade()
             i = self.pega_habilidade_por_nome(dados_novos['nome'])
             if i is None:
@@ -166,13 +157,5 @@ class ControladorHabilidades:
             metodo()
 
     @property
-    def tela_habilidade(self):
-        return self.__tela_habilidades
-    
-    @property
-    def dict_habilidades(self):
-        return self.__dict_habilidades
-
-    @property
-    def cod(self):
-        return self.__cod
+    def habilidade_DAO(self):
+        return self.__habilidade_DAO

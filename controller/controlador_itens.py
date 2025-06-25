@@ -2,6 +2,7 @@ from views.tela_itens import TelaItens
 from model.item import Item
 from model.exceptions.exception_itens import *
 from typing import TYPE_CHECKING
+from DAOs.item_dao import ItemDao
 
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
@@ -10,19 +11,11 @@ if TYPE_CHECKING:
 class ControladorItens:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
-        # O dicionário de "Itens" iniciaria normalmente vazio, porém
-        # para demonstração, utilzaremos alguns objetos já instanciados. 
-        # Estes objetos receberão códigos acima de 999.
-        self.__dict_item: dict[int, Item] = {
-            1000: Item('Flecha', 1, 'comum', 40),
-            1001: Item('Capacete', 10, 'raro', 45),
-            1002: Item('Mapa', 5, 'comum', 70)
-        }
+        self.__item_Dao = ItemDao()
         self.__tela_itens = TelaItens()
-        self.__cod = 1
 
     def pega_item_por_nome(self, nome: str):
-            for item in self.__dict_item.values():
+            for item in self.__item_Dao.get_all():
                 if item.nome == nome:
                     return item
             return None
@@ -42,8 +35,7 @@ class ControladorItens:
                             dados_item['raridade'],
                             dados_item['pagina']
                             )
-                self.__dict_item[self.__cod] = item
-                self.__cod += 1
+                self.__item_Dao.add(item)
                 self.__tela_itens.mensagem('Item criado com sucesso!')
                 return True
         except ItemJahExisteException as e:
@@ -58,7 +50,7 @@ class ControladorItens:
     def listar_itens(self):
         try:
             dados_para_tabela = []
-            for cod, item in self.__dict_item.items():
+            for cod, item in self.__item_Dao.cache.items():
                 dados_para_tabela.append([
                     cod,
                     item.nome,
@@ -75,11 +67,11 @@ class ControladorItens:
     def excluir_item(self):
         try:
             self.listar_itens()
-            cod_validos = list(self.__dict_item.keys()) + [0]
+            cod_validos = list(self.__item_Dao.get_keys()) + [0]
             identificador = self.__tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0:
                 return False
-            del self.__dict_item[identificador]
+            self.__item_Dao.remove(identificador)
             self.__tela_itens.mensagem('Item removido!')
             return True
 
@@ -93,11 +85,11 @@ class ControladorItens:
     def alterar_item_por_cod(self):
         self.listar_itens()
         try:
-            cod_validos = list(self.__dict_item.keys()) + [0]
+            cod_validos = list(self.__item_Dao.get_keys()) + [0]
             identificador = self.__tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0: 
                 return False
-            item = self.__dict_item[identificador]
+            item = self.__item_Dao.cache[identificador]
             dados_novos = self.__tela_itens.pegar_dados_item()
             if dados_novos == 0:
                 return False
@@ -137,13 +129,5 @@ class ControladorItens:
             metodo()
 
     @property
-    def tela_itens(self):
-        return self.__tela_itens
-
-    @property
-    def dict_item(self):
-        return self.__dict_item
-
-    @property
-    def cod(self):
-        return self.__cod
+    def item_DAO(self):
+        return self.__item_Dao
