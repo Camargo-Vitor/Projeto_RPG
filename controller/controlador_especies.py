@@ -378,5 +378,5 @@ class ControladorEspecies:
         return self.__especie_DAO
     
     @property
-    def subespecie(self):
+    def subespecie_DAO(self):
         return self.__subespecie_DAO
