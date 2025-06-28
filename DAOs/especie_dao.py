@@ -3,8 +3,8 @@ from DAOs.abstract_dao import DAO
 
 
 class EspecieDao(DAO):
-    def __init__(self, datasource='especie.pkl'):
-        super().__init__(datasource)
+    def __init__(self, data_source='especie.pkl'):
+        super().__init__(data_source)
 
     def add(self, especie: Especie):
         if((especie is not None) and isinstance(especie, Especie)):

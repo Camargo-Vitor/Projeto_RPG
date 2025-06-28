@@ -3,8 +3,8 @@ from DAOs.abstract_dao import DAO
 
 
 class ItemDao(DAO):
-    def __init__(self, datasource='item.pkl'):
-        super().__init__(datasource)
+    def __init__(self, data_source='item.pkl'):
+        super().__init__(data_source)
 
     def add(self, item: Item):
         if((item is not None) and isinstance(item, Item)):
