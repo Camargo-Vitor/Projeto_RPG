@@ -5,21 +5,7 @@ class TelaClasses(TelaAbstrata):
     def __init__(self, nome_objeto='classe'):
         super().__init__(nome_objeto)
 
-    """
-    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 8, 0]):
-        print('===== Classes =====')
-        print('1. Adicionar Classe')
-        print('2. Excluir Classe')
-        print('3. Listar Classes')
-        print('4. Modificar dados básicos Classe')
-        print('5. Adiconar habilidade Classe')
-        print('6. Remover habilidade Classe')
-        print('7. Adicionar habilidade Subclasse')
-        print('8. Remover habilidade subclasse')
-        print('0. Retornar ')
-        return super().mostra_tela(opcoes)
-        """
-    def mostra_tela(self, opcoes = [], nome_objeto = '', layout_extra = None, indice_layout_extra = 0, crud=False):
+    def mostra_tela(self, nome_objeto = '', layout_extra = None, indice_layout_extra = 0, crud=False):
         layout = [
             [sg.Text(f'Gerenciador de Especies e Subespecies', font = ('Arial', 25))],
             [sg.Text('Escolha uma opção', font=('Arial', 15))],
@@ -35,7 +21,7 @@ class TelaClasses(TelaAbstrata):
             [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
             [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        return super().mostra_tela(opcoes, nome_objeto, layout, indice_layout_extra, crud=False)
+        return super().mostra_tela(nome_objeto, layout, indice_layout_extra, crud=False)
     
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Classe'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
@@ -86,7 +72,7 @@ class TelaClasses(TelaAbstrata):
         layout = [
             [sg.Text("Escolher Subclasse", font=('Arial', 20))],
             [sg.Text('Subclasses:', size=(15, 1)),
-            sg.Combo(values=[a for a in range(0, 4)], key="cod_subclasse", readonly=True)],
+            sg.Combo(values=[a for a in range(1, 4)], key="cod_subclasse", readonly=True)],
             [sg.Button('Confirmar'), sg.Button('Cancelar')]
         ]
 
@@ -97,24 +83,7 @@ class TelaClasses(TelaAbstrata):
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 self.close()
-                return values['cod_subclasse'] - 1
+                return values['cod_subclasse']
             elif button == 'Cancelar':
                 self.close()
                 return 0
-
-
-    def mostra_classe_e_subclasse(self, dados_classe: dict, classe=True, subclasse=True):
-        if classe:
-            print('==== Classe ===='.center(36, '='))
-            print(f"{'Cod':^4} | {'Nome':^10} | {'Dado':^5} | {'Habilidades'}")
-            print(f"{dados_classe['cod']:^4}", end= ' | ')
-            print(f"{dados_classe['nome']:^10}", end = ' | ')
-            print(f"{dados_classe['dado']:^5}", end= ' | ')
-            print(f"{str(dados_classe['habilidades']):^9}")
-        if subclasse:
-            print('==== Subclasses ===='.center(36, '='))
-            print(f"{'Nome':^13} | {'Habilidades Especificas'}")
-            for a in range(3):
-                print(f"{str(dados_classe['nomes_sub'][a]):^13}", end= ' | ')
-                print(f"{str(dados_classe['habilidades_sub'][a]):^13}")
-        print('=' *60)

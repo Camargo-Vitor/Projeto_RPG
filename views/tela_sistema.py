@@ -2,20 +2,10 @@ from views.tela_abstrata import TelaAbstrata
 import PySimpleGUI as sg
 
 class TelaSistema(TelaAbstrata):
-    def __init__(self):
-        self.__window: sg.Window = None
-        self.init_components()
-    
-    def close(self):
-        self.__window.Close()
+    def __init__(self, nome_objeto='Sistema'):
+        super().__init__(nome_objeto)
 
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
-
-    def init_components(self):
-        #sg.theme_previewer()
-        sg.ChangeLookAndFeel('DarkBrown4') #procurar corzinha
+    def mostra_tela(self, nome_objeto = 'Sistema', layout_extra = None, indice_layout_extra = 0, crud=True):
         layout = [
             [sg.Text('Bem vindo ao sistema de gerenciamento de uma aventura de D&D!', font=('Arial', 25))],
             [sg.Text('Escolha sua opção', font=("Helvica",15))],
@@ -29,32 +19,6 @@ class TelaSistema(TelaAbstrata):
             [sg.Radio('Finalizar sistema',"RD1", enable_events=True, key='0')],
             [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        self.__window = sg.Window('Sistema de Gerenciamento de aventura de D&D').Layout(layout)
 
-    def mostra_tela(self, opcoes=[]):
-        self.init_components()
-        while True:
-            button, values = self.open()
-            if button in (sg.WIN_CLOSED, 'Cancelar'):
-                self.close()
-                return 0
-            if any(values[key] for key in self.window.key_dict.keys()):
-                self.__window['Confirmar'].update(disabled=False)
-            else:
-                self.__window['Confirmar'].update(disabled=True)
+        return super().mostra_tela(nome_objeto='Sistema', layout_extra=layout, indice_layout_extra=0, crud=False)
 
-            if button == 'Confirmar':
-                for key, opc in values.items():
-                    if opc:
-                        escolha = int(key)
-                        self.close()
-                        return escolha
-   
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        if isinstance(window, sg.Window):
-            self.__window = window

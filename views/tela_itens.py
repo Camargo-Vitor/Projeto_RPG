@@ -6,8 +6,8 @@ class TelaItens(TelaAbstrata):
     def __init__(self, nome_objeto='Item'):
         super().__init__(nome_objeto)
 
-    def mostra_tela(self, opcoes = [], nome_objeto = 'Item', layout_extra = None, indice_layout_extra = 0, crud=True):
-        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
+    def mostra_tela(self, nome_objeto = 'Item', layout_extra = None, indice_layout_extra = 0, crud=True):
+        return super().mostra_tela(nome_objeto, layout_extra, indice_layout_extra, crud)
 
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Item'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)

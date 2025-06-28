@@ -5,7 +5,7 @@ class TelaPessoas(TelaAbstrata):
     def __init__(self, nome_objeto='Pessoas'):
         super().__init__(nome_objeto)
 
-    def mostra_tela(self, opcoes = [], nome_objeto = 'Pessoas', layout_extra = None, indice_layout_extra = 0, crud=False):
+    def mostra_tela(self, nome_objeto = 'Pessoas', layout_extra = None, indice_layout_extra = 0, crud=False):
         layout = [
             [sg.Text(f'Gerenciador de Pessoa', font = ('Arial', 25))],
             [sg.Text('Escolha uma opção', font=('Arial', 15))],
@@ -19,7 +19,7 @@ class TelaPessoas(TelaAbstrata):
             [sg.Radio('Retornar', "RD1", enable_events=True, key = '0')],
             [sg.Button('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        return super().mostra_tela(opcoes, nome_objeto, layout, indice_layout_extra, crud=False)
+        return super().mostra_tela(nome_objeto, layout, indice_layout_extra, crud=False)
     
     def exibir_tabela(self, cabecalho, dados, nome_objeto = 'Pessoas'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
@@ -49,19 +49,6 @@ class TelaPessoas(TelaAbstrata):
         except Exception as e:
             sg.popup_error(f"[ERRO INESPERADO] Erro ao exibir mestre: {e}")
             return False
-    '''
-    def mostra_tela(self, opcoes=[1, 2, 3, 4, 5, 6, 7, 0]):
-        print('===== Pessoas =====')
-        print('1. Incluir Jogador')
-        print('2. Excluir Jogador')
-        print('3. Listar Jogador')
-        print('4. Alterar Jogador')
-        print('5. Adicionar Ficha')
-        print('6. Remover Ficha')
-        print('7. Acessar Mestre')
-        print('0. Retornar')
-        return super().mostra_tela(opcoes)
-    '''
 
     def pegar_dados_pessoa(self):
         layout = [

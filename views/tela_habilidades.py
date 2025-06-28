@@ -6,8 +6,8 @@ class TelaHabilidades(TelaAbstrata):
     def __init__(self, nome_objeto='Habilidade'):
         super().__init__(nome_objeto)
 
-    def mostra_tela(self, opcoes = [], nome_objeto = 'Habilidade', layout_extra = None, indice_layout_extra = 0, crud=True):
-        return super().mostra_tela(opcoes, nome_objeto, layout_extra, indice_layout_extra, crud)
+    def mostra_tela(self, nome_objeto = 'Habilidade', layout_extra = None, indice_layout_extra = 0, crud=True):
+        return super().mostra_tela(nome_objeto, layout_extra, indice_layout_extra, crud)
 
     def exibir_tabela(self, cabecalho, dados, nome_objeto='Habilidade'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
@@ -21,6 +21,7 @@ class TelaHabilidades(TelaAbstrata):
             [sg.Text('Origem', size = (15, 1)), sg.InputCombo(('classe', 'subclasse', 'especie', 'subespecie'), size=(20, 1), readonly=True, key='origem', enable_events=True)],
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
+
         self.init_components('Nova Habilidade', layout, crud=False)
         while True:
             button, values = self.open()

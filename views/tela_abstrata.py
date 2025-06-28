@@ -31,26 +31,14 @@ class TelaAbstrata(ABC):
         elif layout_extra:
             layout.insert(indice_layout_extra, layout_extra)
         self.__window = sg.Window(f'Gerenciador de {nome_objeto}').Layout(layout)
-        
-    def mostra_tela(self, opcoes:list = [], nome_objeto: str = '', layout_extra:list[list]=None, indice_layout_extra: int=0, crud=True):
-        if opcoes != []:        
-            opc = self.le_int_ou_float(
-                'Digite a opção: ',
-                conjunto_alvo = opcoes
-                        )
-
-            if os.name == 'posix':
-                os.system('clear')  
-            else:
-                os.system('cls')
-
-            return opc
-        else:
-            self.init_components(nome_objeto, layout_extra, indice_layout_extra, crud=crud)
-            while True:
-                ret = self.logica_confirmacao()
-                if ret or ret == 0:
-                    return ret
+    
+    @abstractmethod
+    def mostra_tela(self, nome_objeto: str = '', layout_extra:list[list]=None, indice_layout_extra: int=0, crud=True):
+        self.init_components(nome_objeto, layout_extra, indice_layout_extra, crud=crud)
+        while True:
+            ret = self.logica_confirmacao()
+            if ret or ret == 0:
+                return ret
 
     def logica_confirmacao(self):       
         button, values = self.open()
@@ -68,47 +56,6 @@ class TelaAbstrata(ABC):
                     self.close()
                     return escolha
         return None
-
-    def le_int_ou_float(self, mensagem: str, conjunto_alvo: list=None, positivo: bool=False, tipo: str='int'):
-        while True:
-            try:
-                if tipo not in ('int', 'float'):
-                    raise ValueError("[ERRO] Tipo inválido. Esperado 'int' ou 'float'.")
-
-                entrada = input(mensagem)
-
-                try:
-                    num = int(entrada) if tipo == 'int' else float(entrada)
-                except ValueError:
-                    if tipo == 'int':
-                        raise ValueError('[ERRO] O valor digitado deve ser um número inteiro')
-                    else:
-                        raise ValueError('[ERRO] O valor digitado deve ser um número (utilize "." para decimais)')
-
-                if (conjunto_alvo is not None) and (num not in conjunto_alvo):
-                    raise ValueError("[ERRO] O valor digitado não está dentro do conjunto de valores válidos.")
-                elif positivo and num < 0:
-                    raise ValueError("[ERRO] O valor digitado deve ser positivo")
-
-                return num
-
-            except ValueError as e:
-                print(e)
-            except Exception as e :
-                print(f'[ERRO INESPERADO] Ocorreu um erro inesperado: {str(e)}')
-
-    def le_str(self, mensagem:str, formato='title'):
-        entrada = ''
-        while True:
-            entrada = input(mensagem).strip()
-            if not entrada.isnumeric() and not entrada == '':
-                break
-            print(f'[ERRO] Entrada inválida, não digite números ou espaços vazios.')
-
-        if formato == 'title':
-            return entrada.title()
-        else:
-            return entrada.capitalize()
 
     def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
         layout = [
