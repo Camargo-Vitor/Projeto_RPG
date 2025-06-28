@@ -18,6 +18,7 @@ class DAO(ABC):
         self.__cache = pickle.load(open(self.__data_source,'rb'))
 
     #esse método precisa chamar o self.__dump()
+    @abstractmethod
     def add(self, obj):
         try:
             cod = max([key for key in self.__cache.keys()]) + 1
@@ -26,6 +27,7 @@ class DAO(ABC):
         self.__cache[cod] = obj
         self.__dump()  #atualiza o arquivo depois de add novo amigo
 
+    @abstractmethod
     def update(self, key, obj):
         try:
             if(self.__cache[key] != None):
@@ -34,6 +36,7 @@ class DAO(ABC):
         except KeyError:
             pass  # implementar aqui o tratamento da exceção
 
+    @abstractmethod
     def get(self, key):
         try:
             return self.__cache[key]
@@ -41,6 +44,7 @@ class DAO(ABC):
             pass #implementar aqui o tratamento da exceção
 
     # esse método precisa chamar o self.__dump()
+    @abstractmethod
     def remove(self, key):
         self.__cache.pop(key)
         self.__dump() #atualiza o arquivo depois de remover um objeto
