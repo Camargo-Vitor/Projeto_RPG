@@ -2,6 +2,7 @@ from views.tela_pessoas import TelaPessoas
 from model.mestre import Mestre
 from model.jogador import Jogador
 from model.exceptions.exception_pessoas import *
+from model.exceptions.exception_dict_vazio import *
 from DAOs.pessoa_dao import PessoaDao
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -55,21 +56,26 @@ class ControladorPessoas:
     def listar_jogador(self):
         try:
             dados = []
-            for cod, jogador in self.__pesssoa_dao.cache.items():
-                if isinstance(jogador, Jogador):
-                    linha = [
-                        cod,
-                        jogador.nome,
-                        jogador.telefone,
-                        jogador.endereco.cidade,
-                        jogador.endereco.bairro,
-                        jogador.endereco.numero,
-                        jogador.endereco.cep,
-                        ', '.join(p.nome for p in jogador.personagens)
-                    ]
-                    dados.append(linha)
-            HEADER = ["Cod", "Nome", "Telefone", "Cidade", "Bairro", "Número", "CEP", "Personagens"]
-            self.__tela_pessoas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Persoangem')
+            if self.__pesssoa_dao.cache:
+                for cod, jogador in self.__pesssoa_dao.cache.items():
+                    if isinstance(jogador, Jogador):
+                        linha = [
+                            cod,
+                            jogador.nome,
+                            jogador.telefone,
+                            jogador.endereco.cidade,
+                            jogador.endereco.bairro,
+                            jogador.endereco.numero,
+                            jogador.endereco.cep,
+                            ', '.join(p.nome for p in jogador.personagens)
+                        ]
+                        dados.append(linha)
+                HEADER = ["Cod", "Nome", "Telefone", "Cidade", "Bairro", "Número", "CEP", "Personagens"]
+                self.__tela_pessoas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Persoangem')
+            else:
+                raise DictVazioException
+        except DictVazioException as e:
+            self.__tela_pessoas.mensagem(e)
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao listar os jogadores: {str(e)}')
 

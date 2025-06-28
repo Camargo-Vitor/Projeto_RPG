@@ -2,6 +2,7 @@ from model.ficha import Ficha
 from views.tela_fichas import TelaFichas
 from typing import TYPE_CHECKING
 from DAOs.ficha_dao import FichaDao
+from model.exceptions.exception_dict_vazio import *
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
 
@@ -100,48 +101,53 @@ class ControladorFichas:
             cod_valido_ficha = list(self.__ficha_dao.get_keys()) + [0]
 
             dados = []
-            for key, ficha in self.__ficha_dao.cache.items():
-                linha = [
-                    key,
-                    ficha.nome
-                ]
-                dados.append(linha)
+            if self.__ficha_dao.cache:
+                for key, ficha in self.__ficha_dao.cache.items():
+                    linha = [
+                        key,
+                        ficha.nome
+                    ]
+                    dados.append(linha)
 
-            HEADER = ['Cód', 'Nome Personagem']
-            self.__tela_fichas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Ficha')
+                HEADER = ['Cód', 'Nome Personagem']
+                self.__tela_fichas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Ficha')
 
-            if selecao:
-                identificador = self.__tela_fichas.selecionar_obj_por_cod(f'fichas', cod_valido_ficha)
-                if identificador == 0:
-                    return False
+                if selecao:
+                    identificador = self.__tela_fichas.selecionar_obj_por_cod(f'fichas', cod_valido_ficha)
+                    if identificador == 0:
+                        return False
+                    else:
+                        ficha = self.__ficha_dao.cache[identificador]
+                        self.__tela_fichas.mostra_ficha_inteira(
+                            {
+                                'nome': ficha.nome,
+                                'nivel': ficha.nivel,
+                                'vida': ficha.vida,
+                                'vida_atual': ficha.vida_atual,
+                                'deslocamento': ficha.deslocamento,
+                                'fisico': ficha.fisico,
+                                'altura': ficha.altura,
+                                'historia': ficha.historia,
+                                'moedas': 0,
+                                'classe': ficha.classe.nome,
+                                'subclasse': 'Não há' if ficha.subclasse == None else ficha.subclasse.nome,
+                                'especie': ficha.especie.nome,
+                                'pericias': ficha.pericias_treinadas,
+                                'forca': f'{ficha.atributos["forca"]} ({(ficha.atributos["forca"] - 10) // 2})',
+                                'destreza': f'{ficha.atributos["destreza"]} ({(ficha.atributos["destreza"] - 10) // 2})',
+                                'constituicao': f'{ficha.atributos["constituicao"]} ({(ficha.atributos["constituicao"] - 10) // 2})',
+                                'inteligencia': f'{ficha.atributos["inteligencia"]} ({(ficha.atributos["inteligencia"] - 10) // 2})',
+                                'sabedoria': f'{ficha.atributos["sabedoria"]} ({(ficha.atributos["sabedoria"] - 10) // 2})',
+                                'carisma': f'{ficha.atributos["carisma"]} ({(ficha.atributos["carisma"] - 10) // 2})',
+                                'inventario': [item.nome for item in ficha.inventario],
+                                'magias': [magia.nome for magia in self.selecionar_magias_ativas_em_ficha(ficha)],
+                                'habilidades': [hab.nome for hab in self.selecionar_habilidades_ativas_em_ficha(ficha)]
+                            }
+                        )
                 else:
-                    ficha = self.__ficha_dao.cache[identificador]
-                    self.__tela_fichas.mostra_ficha_inteira(
-                        {
-                            'nome': ficha.nome,
-                            'nivel': ficha.nivel,
-                            'vida': ficha.vida,
-                            'vida_atual': ficha.vida_atual,
-                            'deslocamento': ficha.deslocamento,
-                            'fisico': ficha.fisico,
-                            'altura': ficha.altura,
-                            'historia': ficha.historia,
-                            'moedas': 0,
-                            'classe': ficha.classe.nome,
-                            'subclasse': 'Não há' if ficha.subclasse == None else ficha.subclasse.nome,
-                            'especie': ficha.especie.nome,
-                            'pericias': ficha.pericias_treinadas,
-                            'forca': f'{ficha.atributos["forca"]} ({(ficha.atributos["forca"] - 10) // 2})',
-                            'destreza': f'{ficha.atributos["destreza"]} ({(ficha.atributos["destreza"] - 10) // 2})',
-                            'constituicao': f'{ficha.atributos["constituicao"]} ({(ficha.atributos["constituicao"] - 10) // 2})',
-                            'inteligencia': f'{ficha.atributos["inteligencia"]} ({(ficha.atributos["inteligencia"] - 10) // 2})',
-                            'sabedoria': f'{ficha.atributos["sabedoria"]} ({(ficha.atributos["sabedoria"] - 10) // 2})',
-                            'carisma': f'{ficha.atributos["carisma"]} ({(ficha.atributos["carisma"] - 10) // 2})',
-                            'inventario': [item.nome for item in ficha.inventario],
-                            'magias': [magia.nome for magia in self.selecionar_magias_ativas_em_ficha(ficha)],
-                            'habilidades': [hab.nome for hab in self.selecionar_habilidades_ativas_em_ficha(ficha)]
-                        }
-                    )
+                    raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_fichas.mensagem(e)
         except Exception as e:
             self.__tela_fichas.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens em ficha: {str(e)}")
 

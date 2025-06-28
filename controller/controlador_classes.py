@@ -1,6 +1,7 @@
 from model.classe import Classe
 from model.exceptions.exception_classe import *
 from model.exceptions.excpetion_habilidades import *
+from model.exceptions.exception_dict_vazio import *
 from views.tela_classes import TelaClasses
 from DAOs.classe_dao import ClasseDao
 from typing import TYPE_CHECKING
@@ -49,39 +50,51 @@ class ControladorClasses:
     def listar_classes(self):
         try:
             dados = []
-            for cod, classe in self.__classe_DAO.cache.items():
-                linha = [
-                    cod,
-                    classe.nome,
-                    classe.dado_vida,
-                    ', '.join(hab.nome for hab in classe.habilidades)
-                ]
-                dados.append(linha)
+            if self.__classe_DAO.cache:
+                for cod, classe in self.__classe_DAO.cache.items():
+                    linha = [
+                        cod,
+                        classe.nome,
+                        classe.dado_vida,
+                        ', '.join(hab.nome for hab in classe.habilidades)
+                    ]
+                    dados.append(linha)
 
-            HEADER = ["Cod", "Nome", "Dado Vida", "Habilidades"]
-            self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Classe')
-
+                HEADER = ["Cod", "Nome", "Dado Vida", "Habilidades"]
+                self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Classe')
+            else:
+                raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_classes.mensagem(e)            
         except Exception as e:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao listar classes: {str(e)}')
 
     def listar_classes_e_sub_classe(self):
+        try:
             dados = []
-            for cod, classe in self.__classe_DAO.cache.items():
-                linha = [
-                    cod,
-                    classe.nome,
-                    classe.subclasses[0].nome, 
-                    classe.subclasses[1].nome,
-                    classe.subclasses[2].nome,
-                    [hab.nome for hab in classe.subclasses[0].hab_especificas],
-                    [hab.nome for hab in classe.subclasses[1].hab_especificas],
-                    [hab.nome for hab in classe.subclasses[2].hab_especificas]
-                ]
-                dados.append(linha)
+            if self.__classe_DAO.cache:
+                for cod, classe in self.__classe_DAO.cache.items():
+                    linha = [
+                        cod,
+                        classe.nome,
+                        classe.subclasses[0].nome, 
+                        classe.subclasses[1].nome,
+                        classe.subclasses[2].nome,
+                        [hab.nome for hab in classe.subclasses[0].hab_especificas],
+                        [hab.nome for hab in classe.subclasses[1].hab_especificas],
+                        [hab.nome for hab in classe.subclasses[2].hab_especificas]
+                    ]
+                    dados.append(linha)
 
-            HEADER = ["cod", "Nome", "1ª Subclasse", "2ª Subclassse", "3ª Subclasse", 'hab 1ª', 'hab 2ª', 'hab 3ª']
-            self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Subclasse')
-                
+                HEADER = ["cod", "Nome", "1ª Subclasse", "2ª Subclassse", "3ª Subclasse", 'hab 1ª', 'hab 2ª', 'hab 3ª']
+                self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Subclasse')
+            else:
+                raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_classes.mensagem(e)            
+        except Exception as e:
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao listar classes: {str(e)}')
+            
 
     def excluir_classe(self):
         try:

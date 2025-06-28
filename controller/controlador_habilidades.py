@@ -1,5 +1,6 @@
 from model.habilidade import Habilidade
 from model.exceptions.excpetion_habilidades import *
+from model.exceptions.exception_dict_vazio import *
 from views.tela_habilidades import TelaHabilidades
 from DAOs.habilidade_dao import HabilidadeDao
 from typing import TYPE_CHECKING
@@ -78,18 +79,22 @@ class ControladorHabilidades:
                 raise ValueError("[ERRO] Origem inválida")
 
             dados_para_tabela = []
-            for cod, habilidade in habilidades_filtradas.items():
-                dados_para_tabela.append([
-                    cod,
-                    habilidade.nome,
-                    habilidade.nivel,
-                    habilidade.pagina,
-                    habilidade.origem,
-                ])
+            if self.__habilidade_DAO.cache:
+                for cod, habilidade in habilidades_filtradas.items():
+                    dados_para_tabela.append([
+                        cod,
+                        habilidade.nome,
+                        habilidade.nivel,
+                        habilidade.pagina,
+                        habilidade.origem,
+                    ])
 
-            cabecalho = ['Cód', 'Nome', 'Nivel', 'Pagina', 'Tipo']
-            self.__tela_habilidades.exibir_tabela(cabecalho, dados_para_tabela)
-
+                cabecalho = ['Cód', 'Nome', 'Nivel', 'Pagina', 'Tipo']
+                self.__tela_habilidades.exibir_tabela(cabecalho, dados_para_tabela)
+            else:
+                raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_habilidades.mensagem(e)
         except Exception as e:
             self.__tela_habilidades.mensagem(f'[ERRO INESPERADO] Erro ao listar habilidades: {str(e)}')
     
