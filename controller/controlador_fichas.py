@@ -153,7 +153,7 @@ class ControladorFichas:
             if identificador == 0:
                 return
             else:
-                del self.__ficha_dao.cache[identificador]
+                self.__ficha_dao.remove(identificador)
                 self.__tela_fichas.mensagem('Ficha removida!')
                 return True
         except TypeError as e:
@@ -180,6 +180,7 @@ class ControladorFichas:
                 else:
                     ficha = self.__ficha_dao.cache[identificador_ficha]
                     ficha.add_item_inventario(item[identificador_item])
+                    self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Item adicionado ao inventário!')
                     return True
         except TypeError as e:
@@ -206,6 +207,7 @@ class ControladorFichas:
                 else:
                     ficha = self.__ficha_dao.cache[identificador_ficha]
                     ficha.add_magia(magias[identificador_magia])
+                    self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
                     return True
         except TypeError as e:
@@ -235,6 +237,7 @@ class ControladorFichas:
                 else: 
                     
                     ficha.rm_item_inventario(itens[identificador_item])
+                    self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Item removido do inventário!')
                     return True
         except TypeError as e:
@@ -263,6 +266,7 @@ class ControladorFichas:
                     return False
                 else:
                     ficha.rm_magia(magias[identificador_magia])
+                    self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Magia removida!')
                     return True
         except TypeError as e:
@@ -288,6 +292,7 @@ class ControladorFichas:
                         'Digite a subclasse que deseja se aperfeiçoar (1, 2 ou 3 - de cima para baixo): ', [1, 2, 3])
                     ficha.subclasse = ficha.classe.subclasses[subclasse_ecolhida - 1]
                 ficha.subir_nivel()
+                self.__ficha_dao.update(identificador_ficha, ficha)
                 self.__tela_fichas.mensagem(f'Ficha "{ficha.nome} subiu para o nivel {ficha.nivel}!"')
                 return True
 
@@ -307,6 +312,7 @@ class ControladorFichas:
                 self.__tela_fichas.mensagem(f'O personagem "{ficha.nome}" está morrendo!')
             elif vida_antiga <= 0 and ficha.vida_atual > 0:
                 self.__tela_fichas.mensagem(f'O personagem "{ficha.nome}" foi estabilizado! <3')
+            self.__ficha_dao.update(identificador_ficha, ficha)
             return True
 
     def relatorio(self):

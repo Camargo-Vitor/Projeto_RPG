@@ -127,6 +127,7 @@ class ControladorHabilidades:
                 habilidade.nivel = dados_novos['nivel']
                 habilidade.pagina = dados_novos['pagina']
                 habilidade.origem = dados_novos['origem']
+                self.__habilidade_DAO.update(identificador, habilidade)
                 self.__tela_habilidades.mensagem(f'Habilidade de código {identificador} alterada com sucesso!')
                 return True
             else:

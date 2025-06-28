@@ -99,6 +99,7 @@ class ControladorItens:
                 item.raridade = dados_novos['raridade']
                 item.pagina = dados_novos['pagina']
                 item.valor = dados_novos['valor']
+                self.__item_Dao.update(identificador, item)
                 self.__tela_itens.mensagem('Item alterado com sucesso!')
                 return True
             else:

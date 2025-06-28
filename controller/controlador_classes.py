@@ -213,6 +213,7 @@ class ControladorClasses:
                     raise KeyError("[ERRO DE CHAVE] A habilidade selecionada é inválida.")
                 else:
                     classe.rm_hab(habilidades[identificador_hab])
+                    self.__classe_DAO.update(identificador_hab, classe)
                     self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                     return True
 
@@ -250,6 +251,7 @@ class ControladorClasses:
                     else:
                         habilidade = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache[identificador_hab]
                         subclasse.rm_hab(habilidade[identificador_hab])
+                        self.__classe_DAO.update(identificador_sub, subclasse)
                         self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                         return True
 

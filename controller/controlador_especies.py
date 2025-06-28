@@ -197,6 +197,7 @@ class ControladorEspecies:
                         especie.nome = dados_novos['nome']
                         especie.deslocamento = dados_novos['deslocamento']
                         especie.altura = dados_novos['altura']
+                        self.__especie_DAO.update(identificador, especie)
                         self.__tela_especies.mensagem(f'Especie de código {identificador} alterada com sucesso!')
                         return True
                     else:
@@ -220,6 +221,7 @@ class ControladorEspecies:
             e = self.pega_subespecie_por_sub_nome(dados_novos['nome'])
             if e is None:
                 self.__subespecie_DAO.cache[identificador].nome_sub = dados_novos['nome']
+                self.__subespecie_DAO.update(identificador, subespecie)
                 self.__tela_especies.mensagem(f'Subespécie de código {identificador} alterada com sucesso!')
                 return True
             else:
@@ -250,6 +252,7 @@ class ControladorEspecies:
                     if habilidades[identificador_hab].nome in [hab.nome for hab in especie.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     especie.add_habilidade(habilidades[identificador_hab])
+                    self.__especie_DAO.update(identificador_esp, especie)
                     self.__tela_especies.mensagem('Hablidade adicionada!')
                     return True
                 else:
@@ -281,6 +284,7 @@ class ControladorEspecies:
                 if habilidades[identificador_hab].nome in [hab.nome for hab in subespecie.habilidades]:
                     raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                 subespecie.add_hab_sub(habilidades[identificador_hab])
+                self.__subespecie_DAO.update(identificador_hab, subespecie)
                 self.__tela_especies.mensagem('Hablidade adicionada!')
                 return True
             else:
@@ -312,6 +316,7 @@ class ControladorEspecies:
                     return False
                 else:
                     especie.rm_hab(habilidade[identificador_hab])
+                    self.__especie_DAO.update(identificador_esp, especie)
                     self.__tela_especies.mensagem('Habilidade Removida!')
                     return True
 
@@ -337,6 +342,7 @@ class ControladorEspecies:
                     return False
                 else:
                     subespecie.rm_hab_sub(habilidade[identificador_hab])
+                    self.__subespecie_DAO.update(identificador_sub, subespecie)
                     self.__tela_especies.mensagem('Habilidade Removida!')
                     return True
 

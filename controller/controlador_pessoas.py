@@ -109,6 +109,7 @@ class ControladorPessoas:
                     jogador.endereco.bairro = dados_novos['bairro']
                     jogador.endereco.numero = dados_novos['numero']
                     jogador.endereco.cep = dados_novos['cep']
+                    self.__pesssoa_dao.update(identificador, jogador)
                     self.__tela_pessoas.mensagem('Jogador Alterado com sucesso')
                     return True
                 else:
@@ -141,6 +142,7 @@ class ControladorPessoas:
                     if fichas[identificador_ficha].nome in [fic.nome for fic in jogador.personagens]:
                         raise FichaJahExisteException(fichas[identificador_ficha].nome)
                     jogador.add_ficha(fichas[identificador_ficha])
+                    self.__pesssoa_dao.update(identificador, jogador)
                     self.__tela_pessoas.mensagem('Ficha adicionada!')
                     return True
         except FichaJahExisteException as e:
@@ -169,6 +171,7 @@ class ControladorPessoas:
                     return False
                 else:
                     jogador.rm_ficha(fichas[identificador_ficha])
+                    self.__pesssoa_dao.update(identificador, jogador)
                     self.__tela_pessoas.mensagem('Ficha Removida!')
                     return True
         except TypeError as e:
