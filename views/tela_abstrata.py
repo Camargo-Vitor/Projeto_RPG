@@ -3,6 +3,7 @@ import os
 import PySimpleGUI as sg
 
 class TelaAbstrata(ABC):
+    @abstractmethod
     def __init__(self, nome_objeto: str):
         self.__window: sg.Window = None
         self.init_components(nome_objeto)
