@@ -3,8 +3,8 @@ from DAOs.abstract_dao import DAO
 
 
 class HabilidadeDao(DAO):
-    def __init__(self, datasource='habilidade.pkl'):
-        super().__init__(datasource)
+    def __init__(self, data_source='habilidade.pkl'):
+        super().__init__(data_source)
 
     def add(self, habilidade: Habilidade):
         if((habilidade is not None) and isinstance(habilidade, Habilidade)):
