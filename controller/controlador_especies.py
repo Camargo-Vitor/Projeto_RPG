@@ -3,6 +3,7 @@ from model.especie import Especie
 from model.subespecie import Subespecie
 from model.exceptions.exception_especies import *
 from model.exceptions.excpetion_habilidades import *
+from model.exceptions.exception_dict_vazio import *
 from DAOs.especie_dao import EspecieDao
 from DAOs.subespecie_dao import SubepecieDao
 from typing import TYPE_CHECKING
@@ -98,18 +99,22 @@ class ControladorEspecies:
     def listar_especies(self):
         try:
             dados = []
-
-            for key, especie in self.__especie_DAO.cache.items():
-                linha = [
-                    key,
-                    especie.nome,
-                    especie.deslocamento,
-                    especie.altura,
-                    ', '.join(hab.nome for hab in especie.habilidades)
-                ]
-                dados.append(linha)
-            HEADER = ['Código', 'Nome', 'Deslocamento', 'Altura', 'Habilidades']
-            self.__tela_especies.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Especie')
+            if self.__especie_DAO.cache:
+                for key, especie in self.__especie_DAO.cache.items():
+                    linha = [
+                        key,
+                        especie.nome,
+                        especie.deslocamento,
+                        especie.altura,
+                        ', '.join(hab.nome for hab in especie.habilidades)
+                    ]
+                    dados.append(linha)
+                HEADER = ['Código', 'Nome', 'Deslocamento', 'Altura', 'Habilidades']
+                self.__tela_especies.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Especie')
+            else:
+                raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_classes.mensagem(e)            
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as espécies: {str(e)}')
 
@@ -139,7 +144,9 @@ class ControladorEspecies:
                 HEADER = ['Código', 'Nome', 'Deslocamento', 'Altura', 'Habilidades', 'Habilidades Específicas']
                 self.__tela_especies.exibir_tabela(cabecalho=HEADER, dados=dados)
             else:
-                raise Exception('Lista vazia') # criar exception'
+                raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_especies.mensagem(e)
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as subespécies: {str(e)}')
 

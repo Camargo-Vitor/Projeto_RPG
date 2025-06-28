@@ -1,5 +1,6 @@
 from model.magia import Magia
 from model.exceptions.excpetion_magias import *
+from model.exceptions.exception_dict_vazio import *
 from typing import TYPE_CHECKING
 from views.tela_magias import TelaMagias
 from DAOs.magia_dao import MagiaDao
@@ -61,7 +62,9 @@ class ControladorMagias:
                 cabecalho = ['Cód', 'Nome', 'Nivel', 'Pág.']
                 self.__tela_magias.exibir_tabela(cabecalho, dados_para_tabela)
             else:
-                raise Exception('tavaziopoxa') #Criar Excpetion Dict Vazio
+                raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_magias.mensagem(e)
         except Exception as e:
             self.__tela_magias.mensagem(f'[ERRO INESPERADO] Erro ao listar as magias: {str(e)}')
 

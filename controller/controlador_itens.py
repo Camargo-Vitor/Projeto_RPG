@@ -1,6 +1,7 @@
 from views.tela_itens import TelaItens
 from model.item import Item
 from model.exceptions.exception_itens import *
+from model.exceptions.exception_dict_vazio import *
 from typing import TYPE_CHECKING
 from DAOs.item_dao import ItemDao
 
@@ -50,17 +51,22 @@ class ControladorItens:
     def listar_itens(self):
         try:
             dados_para_tabela = []
-            for cod, item in self.__item_Dao.cache.items():
-                dados_para_tabela.append([
-                    cod,
-                    item.nome,
-                    item.raridade,
-                    item.pagina,
-                    item.valor,
-                ])
+            if self.__item_Dao.cache:
+                for cod, item in self.__item_Dao.cache.items():
+                    dados_para_tabela.append([
+                        cod,
+                        item.nome,
+                        item.raridade,
+                        item.pagina,
+                        item.valor,
+                    ])
 
-            cabecalho = ['Cód', 'Nome', 'Raridade', 'Pagina', 'Valor']
-            self.__tela_itens.exibir_tabela(cabecalho, dados_para_tabela)
+                cabecalho = ['Cód', 'Nome', 'Raridade', 'Pagina', 'Valor']
+                self.__tela_itens.exibir_tabela(cabecalho, dados_para_tabela)
+            else:
+                raise DictVazioException()
+        except DictVazioException as e:
+            self.__tela_itens.mensagem(e)
         except Exception as e:
             self.__tela_itens.mensagem(f'[ERRO INESPERADO] Erro ao listar as itens: {str(e)}')
     
