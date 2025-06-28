@@ -14,7 +14,8 @@ class ControladorPessoas:
         self.__controlador_sistema = controlador_sistema
         self.__tela_pessoas = TelaPessoas()
         self.__pesssoa_dao = PessoaDao()
-        self.__pesssoa_dao.add(Mestre('Nome', 0, 'Cidade', 'Bairro', 0, 0))
+        if not self.__pesssoa_dao.cache:
+            self.__pesssoa_dao.add(Mestre('Nome', 0, 'Cidade', 'Bairro', 0, 0))
     
     def pega_pessoa_por_nome(self, nome: str):
         for pessoa in self.__pesssoa_dao.get_all():
@@ -75,7 +76,7 @@ class ControladorPessoas:
     def excluir_jogador(self):
         try:
             self.listar_jogador()
-            cod_validos = list(self.__pesssoa_dao.get_keys()) + [0]
+            cod_validos = list(self.__pesssoa_dao.get_keys()) + [0] - [1]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogador', cod_validos)
             if identificador == 0:
                 return False
