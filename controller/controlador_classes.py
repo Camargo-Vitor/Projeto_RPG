@@ -112,6 +112,7 @@ class ControladorClasses:
                 if e is None:
                     classe.nome = dados_novos['nome']
                     classe.dado_vida = dados_novos['dado']
+                    self.__classe_DAO.update(identificador, classe)
                     self.__tela_classes.mensagem(f'Classe de código {identificador} alterada com sucesso!')
                 else:
                     raise ClasseJahExisteException(dados_novos['nome'])
@@ -141,6 +142,7 @@ class ControladorClasses:
                     if habilidades[identificador_hab].nome in [hab.nome for hab in classe.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     classe.add_hab(habilidades[identificador_hab])
+                    self.__classe_DAO.update(identificador_hab, classe)
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
@@ -181,6 +183,7 @@ class ControladorClasses:
                     if habilidades[identificador_hab].nome in [hab.nome for hab in subclasse.hab_especificas]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     subclasse.add_hab(habilidades[identificador_hab])
+                    self.__classe_DAO.update(identificador_sub, subclasse)
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
