@@ -198,7 +198,7 @@ class ControladorClasses:
         try:
             self.listar_classes()
             codigos_validos = list(self.__classe_DAO.get_keys()) + [0]
-            identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos),
+            identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos)
             if identificador_class == 0:
                 return False
             else:

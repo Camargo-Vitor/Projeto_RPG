@@ -1,7 +1,7 @@
 from model.ficha import Ficha
 from views.tela_fichas import TelaFichas
 from typing import TYPE_CHECKING
-
+from DAOs.ficha_dao import FichaDao
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
 
@@ -10,7 +10,8 @@ class ControladorFichas:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_fichas = TelaFichas()
-        self.__cod = 1
+        self.__ficha_dao = FichaDao()
+
         # O dicionário de "Fichas" iniciaria normalmente vazio, porém
         # para demonstração, utilzaremos alguns objetos já instanciados. 
         # Estes objetos receberão códigos acima de 999.
@@ -70,14 +71,14 @@ class ControladorFichas:
 
     def incluir_ficha(self):
         dados = self.__tela_fichas.pegar_dados_ficha(
-            [classe.nome for classe in self.__controlador_sistema.controlador_classes.dict_classes.values()],
-            [especie.nome for especie in self.__controlador_sistema.controlador_especies.dict_subespecie.values()]
+            [classe.nome for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all()],
+            [especie.nome for especie in self.__controlador_sistema.controlador_especies.subespecie_DAO.get_all()]
         )
-        for classe in self.__controlador_sistema.controlador_classes.dict_classes.values():
+        for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all():
             if classe.nome == dados['classe']:
                 classe_ficha = classe
 
-        for subespecie in self.__controlador_sistema.controlador_especies.dict_subespecie.values():
+        for subespecie in self.__controlador_sistema.controlador_especies.subespecie_DAO.get_all():
             if subespecie.nome == dados['subespecie']:
                 subespecie_ficha = subespecie
 
@@ -91,15 +92,15 @@ class ControladorFichas:
             dados['pericias_treinadas'],
             dados['atributos']
         )
-        self.__dict_fichas[self.__cod] = nova_ficha
+        self.__ficha_dao.add(nova_ficha)
         self.__tela_fichas.mensagem('SUCESSO')
 
     def listar_fichas(self, selecao=True):
         try:
-            cod_valido_ficha = list(self.__dict_fichas.keys()) + [0]
+            cod_valido_ficha = list(self.__ficha_dao.get_keys()) + [0]
 
             dados = []
-            for key, ficha in self.__dict_fichas.items():
+            for key, ficha in self.__ficha_dao.cache.items():
                 linha = [
                     key,
                     ficha.nome
@@ -114,7 +115,7 @@ class ControladorFichas:
                 if identificador == 0:
                     return False
                 else:
-                    ficha = self.__dict_fichas[identificador]
+                    ficha = self.__ficha_dao.cache[identificador]
                     self.__tela_fichas.mostra_ficha_inteira(
                         {
                             'nome': ficha.nome,
@@ -147,12 +148,12 @@ class ControladorFichas:
     def excluir_fichas(self):
         try:
             self.listar_fichas(selecao=False)
-            cod_validos = list(self.__dict_fichas.keys()) + [0]
+            cod_validos = list(self.__ficha_dao.get_keys()) + [0]
             identificador = self.__tela_fichas.selecionar_obj_por_cod('selecione a ficha', cod_validos)
             if identificador == 0:
                 return
             else:
-                del self.__dict_fichas[identificador]
+                del self.__ficha_dao.cache[identificador]
                 self.__tela_fichas.mensagem('Ficha removida!')
                 return True
         except TypeError as e:
@@ -165,19 +166,19 @@ class ControladorFichas:
     def adicionar_item_ficha(self):
         try:
             self.listar_fichas(selecao=False)
-            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+            cod_validos_ficha = list(self.__ficha_dao.get_keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
             else:
-                item = self.__controlador_sistema.controlador_itens.dict_item
+                item = self.__controlador_sistema.controlador_itens.item_DAO.cache
                 self.__controlador_sistema.controlador_itens.listar_itens()
                 codigos_validos_item = list(item.keys()) + [0]
                 identificador_item = self.__tela_fichas.selecionar_obj_por_cod('item', codigos_validos_item)
                 if identificador_item == 0:
                     return False
                 else:
-                    ficha = self.__dict_fichas[identificador_ficha]
+                    ficha = self.__ficha_dao.cache[identificador_ficha]
                     ficha.add_item_inventario(item[identificador_item])
                     self.__tela_fichas.mensagem('Item adicionado ao inventário!')
                     return True
@@ -191,7 +192,7 @@ class ControladorFichas:
     def adicionar_magia_ficha(self):
         try:
             self.listar_fichas(selecao=False)
-            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+            cod_validos_ficha = list(self.__ficha_dao.get_keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
@@ -203,7 +204,7 @@ class ControladorFichas:
                 if identificador_magia == 0:
                     return False
                 else:
-                    ficha = self.__dict_fichas[identificador_ficha]
+                    ficha = self.__ficha_dao.cache[identificador_ficha]
                     ficha.add_magia(magias[identificador_magia])
                     self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
                     return True
@@ -217,13 +218,13 @@ class ControladorFichas:
     def remover_item_ficha(self):
         try:
             self.listar_fichas(selecao=False)
-            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+            cod_validos_ficha = list(self.__ficha_dao.get_keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.__dict_fichas[identificador_ficha]
-                itens = self.__controlador_sistema.controlador_itens.dict_item
+                ficha = self.__ficha_dao.cache[identificador_ficha]
+                itens = self.__controlador_sistema.controlador_itens.item_DAO
                 self.__controlador_sistema.controlador_itens.listar_itens()
                 codigos_validos_item = list(itens.keys()) + [0]
                 itens_personagem = [item.nome for item in ficha.inventario]
@@ -246,13 +247,13 @@ class ControladorFichas:
     def remover_magia_ficha(self):
         try:
             self.listar_fichas(selecao=False)
-            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+            cod_validos_ficha = list(self.__ficha_dao.get_keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.__dict_fichas[identificador_ficha]
-                magias = self.__controlador_sistema.controlador_magias.dict_magias
+                ficha = self.__ficha_dao.cache[identificador_ficha]
+                magias = self.__controlador_sistema.controlador_magias.magia_DAO.cache
                 self.__controlador_sistema.controlador_magias.listar_magias()
                 codigos_validos_magia = list(magias.keys()) + [0]
                 itens_personagem = [magia.nome for magia in self.selecionar_magias_ativas_em_ficha(ficha)]
@@ -273,12 +274,12 @@ class ControladorFichas:
 
     def subir_nivel_de_uma_ficha(self):
             self.listar_fichas(selecao=False)
-            cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+            cod_validos_ficha = list(self.__ficha_dao.get_keys()) + [0]
             identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.__dict_fichas[identificador_ficha]
+                ficha = self.__ficha_dao.cache[identificador_ficha]
                 if ficha.nivel == 2:
                     infos = {'nomes_sub': [sub.nome for sub in ficha.classe.subclasses],
                             'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in ficha.classe.subclasses]}
@@ -292,12 +293,12 @@ class ControladorFichas:
 
     def alterar_vida_ficha(self):
         self.listar_fichas(selecao=False)
-        cod_validos_ficha = list(self.__dict_fichas.keys()) + [0]
+        cod_validos_ficha = list(self.__ficha_dao.get_keys()) + [0]
         identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
         if identificador_ficha == 0:
             return False
         else:
-            ficha = self.__dict_fichas[identificador_ficha]
+            ficha = self.__ficha_dao.cache[identificador_ficha]
             valor = self.__tela_fichas.ler_vida_alterada()
             vida_antiga = ficha.vida_atual
             ficha.vida_atual += valor
@@ -309,11 +310,11 @@ class ControladorFichas:
             return True
 
     def relatorio(self):
-        if not self.__dict_fichas:
+        if not self.__ficha_dao.cache:
             self.__tela_fichas.mensagem("Nenhuma ficha cadastrada.")
             return False
 
-        fichas = list(self.__dict_fichas.values())
+        fichas = list(self.__ficha_dao.get_all())
 
         #Valores maiores
         personagem_com_maior_nivel = fichas[0]
@@ -448,9 +449,5 @@ class ControladorFichas:
         return self.__tela_fichas
 
     @property
-    def cod(self):
-        return self.__cod
-
-    @property
-    def dict_fichas(self):
-        return self.__dict_fichas
+    def ficha_dao(self):
+        return self.__ficha_dao
