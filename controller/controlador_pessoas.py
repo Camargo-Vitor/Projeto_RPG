@@ -2,6 +2,7 @@ from views.tela_pessoas import TelaPessoas
 from model.mestre import Mestre
 from model.jogador import Jogador
 from model.exceptions.exception_pessoas import *
+from DAOs.pessoa_dao import PessoaDao
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
@@ -12,19 +13,11 @@ class ControladorPessoas:
     def __init__(self, controlador_sistema: "ControladorSistema"):
         self.__controlador_sistema = controlador_sistema
         self.__tela_pessoas = TelaPessoas()
-        # O dicionário de "Jogadores" iniciaria normalmente vazio, porém
-        # para demonstração, utilzaremos alguns objetos já instanciados. 
-        # Estes objetos receberão códigos acima de 999.
-        self.__jogadores: dict[int, Jogador] = {
-            1000: Jogador('João', 92222222221, 'americana', 'americos', 231, 87312432),
-            1001: Jogador('Victor', 4896703241, 'Florianópolis', 'centro', 261, 88031483),
-            1002: Jogador('Elias', 25123456789, 'joinville', 'cinza', 981, 86135098),
-            1003: Jogador('Sofia', 21849021435, 'jaraguá', 'amizade', 784, 98099876)}
-        self.__mestre: Mestre = Mestre('[VAZIO]', 0, '[VAZIO]', 'VAZIO', 0, 0)
-        self.__cod = 1
+        self.__pesssoa_dao = PessoaDao()
+        self.__pesssoa_dao.add(Mestre('Nome', 0, 'Cidade', 'Bairro', 0, 0))
     
     def pega_pessoa_por_nome(self, nome: str):
-        for pessoa in self.__jogadores.values():
+        for pessoa in self.__pesssoa_dao.get_all():
             if pessoa.nome == nome:
                 return pessoa
         return None
@@ -46,8 +39,7 @@ class ControladorPessoas:
                     dados_pessoa['numero'],
                     dados_pessoa['cep'],
                 )
-                self.__jogadores[self.__cod] = jogador
-                self.__cod +=1
+                self.__pesssoa_dao.add(jogador)
                 self.__tela_pessoas.mensagem('Jogador criado com sucesso')
                 return True 
         except JogadorJahExisteException as e:
@@ -62,18 +54,19 @@ class ControladorPessoas:
     def listar_jogador(self):
         try:
             dados = []
-            for cod, jogador in self.__jogadores.items():
-                linha = [
-                    cod,
-                    jogador.nome,
-                    jogador.telefone,
-                    jogador.endereco.cidade,
-                    jogador.endereco.bairro,
-                    jogador.endereco.numero,
-                    jogador.endereco.cep,
-                    ', '.join(p.nome for p in jogador.personagens)
-                ]
-                dados.append(linha)
+            for cod, jogador in self.__pesssoa_dao.cache.items():
+                if isinstance(jogador, Jogador):
+                    linha = [
+                        cod,
+                        jogador.nome,
+                        jogador.telefone,
+                        jogador.endereco.cidade,
+                        jogador.endereco.bairro,
+                        jogador.endereco.numero,
+                        jogador.endereco.cep,
+                        ', '.join(p.nome for p in jogador.personagens)
+                    ]
+                    dados.append(linha)
             HEADER = ["Cod", "Nome", "Telefone", "Cidade", "Bairro", "Número", "CEP", "Personagens"]
             self.__tela_pessoas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Persoangem')
         except Exception as e:
@@ -82,12 +75,12 @@ class ControladorPessoas:
     def excluir_jogador(self):
         try:
             self.listar_jogador()
-            cod_validos = list(self.__jogadores.keys()) + [0]
+            cod_validos = list(self.__pesssoa_dao.get_keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogador', cod_validos)
             if identificador == 0:
                 return False
             else:
-                del self.__jogadores[identificador]
+                self.__pesssoa_dao.remove(identificador)
                 self.__tela_pessoas.mensagem('Jogador Removido')
                 return True
         except KeyError as e:
@@ -100,12 +93,12 @@ class ControladorPessoas:
     def alterar_jogador_por_cod(self):
         try:
             self.listar_jogador()
-            codigo_validos = list(self.__jogadores.keys()) + [0]
+            codigo_validos = list(self.__pesssoa_dao.get_keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogador', codigo_validos)
             if identificador == 0:
                 return False
             else:
-                jogador = self.__jogadores[identificador]
+                jogador = self.__pesssoa_dao.cache[identificador]
                 dados_novos = self.__tela_pessoas.pegar_dados_pessoa()
                 j = self.pega_pessoa_por_nome(dados_novos['nome'])
                 if j is None:
@@ -131,19 +124,19 @@ class ControladorPessoas:
     def add_ficha(self):
         try:
             self.listar_jogador()
-            cod_validos = list(self.__jogadores.keys()) + [0]
+            cod_validos = list(self.__pesssoa_dao.get_keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogadores', cod_validos)
             if identificador == 0:
                 return False
             else:
-                fichas = self.__controlador_sistema.controlador_fichas.dict_fichas
+                fichas = self.__controlador_sistema.controlador_fichas.ficha_dao.cache
                 cod_validos_fichas = list(fichas.keys()) + [0]
                 self.__controlador_sistema.controlador_fichas.listar_fichas(selecao=False)
                 identificador_ficha = self.__tela_pessoas.selecionar_obj_por_cod('fichas', cod_validos_fichas)
                 if identificador_ficha == 0:
                     return False
                 else:
-                    jogador = self.__jogadores[identificador]
+                    jogador = self.__pesssoa_dao.cache[identificador]
                     if fichas[identificador_ficha].nome in [fic.nome for fic in jogador.personagens]:
                         raise FichaJahExisteException(fichas[identificador_ficha].nome)
                     jogador.add_ficha(fichas[identificador_ficha])
@@ -161,13 +154,13 @@ class ControladorPessoas:
     def remove_ficha(self):
         try:
             self.listar_jogador()
-            cod_validos = list(self.__jogadores.keys()) + [0]
+            cod_validos = list(self.__pesssoa_dao.get_keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogadores', cod_validos)
             if identificador == 0:
                 return False
             else:
-                jogador = self.__jogadores[identificador]
-                fichas = self.__controlador_sistema.controlador_fichas.dict_fichas
+                jogador = self.__pesssoa_dao.cache[identificador]
+                fichas = self.__controlador_sistema.controlador_fichas.ficha_dao.cache
                 self.__controlador_sistema.controlador_fichas.listar_fichas(selecao=False)
                 cod_validos_fichas = list(fichas.keys()) + [0]
                 identificador_ficha = self.__tela_pessoas.selecionar_obj_por_cod('fichas', cod_validos_fichas)
@@ -184,27 +177,32 @@ class ControladorPessoas:
         except Exception as e:
             self.__tela_pessoas.mensagem(f'[ERRO INESPERADO] Erro ao remover ficha {e}')   
 
-    def acessar_mestre(self, alterar=False):
+    def acessar_mestre(self):
         try:
-            if alterar:
-                # Tela retorna apenas os dados preenchidos, como dicionário
-                dados_novos = self.__tela_pessoas.exibir_mestre(self.__mestre)
-
-                if dados_novos:
-                    self.__mestre = Mestre(
-                        nome=dados_novos["nome"],
-                        telefone=dados_novos["telefone"],
-                        cidade=dados_novos["cidade"],
-                        bairro=dados_novos["bairro"],
-                        numero=dados_novos["numero"],
-                        cep=dados_novos["cep"]
-                    )
-                    self.__tela_pessoas.mensagem("Mestre alterado com sucesso!")
-                    return True
-                else:
-                    return False
-            else:
+            mestre:Mestre = self.__pesssoa_dao.get(1)
+            dados_mestre = {
+                'nome': mestre.nome,
+                'telefone': mestre.telefone,
+                'cidade': mestre.endereco.cidade,
+                'bairro': mestre.endereco.bairro,
+                'numero': mestre.endereco.numero,
+                'cep': mestre.endereco.cep
+            }
+            dados_novos = self.__tela_pessoas.exibir_mestre(dados_mestre)
+            if dados_novos == 0:
                 return False
+            else:
+                novo_mestre = Mestre(
+                    nome=dados_novos["nome"],
+                    telefone=dados_novos["telefone"],
+                    cidade=dados_novos["cidade"],
+                    bairro=dados_novos["bairro"],
+                    numero=dados_novos["numero"],
+                    cep=dados_novos["cep"]
+                )
+                self.__pesssoa_dao.update(1, novo_mestre)
+                self.__tela_pessoas.mensagem("Mestre alterado com sucesso!")
+                return True
         except Exception as e:
             self.__tela_pessoas.mensagem(f"[ERRO INESPERADO] Erro ao acessar mestre: {e}")
 
@@ -234,11 +232,3 @@ class ControladorPessoas:
     @property
     def tela_pessoas(self):
         return self.__tela_pessoas
-    
-    @property
-    def jogadores(self):
-        return self.__jogadores
-
-    @property
-    def mestre(self):
-        return self.__mestre

@@ -2,16 +2,8 @@ from views.tela_abstrata import TelaAbstrata
 import PySimpleGUI as sg
 
 class TelaPessoas(TelaAbstrata):
-    def __init__(self):
-        self.__window = None
-        self.init_components('Pessoa')
-
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        button, values = self.__window.Read()
-        return button, values
+    def __init__(self, nome_objeto='Pessoas'):
+        super().__init__(nome_objeto)
 
     def mostra_tela(self, opcoes = [], nome_objeto = 'Pessoas', layout_extra = None, indice_layout_extra = 0, crud=False):
         layout = [
@@ -32,36 +24,28 @@ class TelaPessoas(TelaAbstrata):
     def exibir_tabela(self, cabecalho, dados, nome_objeto = 'Pessoas'):
         return super().exibir_tabela(cabecalho, dados, nome_objeto)
     
-
-    def exibir_mestre(self, mestre):
+    def exibir_mestre(self, dados_mestre):
         try:
             layout = [
                 [sg.Text("Dados do Mestre", font=("Arial", 16))],
-                [sg.Text("Nome:", size=(10, 1)), sg.InputText(mestre.nome, key="nome")],
-                [sg.Text("Telefone:", size=(10, 1)), sg.InputText(mestre.telefone, key="telefone")],
-                [sg.Text("Cidade:", size=(10, 1)), sg.InputText(mestre.endereco.cidade, key="cidade")],
-                [sg.Text("Bairro:", size=(10, 1)), sg.InputText(mestre.endereco.bairro, key="bairro")],
-                [sg.Text("Número:", size=(10, 1)), sg.InputText(mestre.endereco.numero, key="numero")],
-                [sg.Text("CEP:", size=(10, 1)), sg.InputText(mestre.endereco.cep, key="cep")],
-                [sg.Button("Salvar"), sg.Button("Cancelar")]
+                [sg.Text(f"Nome: {dados_mestre['nome']}", size=(20, 1))],
+                [sg.Text(f"Telefone: {dados_mestre['telefone']}", size=(20, 1))],
+                [sg.Text(f"Cidade: {dados_mestre['cidade']} ", size=(20, 1))],
+                [sg.Text(f"Bairro: {dados_mestre['bairro']}", size=(20, 1))],
+                [sg.Text(f"Número: {dados_mestre['numero']}", size=(20, 1))],
+                [sg.Text(f"CEP: {dados_mestre['cep']}", size=(20, 1))],
+                [sg.Button("Alterar"), sg.Button("Cancelar")]
             ]
 
-            window = sg.Window("Alterar Mestre", layout)
-            while True:
-                event, values = window.read()
-                if event in (sg.WINDOW_CLOSED, "Cancelar"):
-                    window.close()
-                    return False
-                elif event == "Salvar":
-                    window.close()
-                    return {
-                        "nome": values["nome"],
-                        "telefone": values["telefone"],
-                        "cidade": values["cidade"],
-                        "bairro": values["bairro"],
-                        "numero": values["numero"],
-                        "cep": values["cep"]
-                    }
+            self.init_components('Dados Mestre', layout, crud=False)
+            button, values = self.open()
+            if button == 'Cancelar':
+                self.close()
+                return False
+            if button == 'Alterar':
+                self.close()
+                novos_dados = self.pegar_dados_pessoa()
+                return novos_dados
         except Exception as e:
             sg.popup_error(f"[ERRO INESPERADO] Erro ao exibir mestre: {e}")
             return False
@@ -82,7 +66,7 @@ class TelaPessoas(TelaAbstrata):
     def pegar_dados_pessoa(self):
         layout = [
             [sg.Text('Dados Pessoas', font=('Helvica', 25))],
-            [sg.Text('Nome', size=(15, 1)), sg.InputText('', key='nome', enable_events=True)],
+            [sg.Text('Nome', size=(15, 1)), sg.InputText(key='nome', enable_events=True)],
             [sg.Text('Telefone', size=(15, 1)), sg.InputText('', key='telefone', enable_events=True)],
             [sg.Text('Cidade', size=(15, 1)), sg.InputText('', key='cidade', enable_events= True)],
             [sg.Text('Bairro', size=(15, 1)), sg.InputText('', key='bairro', enable_events=True)],
@@ -91,11 +75,10 @@ class TelaPessoas(TelaAbstrata):
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]            
         ]
 
-        
-        self.__window = sg.Window('Dados Item').Layout(layout)
+        self.init_components('Dados pessoa', layout, crud=False)
 
         while True:
-            button, values = self.__window.read()
+            button, values = self.open()
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 break
@@ -111,13 +94,12 @@ class TelaPessoas(TelaAbstrata):
             check_cep = values['cep'] != ''
             
             if all([check_nome, check_telefone, check_cidade, check_bairro, check_numero, check_cep]):
-                self.__window['Confirmar'].update(disabled=False)
+                self.window['Confirmar'].update(disabled=False)
             else:
-                self.__window['Confirmar'].update(disabled=True)
+                self.window['Confirmar'].update(disabled=True)
 
         self.close()
 
-            
         values['nome'] = values['nome'].title().strip()
         values['telefone'] = int(values['telefone'])
         values['cidade'] = values['cidade'].title().strip()
@@ -125,12 +107,3 @@ class TelaPessoas(TelaAbstrata):
         values['numero'] = int(values['numero'])
         values['cep'] = int(values['cep'])
         return values
-
-    @property
-    def window(self):
-        return self.__window
-
-    @window.setter
-    def window(self, window):
-        if isinstance(window, sg.Window):
-            self.__window = window
