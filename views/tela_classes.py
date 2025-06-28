@@ -86,7 +86,7 @@ class TelaClasses(TelaAbstrata):
         layout = [
             [sg.Text("Escolher Subclasse", font=('Arial', 20))],
             [sg.Text('Subclasses:', size=(15, 1)),
-            sg.Combo(values=[a for a in range(1, 4)], key="cod_subclasse", readonly=True)],
+            sg.Combo(values=[a for a in range(0, 4)], key="cod_subclasse", readonly=True)],
             [sg.Button('Confirmar'), sg.Button('Cancelar')]
         ]
 

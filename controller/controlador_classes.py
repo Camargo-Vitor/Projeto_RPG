@@ -66,8 +66,9 @@ class ControladorClasses:
 
     def listar_classes_e_sub_classe(self):
             dados = []
-            for classe in self.classe_DAO.get_all():
+            for cod, classe in self.__classe_DAO.cache.items():
                 linha = [
+                    cod,
                     classe.nome,
                     classe.subclasses[0].nome, 
                     classe.subclasses[1].nome,
@@ -78,7 +79,7 @@ class ControladorClasses:
                 ]
                 dados.append(linha)
 
-            HEADER = ["Nome", "1ª Subclasse", "2ª Subclassse", "3ª Subclasse", 'hab 1ª', 'hab 2ª', 'hab 3ª']
+            HEADER = ["cod", "Nome", "1ª Subclasse", "2ª Subclassse", "3ª Subclasse", 'hab 1ª', 'hab 2ª', 'hab 3ª']
             self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Subclasse')
                 
 
@@ -158,7 +159,7 @@ class ControladorClasses:
 
     def adiciona_hab_subclasse(self):
         try:
-            self.listar_classes()
+            self.listar_classes_e_sub_classe()
             codigos_validos_class = list(self.__classe_DAO.get_keys()) + [0]
             identificador_class= self.__tela_classes.selecionar_obj_por_cod('Classe', codigos_validos_class)
             if identificador_class == 0:
@@ -166,9 +167,6 @@ class ControladorClasses:
             else:
                 classe = self.__classe_DAO.cache[identificador_class]
                 habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
-                infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
-                         'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
-                self.__tela_classes.mostra_classe_e_subclasse(infos, classe=False)
                 identificador_sub = self.__tela_classes.ler_subclasse()
                 if identificador_sub == 0:
                     return False
@@ -183,7 +181,7 @@ class ControladorClasses:
                     if habilidades[identificador_hab].nome in [hab.nome for hab in subclasse.hab_especificas]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     subclasse.add_hab(habilidades[identificador_hab])
-                    self.__classe_DAO.update(identificador_sub, subclasse)
+                    self.__classe_DAO.update(identificador_class, classe)
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
@@ -254,7 +252,7 @@ class ControladorClasses:
                     else:
                         habilidade = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache[identificador_hab]
                         subclasse.rm_hab(habilidade[identificador_hab])
-                        self.__classe_DAO.update(identificador_sub, subclasse)
+                        self.__classe_DAO.update(identificador_class, classe)
                         self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                         return True
 
