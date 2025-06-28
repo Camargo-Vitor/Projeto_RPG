@@ -171,7 +171,7 @@ class ControladorClasses:
                 if identificador_sub == 0:
                     return False
                 else:
-                    subclasse = classe.subclasses[identificador_sub]    
+                    subclasse = classe.subclasses[identificador_sub - 1]    
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
                     codigos_validos_sub = list(self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get_keys()) + [0]
                     identificador_hab = self.__tela_classes.selecionar_obj_por_cod('subclasse', codigos_validos_sub)
