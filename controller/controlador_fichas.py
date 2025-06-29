@@ -3,6 +3,7 @@ from views.tela_fichas import TelaFichas
 from typing import TYPE_CHECKING
 from DAOs.ficha_dao import FichaDao
 from model.exceptions.exception_dict_vazio import *
+from model.exceptions.excpetion_ficha import *
 if TYPE_CHECKING:
     from controller.controlador_sistema import ControladorSistema
 
@@ -47,54 +48,65 @@ class ControladorFichas:
             [17, 13, 16, 12, 12, 8])}
             """
     def selecionar_habilidades_ativas_em_ficha(self, ficha: Ficha):
-        habilidades = []
-        for hab in ficha.especie.hab_especificas:
-            if hab.nivel <= ficha.nivel:
-                habilidades.append(hab)
-        for hab in ficha.especie.habilidades:
-            if hab.nivel <= ficha.nivel:
-                habilidades.append(hab)
-        for hab in ficha.classe.habilidades:
-            if hab.nivel <= ficha.nivel:
-                habilidades.append(hab)
-        if ficha.subclasse:
-            for hab in ficha.subclasse.hab_especificas:
+        try:
+            habilidades = []
+            for hab in ficha.especie.hab_especificas:
                 if hab.nivel <= ficha.nivel:
                     habilidades.append(hab)
-        return habilidades
+            for hab in ficha.especie.habilidades:
+                if hab.nivel <= ficha.nivel:
+                    habilidades.append(hab)
+            for hab in ficha.classe.habilidades:
+                if hab.nivel <= ficha.nivel:
+                    habilidades.append(hab)
+            if ficha.subclasse:
+                for hab in ficha.subclasse.hab_especificas:
+                    if hab.nivel <= ficha.nivel:
+                        habilidades.append(hab)
+            return habilidades
+        except Exception as e:
+                    self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao selecionar habilidade: {str(e)}')
 
     def selecionar_magias_ativas_em_ficha(self, ficha: Ficha):
-        magias = []
-        for magia in ficha.lista_magias:
-            if magia.nivel <= ficha.nivel:
-                magias.append(magia)
-        return magias
+        try:
+            magias = []
+            for magia in ficha.lista_magias:
+                if magia.nivel <= ficha.nivel:
+                    magias.append(magia)
+            return magias
+        except Exception as e:
+            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao selecionar magia: {str(e)}')
 
     def incluir_ficha(self):
-        dados = self.__tela_fichas.pegar_dados_ficha(
-            [classe.nome for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all()],
-            [especie.nome for especie in self.__controlador_sistema.controlador_especies.subespecie_DAO.get_all()]
-        )
-        for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all():
-            if classe.nome == dados['classe']:
-                classe_ficha = classe
+        try:
+            dados = self.__tela_fichas.pegar_dados_ficha(
+                [classe.nome for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all()],
+                [especie.nome for especie in self.__controlador_sistema.controlador_especies.subespecie_DAO.get_all()]
+            )
+            for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all():
+                if classe.nome == dados['classe']:
+                    classe_ficha = classe
 
-        for subespecie in self.__controlador_sistema.controlador_especies.subespecie_DAO.get_all():
-            if subespecie.nome == dados['subespecie']:
-                subespecie_ficha = subespecie
+            for subespecie in self.__controlador_sistema.controlador_especies.subespecie_DAO.get_all():
+                if subespecie.nome == dados['subespecie']:
+                    subespecie_ficha = subespecie
 
-        nova_ficha = Ficha(
-            dados['nome'],
-            dados['descricao_fisica'],
-            dados['historia'],
-            dados['moedas'],
-            classe_ficha,
-            subespecie_ficha,
-            dados['pericias_treinadas'],
-            dados['atributos']
-        )
-        self.__ficha_dao.add(nova_ficha)
-        self.__tela_fichas.mensagem('SUCESSO')
+            nova_ficha = Ficha(
+                dados['nome'],
+                dados['descricao_fisica'],
+                dados['historia'],
+                dados['moedas'],
+                classe_ficha,
+                subespecie_ficha,
+                dados['pericias_treinadas'],
+                dados['atributos']
+            )
+            self.__ficha_dao.add(nova_ficha)
+            self.__tela_fichas.mensagem('SUCESSO')
+        except KeyError as e:
+            self.__tela_fichas.mensagem(f"[ERRO] Dado ausente: {str(e)}")
+        except Exception as e:
+            self.__tela_fichas.mensagem(f'[ERRO INESPERADO] Erro ao incluir ficha: {str(e)}')
 
     def listar_fichas(self, selecao=True):
         try:
@@ -144,12 +156,12 @@ class ControladorFichas:
                                 'habilidades': [hab.nome for hab in self.selecionar_habilidades_ativas_em_ficha(ficha)]
                             }
                         )
-                else:
-                    raise DictVazioException()
+            else:
+                raise DictVazioException()
         except DictVazioException as e:
             self.__tela_fichas.mensagem(e)
         except Exception as e:
-            self.__tela_fichas.mensagem(f"[ERRO INESPERADO] Erro ao listar os itens em ficha: {str(e)}")
+            self.__tela_fichas.mensagem(f"[ERRO INESPERADO] Erro ao listar as fichas: {str(e)}")
 
     def excluir_fichas(self):
         try:
@@ -431,7 +443,6 @@ class ControladorFichas:
         ]
 
         self.__tela_fichas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Relatório de Fichas')
-        self.__tela_fichas.mostra_relatorio(dados_relatorio)
         return dados_relatorio
 
     def retornar(self):

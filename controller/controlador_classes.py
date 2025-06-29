@@ -120,7 +120,7 @@ class ControladorClasses:
             if identificador == 0:
                 return False
             else:
-                classe = self.__classe_DAO.cache[identificador]
+                classe = self.__classe_DAO.get(identificador)
                 dados_novos = self.__tela_classes.pegar_dados_classes()
                 e = self.pega_classe_por_nome(dados_novos['nome'])
                 if e is None:
@@ -152,11 +152,11 @@ class ControladorClasses:
                 if identificador_hab == 0:
                     return False
                 elif habilidades[identificador_hab].origem == 'classe':
-                    classe = self.__classe_DAO.cache[identificador_class]
+                    classe = self.__classe_DAO.get(identificador_class)
                     if habilidades[identificador_hab].nome in [hab.nome for hab in classe.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     classe.add_hab(habilidades[identificador_hab])
-                    self.__classe_DAO.update(identificador_hab, classe)
+                    self.__classe_DAO.update(identificador_class, classe)
                     self.__tela_classes.mensagem('Habilidade adicionada!')
                     return True
                 else:
@@ -178,7 +178,7 @@ class ControladorClasses:
             if identificador_class == 0:
                 return False
             else:
-                classe = self.__classe_DAO.cache[identificador_class]
+                classe = self.__classe_DAO.get(identificador_class)
                 habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
                 identificador_sub = self.__tela_classes.ler_subclasse()
                 if identificador_sub == 0:
@@ -217,7 +217,7 @@ class ControladorClasses:
                 return False
             else:
                 habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
-                classe = self.__classe_DAO.cache[identificador_class]
+                classe = self.__classe_DAO.get(identificador_class)
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades('classe')
                 codigos_validos_hab = list(habilidades.keys()) + [0]
                 identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidades', codigos_validos_hab)
@@ -227,7 +227,7 @@ class ControladorClasses:
                     raise KeyError("[ERRO DE CHAVE] A habilidade selecionada é inválida.")
                 else:
                     classe.rm_hab(habilidades[identificador_hab])
-                    self.__classe_DAO.update(identificador_hab, classe)
+                    self.__classe_DAO.update(identificador_class, classe)
                     self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                     return True
 
@@ -238,20 +238,14 @@ class ControladorClasses:
 
     def remover_hab_subclasse(self):
         try:
-            self.listar_classes()
+            self.listar_classes_e_sub_classe()
             codigos_validos_class = list(self.__classe_DAO.get_keys()) + [0]
             identificador_class = self.__tela_classes.selecionar_obj_por_cod('classe', codigos_validos_class)
             if identificador_class == 0:
                 return False
             else:
-                classe = self.__classe_DAO.cache[identificador_class]
-                infos = {'nomes_sub': [sub.nome for sub in classe.subclasses],
-                         'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in classe.subclasses]}
-                self.__tela_classes.mostra_classe_e_subclasse(infos, classe=False)
-                identificador_sub = self.__tela_classes.le_int_ou_float(
-                    'Digite qual subclasse (1, 2 ou 3 - de cima para baixo): ',
-                    conjunto_alvo=[1, 2, 3]
-                )
+                classe = self.__classe_DAO.get(identificador_class)
+                identificador_sub = self.__tela_classes.ler_subclasse()
                 if identificador_sub == 0:
                     return False
                 else:
@@ -263,8 +257,8 @@ class ControladorClasses:
                     if identificador_hab == 0:
                         return False
                     else:
-                        habilidade = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache[identificador_hab]
-                        subclasse.rm_hab(habilidade[identificador_hab])
+                        habilidade = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get(identificador_hab)
+                        subclasse.rm_hab(habilidade)
                         self.__classe_DAO.update(identificador_class, classe)
                         self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                         return True
@@ -272,7 +266,7 @@ class ControladorClasses:
         except KeyError as e:
             self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Elemento não excluido, código não encontrado: {e}')
         except Exception as e:
-            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao adicionar habilidade em subclasse: {e}')
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade em subclasse: {e}')
       
     def retornar(self):
         self.__controlador_sistema.abre_tela()

@@ -124,7 +124,7 @@ class ControladorHabilidades:
             identificador = self.__tela_habilidades.selecionar_obj_por_cod('habilidades', cod_validos)
             if identificador == 0:
                 return False
-            habilidade = self.__habilidade_DAO.cache[identificador]
+            habilidade = self.__habilidade_DAO.get(identificador)
             dados_novos = self.__tela_habilidades.pegar_dados_habilidade()
             i = self.pega_habilidade_por_nome(dados_novos['nome'])
             if i is None:

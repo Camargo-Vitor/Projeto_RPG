@@ -291,7 +291,7 @@ class ControladorEspecies:
                 if habilidades[identificador_hab].nome in [hab.nome for hab in subespecie.habilidades]:
                     raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                 subespecie.add_hab_sub(habilidades[identificador_hab])
-                self.__subespecie_DAO.update(identificador_hab, subespecie)
+                self.__subespecie_DAO.update(identificador_sub, subespecie)
                 self.__tela_especies.mensagem('Hablidade adicionada!')
                 return True
             else:
