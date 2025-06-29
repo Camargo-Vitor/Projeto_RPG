@@ -1,4 +1,5 @@
 import pickle
+from model.exceptions.exception_dict_vazio import *
 from abc import ABC, abstractmethod
 
 class DAO(ABC):

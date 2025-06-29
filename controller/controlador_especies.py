@@ -164,7 +164,7 @@ class ControladorEspecies:
                         subespecies_relacionadas.append(key)
                 for i in subespecies_relacionadas:
                     self.__subespecie_DAO.remove(i)
-                    self.__subespecie_DAO.remove(identificador)
+                    self.__especie_DAO.remove(identificador)
                 self.__tela_especies.mensagem('Especie removida!')
                 return True
             
@@ -192,7 +192,7 @@ class ControladorEspecies:
     def alterar_especie_por_cod(self):
         try:
             self.listar_especies()
-            cod_validos = list(self.__especie_DAO.get_keys()) + [0]
+            cod_validos = list(self.__especie_DAO.get_keys()) + [0] 
             identificador = self.__tela_especies.selecionar_obj_por_cod('especie', cod_validos)
             if identificador == 0:
                 return False

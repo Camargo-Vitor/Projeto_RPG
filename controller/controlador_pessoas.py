@@ -83,9 +83,9 @@ class ControladorPessoas:
     def excluir_jogador(self):
         try:
             self.listar_jogador()
-            cod_validos = list(self.__pesssoa_dao.get_keys()) + [0] - [1]
+            cod_validos = list(self.__pesssoa_dao.get_keys()) + [0] 
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogador', cod_validos)
-            if identificador == 0:
+            if identificador == 0 or identificador == 1:
                 return False
             else:
                 self.__pesssoa_dao.remove(identificador)
@@ -104,7 +104,9 @@ class ControladorPessoas:
             codigo_validos = list(self.__pesssoa_dao.get_keys()) + [0]
             identificador = self.__tela_pessoas.selecionar_obj_por_cod('jogador', codigo_validos)
             if identificador == 0:
-                return False
+                 return False
+            elif identificador == 1:
+                raise Exception("Não é possivel alterar o Mestre por aqui")
             else:
                 jogador = self.__pesssoa_dao.get(identificador)
                 dados_novos = self.__tela_pessoas.pegar_dados_pessoa()
