@@ -189,26 +189,28 @@ class Ficha:
         self.__vida_atual = nova_vida
 
     def add_item_inventario(self, item: Item):
-        if isinstance(item, Item) and item not in self.inventario:
+        if isinstance(item, Magia) and not sum([item.nome == item_lista.nome for item_lista in self.__inventario]):
             self.__inventario.append(item)
 
     def rm_item_inventario(self, item: Item):
-        if item in self.inventario:
-            self.inventario.remove(item)
-        else:
-            raise Exception('Item não está na ficha')
+        for item_lista in self.inventario:
+            if item.nome == item_lista.nome:
+                self.inventario.remove(item_lista)
+                return True
+        raise Exception('Magia não está na ficha')
 
     def add_magia(self, magia: Magia):
-        if isinstance(magia, Magia) and magia not in self.__lista_magias:
+        if isinstance(magia, Magia) and not sum([magia.nome == magia_lista.nome for magia_lista in self.__lista_magias]):
             self.lista_magias.append(magia)
         else:
             raise Exception('Magia já está na ficha')
 
     def rm_magia(self, magia: Magia):
-        if magia in self.__lista_magias:
-            self.__lista_magias.remove(magia)
-        else:
-            raise Exception('Magia não está na ficha')
+        for magia_lista in self.__lista_magias:
+            if magia.nome == magia_lista.nome:
+                self.__lista_magias.remove(magia_lista)
+                return True
+        raise Exception('Magia não está na ficha')
 
     def subir_nivel(self):
         self.__nivel += 1

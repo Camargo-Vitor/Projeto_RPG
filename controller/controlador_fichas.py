@@ -14,39 +14,6 @@ class ControladorFichas:
         self.__tela_fichas = TelaFichas()
         self.__ficha_dao = FichaDao()
 
-        # O dicionário de "Fichas" iniciaria normalmente vazio, porém
-        # para demonstração, utilzaremos alguns objetos já instanciados. 
-        # Estes objetos receberão códigos acima de 999.
-        """
-        self.__dict_fichas: dict[int, Ficha] = {
-            1000: Ficha('Maria', 'Alta e de cabelo azul','nasceu, cresceu, viveu.', 100,
-            self.__controlador_sistema.controlador_classes.dict_classes[1001], 
-            self.__controlador_sistema.controlador_especies.dict_subespecie[1000],
-            ['Percepção', 'Presdigitação', 'Sobrevivência', 'Persuasão', 'Performance'],
-            [10, 8, 13, 14, 12, 16]),
-
-            1001: Ficha('Sindur', 'Baixo, com uma longa barba laranja e calvo', 'nasceu, não cresceu, viveu muito', 1341,
-            self.__controlador_sistema.controlador_classes.dict_classes[1002],
-            self.__controlador_sistema.controlador_especies.dict_subespecie[1001],
-            ['Atletismo', 'Lidar com Animais', 'Percepção', 'Intimidação', 'Natureza'],
-            [20, 15, 18, 12, 7, 13]),
-
-            1002: Ficha('Kashimir', 'Alto, Velho, com uma cicatriz na bochecha esquerda', 'nasceu, sofreu, creseceu, vendeu a alma, viveu', 6547,
-            self.__controlador_sistema.controlador_classes.dict_classes[1003],
-            self.__controlador_sistema.controlador_especies.dict_subespecie[1005],
-            ['Persuasão', 'Arcanismo', 'Natureza', 'Performace', 'História'],
-            [7, 15, 12, 11, 14, 18]),
-            1003: Ficha('Sebo', 'Pequeno, Calvo, Magro e Novo', 'Nasceu, Não vive e leu', 100,
-            self.__controlador_sistema.controlador_classes.dict_classes[1000],
-            self.__controlador_sistema.controlador_especies.dict_subespecie[1002],
-            ['Arcanismo', 'Intuição', 'Religião', 'Medicina', 'Furtividade'],
-            [7, 14, 11, 18, 15, 13]),
-            1004: Ficha('Barmarlee', 'Musculoso, coberto de cicatrizes, velho, barba mal feita', 'nasceu, casou, cresceu, quase foi, sobreviveu', 2341,
-            self.__controlador_sistema.controlador_classes.dict_classes[1002],
-            self.__controlador_sistema.controlador_especies.dict_subespecie[1003],
-            ['Historia', 'Atletismo', 'Intimidação', 'Furtividade', 'Medicina'],
-            [17, 13, 16, 12, 12, 8])}
-            """
     def selecionar_habilidades_ativas_em_ficha(self, ficha: Ficha):
         try:
             habilidades = []
@@ -283,6 +250,9 @@ class ControladorFichas:
                 if identificador_magia == 0:
                     return False
                 else:
+                    print(magias)
+                    print(magias[identificador_magia])
+                    print(ficha.lista_magias)
                     ficha.rm_magia(magias[identificador_magia])
                     self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Magia removida!')
@@ -303,11 +273,10 @@ class ControladorFichas:
             else:
                 ficha = self.__ficha_dao.get(identificador_ficha)
                 if ficha.nivel == 2:
-                    infos = {'nomes_sub': [sub.nome for sub in ficha.classe.subclasses],
-                            'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in ficha.classe.subclasses]}
-                    self.__controlador_sistema.controlador_classes.tela_classes.mostra_classe_e_subclasse(infos, classe=False)
-                    subclasse_ecolhida = self.__tela_fichas.selecionar_obj_por_cod(
-                        'Digite a subclasse que deseja se aperfeiçoar (1, 2 ou 3 - de cima para baixo): ', [1, 2, 3])
+                    self.__controlador_sistema.controlador_classes.listar_classes_e_sub_classe()
+                    subclasse_ecolhida = self.__controlador_sistema.controlador_classes.tela_classes.ler_subclasse()
+                    if subclasse_ecolhida == 0:
+                        return False
                     ficha.subclasse = ficha.classe.subclasses[subclasse_ecolhida - 1]
                 ficha.subir_nivel()
                 self.__ficha_dao.update(identificador_ficha, ficha)
