@@ -40,7 +40,8 @@ class Subespecie(Especie):
             self.__hab_especificas.append(habilidade)
 
     def rm_hab_sub(self, habilidade: Habilidade):
-        if habilidade in self.hab_especificas:
-            self.hab_especificas.remove(habilidade)
-        else:
-            return('Habilidade não encontrada')
+        for habilidade_lista in self.hab_especificas:
+            if habilidade_lista.nome == habilidade.nome:
+                self.hab_especificas.remove(habilidade_lista)
+                return True
+        raise KeyError('[ERRO] Habilidade não encontrada')

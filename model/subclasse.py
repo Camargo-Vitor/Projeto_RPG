@@ -30,7 +30,8 @@ class Subclasse():
             raise ValueError("[ERRO] Habilidade não adicionada, valor inválido")
 
     def rm_hab(self, habilidade: Habilidade):
-        if habilidade in self.__hab_espeficicas:
-            self.__hab_espeficicas.remove(habilidade)
-        else:
-            raise KeyError("[ERRO] Habilidade não encontrada")
+        for habilidade_lista in self.__hab_espeficicas:
+            if habilidade_lista.nome == habilidade.nome:
+                self.__hab_espeficicas.remove(habilidade_lista)
+                return True
+        raise KeyError("[ERRO] Habilidade não encontrada")

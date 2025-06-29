@@ -114,7 +114,7 @@ class ControladorEspecies:
             else:
                 raise DictVazioException()
         except DictVazioException as e:
-            self.__tela_classes.mensagem(e)            
+            self.__tela_especies.mensagem(e)            
         except Exception as e:
             self.__tela_especies.mensagem(f'[ERRO INESPERADO] Erro ao listar as espécies: {str(e)}')
 
@@ -322,9 +322,6 @@ class ControladorEspecies:
                 if identificador_hab == 0:
                     return False
                 else:
-                    print(habilidade)
-                    print(habilidade[identificador_hab])
-                    print(especie.habilidades)
                     especie.rm_hab(habilidade[identificador_hab])
                     self.__especie_DAO.update(identificador_esp, especie)
                     self.__tela_especies.mensagem('Habilidade Removida!')

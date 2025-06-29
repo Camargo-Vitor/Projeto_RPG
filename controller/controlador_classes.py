@@ -93,7 +93,7 @@ class ControladorClasses:
         except DictVazioException as e:
             self.__tela_classes.mensagem(e)            
         except Exception as e:
-            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao listar classes: {str(e)}')
+            self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao listar subclasses: {str(e)}')
             
 
     def excluir_classe(self):
@@ -216,23 +216,23 @@ class ControladorClasses:
             if identificador_class == 0:
                 return False
             else:
-                habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get(identificador_hab)
                 classe = self.__classe_DAO.get(identificador_class)
+                codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get_keys()) + [0]
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades('classe')
-                codigos_validos_hab = list(habilidades.keys()) + [0]
                 identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidades', codigos_validos_hab)
+                habilidade = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get(identificador_hab)
                 if identificador_hab == 0:
                     return False
-                elif habilidades[identificador_hab] not in classe.habilidades:
+                elif sum([habilidade.nome == habilidade_lista.nome for habilidade_lista in classe.habilidades]) == 0:
                     raise KeyError("[ERRO DE CHAVE] A habilidade selecionada é inválida.")
                 else:
-                    classe.rm_hab(habilidades)
+                    classe.rm_hab(habilidade)
                     self.__classe_DAO.update(identificador_class, classe)
                     self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                     return True
 
         except KeyError as e: 
-            self.__tela_classes.mensagem(f'ERRO DE CHAVE] Elemento não excluido, código não encontado: {e}')
+            self.__tela_classes.mensagem(f'[ERRO DE CHAVE] Elemento não excluido, código não encontado: {e}')
         except Exception as e:
             self.__tela_classes.mensagem(f'[ERRO INESPERADO] Erro ao excluir habilidade em classe: {e}')
 
@@ -250,7 +250,6 @@ class ControladorClasses:
                     return False
                 else:
                     subclasse = classe.subclasses[identificador_sub-1]
-    
                     self.__controlador_sistema.controlador_habilidades.listar_habilidades(origem='subclasse')
                     codigos_validos_hab = list(self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get_keys()) + [0]
                     identificador_hab = self.__tela_classes.selecionar_obj_por_cod('habilidade', codigos_validos_hab)
