@@ -67,8 +67,8 @@ class TelaFichas(TelaAbstrata):
         self.init_components('Nova ficha', layout, crud=False)
 
         while True:
-            event, values = self.open()
-            if event in (sg.WIN_CLOSED, 'Cancelar'):
+            button, values = self.open()
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
                 self.close()
                 return 0
 
@@ -85,7 +85,7 @@ class TelaFichas(TelaAbstrata):
 
             self.window['Confirmar'].update(disabled=not check_inputs)
 
-            if event == 'Confirmar':
+            if button == 'Confirmar':
                 pericias_treinadas = [dic_num_pericias[k] for k in dic_num_pericias if values[k]]
                 atributos_distribuidos = [int(values[f'atributo_{a}']) for a in ATRIBUTOS]
                 if sorted(atributos_distribuidos) != sorted(valores_sorteados):
@@ -190,7 +190,7 @@ class TelaFichas(TelaAbstrata):
         window = sg.Window('Visualização da Ficha', layout, modal=True)
 
         while True:
-            event, _ = window.read()
-            if event in (sg.WINDOW_CLOSED, 'Fechar'):
+            button, _ = window.read()
+            if button in (sg.WINDOW_CLOSED, 'Fechar'):
                 break
         window.close()

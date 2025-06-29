@@ -57,7 +57,8 @@ class Especie():
                               (verificar origem da habilidade)")
 
     def rm_hab(self, habilidade: Habilidade):
-        if habilidade in self.habilidades:
-            self.habilidades.remove(habilidade)
-        else:
-            raise KeyError("[ERRO] Habilidade não encontrada")
+        for habilidade_lista in self.habilidades:
+            if habilidade_lista.nome == habilidade.nome:
+                self.habilidades.remove(habilidade_lista)
+                return True
+        raise KeyError("[ERRO] Habilidade não encontrada")
