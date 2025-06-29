@@ -43,7 +43,10 @@ class TelaClasses(TelaAbstrata):
         while True:
             button, values = self.open()
 
-            if button in (sg.WIN_CLOSED, 'Confirmar'):
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
+                self.close()
+                return 0
+            elif button == 'Confirmar':
                 self.close()
                 values['nome'] = values['nome'].strip().title()
                 dados = {
@@ -52,15 +55,12 @@ class TelaClasses(TelaAbstrata):
                     'nomes_sub': [values['nome_sub1'], values['nome_sub2'], values['nome_sub3']]
                 }
                 return dados
-            elif button == 'Cancelar':
-                self.close()
-                return 0
             
-            check_nome = values['nome'].strip() != ''
+            check_nome = values['nome'].title().strip() != ''
             check_dado = values['dado'] != ''
-            check_nome_sub1 = values['nome_sub1'].strip() != ''
-            check_nome_sub2 = values['nome_sub2'].strip() != ''
-            check_nome_sub3 = values['nome_sub3'].strip() != ''
+            check_nome_sub1 = values['nome_sub1'].tite().strip() != ''
+            check_nome_sub2 = values['nome_sub2'].title().strip() != ''
+            check_nome_sub3 = values['nome_sub3'].title().strip() != ''
             
 
             if all([check_nome, check_dado, check_nome_sub1, check_nome_sub2, check_nome_sub3]):

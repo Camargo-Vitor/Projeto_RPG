@@ -25,17 +25,17 @@ class TelaHabilidades(TelaAbstrata):
         self.init_components('Nova Habilidade', layout, crud=False)
         while True:
             button, values = self.open()
-            if button in (sg.WIN_CLOSED, 'Confirmar'):
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
+                self.close()
+                return 0
+            elif button == 'Confirmar':
                 self.close()
                 values['nome'] = values['nome'].title().strip()
                 return values
-            elif button == 'Cancelar':
-                self.close()
-                return 0
-            check_nome = values['nome'].strip() != ''
+            check_nome = values['nome'].title().strip() != ''
             check_nivel = values['nivel'] != ''
             check_pagina = values['pagina'] != ''
-            check_origem = values['origem'].strip() != ''
+            check_origem = values['origem'].title().strip() != ''
             if all([check_nome, check_nivel, check_pagina, check_origem]):
                 self.window['Confirmar'].update(disabled=False)
             else:

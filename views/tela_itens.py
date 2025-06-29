@@ -30,18 +30,19 @@ class TelaItens(TelaAbstrata):
         while True:
             button, values = self.open()
 
-            if button in (sg.WIN_CLOSED, 'Confirmar'):
+
+            if button == 'Confirmar':
                 self.close()
                 values['nome'] = values['nome'].title().strip()
                 values['raridade'] = values['raridade'].title().strip()
                 values['valor'] = int(values['valor'])
                 return values
 
-            elif button == 'Cancelar':
+            elif button in (sg.WIN_CLOSED, 'Cancelar'):
                 self.close()
                 return 0
-
-            check_nome = values['nome'].strip() != ''
+            
+            check_nome = values['nome'].title().strip() != ''
             check_raridade = values['raridade'].strip() != ''
             check_pagina = values['pagina'] != ''
             check_valor = values['valor'] != ''

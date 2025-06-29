@@ -72,7 +72,7 @@ class TelaAbstrata(ABC):
                 raise Exception()
         except Exception as e:
             self.close()
-            if button == 'Cancelar':
+            if button in (sg.WIN_CLOSED, 'Cancelar') :
                 return 0
             else:
                 print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')

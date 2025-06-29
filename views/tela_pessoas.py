@@ -73,10 +73,10 @@ class TelaPessoas(TelaAbstrata):
                 self.close()
                 return 0
 
-            check_nome = values['nome'].strip() != ''
+            check_nome = values['nome'].title().strip() != ''
             check_telefone = values['telefone'] != ''
-            check_cidade = values['cidade'].strip() != ''
-            check_bairro = values['bairro'].strip() != ''
+            check_cidade = values['cidade'].title().strip() != ''
+            check_bairro = values['bairro'].title().strip() != ''
             check_numero = values['numero'] != ''
             check_cep = values['cep'] != ''
             

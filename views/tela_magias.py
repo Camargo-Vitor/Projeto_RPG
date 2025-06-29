@@ -20,21 +20,26 @@ class TelaMagias(TelaAbstrata):
             [sg.Text('Pagina', size = (15, 1)), sg.Combo(values=([i for i in range(1, 385)]), enable_events=True, readonly=True, key='pagina')],
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        self.init_components('Nova Magia', layout, crud=False)
+        super().init_components('Nova Magia', layout, crud=False)
+
         while True:
             button, values = self.open()
-            if button in (sg.WIN_CLOSED, "Cancelar", 'Confirmar'):
-                break
-            check_nome = values['nome'].strip() != ''
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
+                self.close()
+                return 0
+
+            elif button == 'Confirmar':
+                self.close()
+                values['nome'] = values['nome'].title().strip() 
+                values['nivel'] = int(values['nivel'])
+                values['pagina'] = int(values['pagina'])
+            
+            check_nome = values['nome'].title().strip() != ''
             check_nivel = values['nivel'] != ''
             check_pagina = values['pagina'] != ''
+
             if all([check_nome, check_nivel, check_pagina]):
                 self.window['Confirmar'].update(disabled=False)
             else:
-                self.window['Confirmar'].update(disabled=True)
-            values['nome'] = values['nome'].title().strip()      
-        self.close()
-        if button == 'Confirmar':
-            return values
-        else:
-            return False
+                self.window['Confirmar'].update(disabled=True)    
+

@@ -46,16 +46,16 @@ class TelaEspecies(TelaAbstrata):
         while True:
             button, values = self.open()
 
-            if button in (sg.WIN_CLOSED, 'Confirmar'):
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
+                self.close()
+                return 0
+            elif button == 'Confirmar':
                 self.close()
                 values['nome'] = values['nome'].strip().title()
                 values['altura'] = int(values['altura'])
                 return values
-            elif button == 'Cancelar':
-                self.close()
-                return 0
             
-            check_nome = values['nome'].strip() != ''
+            check_nome = values['nome'].title().strip() != ''
             check_deslocamento = values['deslocamento'] != ''
             check_altura = values['altura'] != ''
             
@@ -77,13 +77,13 @@ class TelaEspecies(TelaAbstrata):
         while True:
             button, values = self.open()
 
-            if button in (sg.WIN_CLOSED, 'Confirmar'):
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
+                self.close()
+                return 0
+            elif button == 'Confirmar':
                 self.close()
                 values['nome'] = values['nome'].strip().title()
                 return values
-            elif button == 'Cancelar':
-                self.close()
-                return 0
 
             if values['nome'].strip() != '':
                 self.window['Confirmar'].update(disabled=False)
