@@ -291,7 +291,7 @@ class ControladorFichas:
             return False
         else:
             ficha = self.__ficha_dao.get(identificador_ficha)
-            valor = self.__tela_fichas.ler_vida_alterada()
+            valor = self.__tela_fichas.ler_dado_alterado()
             vida_antiga = ficha.vida_atual
             ficha.vida_atual += valor
             self.__tela_fichas.mensagem(f'Vida alterada {vida_antiga} -> {ficha.vida_atual}')
@@ -302,6 +302,21 @@ class ControladorFichas:
             self.__ficha_dao.update(identificador_ficha, ficha)
             return True
 
+    def alterar_moedas_ficha(self):
+        self.listar_fichas(selecao=False)
+        cod_validos_ficha = list(self.__ficha_dao.get_keys()) + [0]
+        identificador_ficha = self.__tela_fichas.selecionar_obj_por_cod('fichas', cod_validos_ficha)
+        if identificador_ficha == 0:
+            return False
+        else:
+            ficha = self.__ficha_dao.get(identificador_ficha)
+            valor = self.__tela_fichas.ler_dado_alterado(dado='moeda')
+            moedas_antiga = ficha.moedas
+            ficha.moedas += valor
+            self.__tela_fichas.mensagem(f'Moedas alteradas {moedas_antiga} -> {ficha.moedas}')
+            self.__ficha_dao.update(identificador_ficha, ficha)
+            return True
+ 
     def relatorio(self):
         if not self.__ficha_dao.cache:
             self.__tela_fichas.mensagem("Nenhuma ficha cadastrada.")
@@ -423,12 +438,14 @@ class ControladorFichas:
             2: self.excluir_fichas,
             3: self.listar_fichas,
             4: self.alterar_vida_ficha,
+            40: self.alterar_moedas_ficha,
             5: self.subir_nivel_de_uma_ficha,
             6: self.adicionar_item_ficha,
             7: self.remover_item_ficha,
             8: self.adicionar_magia_ficha,
             9: self.remover_magia_ficha,
             10: self.relatorio,
+
             0: self.retornar
         }
         while True:

@@ -15,6 +15,7 @@ class TelaFichas(TelaAbstrata):
             [sg.Radio(f'Excluir Ficha', 'RD1', enable_events=True, key = '2')],
             [sg.Radio(f'Listar Fichas', 'RD1', enable_events=True, key = '3')],
             [sg.Radio(f'Alterar vida de uma Ficha', 'RD1', enable_events=True, key = '4')],
+            [sg.Radio(f'Alterar moedas de uma Ficha', 'RD1', enable_events=True, key = '40')],
             [sg.Radio(f'Subir nivel de uma Ficha', 'RD1', enable_events=True, key = '5')],
             [sg.Radio(f'Adicionar Item em Ficha', 'RD1', enable_events=True, key = '6')],
             [sg.Radio(f'Remover Item em Ficha', 'RD1', enable_events=True, key = '7')],
@@ -104,31 +105,31 @@ class TelaFichas(TelaAbstrata):
                     'atributos': atributos_distribuidos
                 }
 
-    def ler_vida_alterada(self):
+    def ler_dado_alterado(self, dado='vida'):
         layout = [
-            [sg.Text("Alterar Vida", font=("Arial", 24))],
-            [sg.Radio('Dano', 'RD1', enable_events=True, key='dano'),
-             sg.Radio('Cura', 'RD1', enable_events=True, key='cura')],
-            [sg.Text('Vida: '), sg.InputText(size=(15, 1), enable_events=True, key='vida')],
+            [sg.Text(f"Alterar {dado}", font=("Arial", 24))],
+            [sg.Radio('Subtrair', 'RD1', enable_events=True, key='subtrair'),
+             sg.Radio('Somar', 'RD1', enable_events=True, key='somar')],
+            [sg.Text('Dado: '), sg.InputText(size=(15, 1), enable_events=True, key='valor')],
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
 
-        self.init_components('Altera vida', layout, crud=False)
+        self.init_components('Altera dado', layout, crud=False)
 
         while True:
             button, values = self.open()
 
             if button in (sg.WIN_CLOSED, 'Confirmar'):
                 self.close()
-                if values['dano']:
-                    return -int(values['vida'])
-                elif values['cura']:
-                    return +int(values['vida'])
+                if values['subtrair']:
+                    return -int(values['valor'])
+                elif values['somar']:
+                    return +int(values['valor'])
             elif button == 'Cancelar':
                 self.close()
                 return 0
 
-            if values['vida'].isnumeric() and (values['dano'] or values['cura']):
+            if values['valor'].isnumeric() and (values['subtrair'] or values['somar']):
                 self.window['Confirmar'].update(disabled=False)
             else:
                 self.window['Confirmar'].update(disabled=True)

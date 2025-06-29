@@ -164,6 +164,10 @@ class Ficha:
     def fisico(self, fisico: str):
         self.__fisico = fisico
 
+    @moedas.setter
+    def moedas(self, moedas: int):
+        if isinstance(moedas, int):
+            self.__moedas = moedas
 
     @historia.setter
     def historia(self, historia: str):
