@@ -3,6 +3,7 @@ from model.mestre import Mestre
 from model.jogador import Jogador
 from model.exceptions.exception_pessoas import *
 from model.exceptions.exception_dict_vazio import *
+from model.exceptions.excpetion_ficha import *
 from DAOs.pessoa_dao import PessoaDao
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -73,7 +74,7 @@ class ControladorPessoas:
                 HEADER = ["Cod", "Nome", "Telefone", "Cidade", "Bairro", "Número", "CEP", "Personagens"]
                 self.__tela_pessoas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Persoangem')
             else:
-                raise DictVazioException
+                raise DictVazioException()
         except DictVazioException as e:
             self.__tela_pessoas.mensagem(e)
         except Exception as e:
