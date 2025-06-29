@@ -216,7 +216,7 @@ class ControladorClasses:
             if identificador_class == 0:
                 return False
             else:
-                habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
+                habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.get(identificador_hab)
                 classe = self.__classe_DAO.get(identificador_class)
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades('classe')
                 codigos_validos_hab = list(habilidades.keys()) + [0]
@@ -226,7 +226,7 @@ class ControladorClasses:
                 elif habilidades[identificador_hab] not in classe.habilidades:
                     raise KeyError("[ERRO DE CHAVE] A habilidade selecionada é inválida.")
                 else:
-                    classe.rm_hab(habilidades[identificador_hab])
+                    classe.rm_hab(habilidades)
                     self.__classe_DAO.update(identificador_class, classe)
                     self.__tela_classes.mensagem('Habilidade removida com sucesso!')
                     return True

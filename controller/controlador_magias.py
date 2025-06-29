@@ -94,7 +94,7 @@ class ControladorMagias:
             identificador = self.__tela_magias.selecionar_obj_por_cod('Magia', cod_validos)
             if identificador == 0:
                 return
-            magia = self.__magia_DAO.cache[identificador]
+            magia = self.__magia_DAO.get(identificador)
             dados_novos = self.__tela_magias.pegar_dados_magia()
             i = self.pegar_magia_por_nome(dados_novos['nome'])
             if i is None:

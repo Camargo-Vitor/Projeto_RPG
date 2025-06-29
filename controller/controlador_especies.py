@@ -69,7 +69,7 @@ class ControladorEspecies:
                 if identificador == 0:
                     return False
                 else:
-                    especie = self.__especie_DAO.cache[identificador]
+                    especie = self.__especie_DAO.get(identificador)
                     dados_subespecie = self.__tela_especies.pegar_dados_subespecie(especie.nome)
                     if dados_subespecie == 0:
                         return False
@@ -197,7 +197,7 @@ class ControladorEspecies:
             if identificador == 0:
                 return False
             else:
-                    especie = self.__especie_DAO.cache[identificador]
+                    especie = self.__especie_DAO.get(identificador)
                     dados_novos = self.__tela_especies.pegar_dados_especie()
                     e = self.pega_especie_por_nome(dados_novos['nome'])
                     if e is None:
@@ -223,7 +223,7 @@ class ControladorEspecies:
             identificador = self.__tela_especies.selecionar_obj_por_cod('subespecie', cod_validos)
             if identificador == 0:
                 return False
-            subespecie = self.__subespecie_DAO.cache[identificador]
+            subespecie = self.__subespecie_DAO.get(identificador)
             dados_novos = self.__tela_especies.pegar_dados_subespecie(super(Subespecie, subespecie).nome)
             e = self.pega_subespecie_por_sub_nome(dados_novos['nome'])
             if e is None:
@@ -255,7 +255,7 @@ class ControladorEspecies:
                 if identificador_hab == 0:
                     return
                 elif habilidades[identificador_hab].origem == 'especie':
-                    especie = self.__especie_DAO.cache[identificador_esp]
+                    especie = self.__especie_DAO.get(identificador_esp)
                     if habilidades[identificador_hab].nome in [hab.nome for hab in especie.habilidades]:
                         raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                     especie.add_habilidade(habilidades[identificador_hab])
@@ -287,7 +287,7 @@ class ControladorEspecies:
             if identificador_hab == 0:
                 return False
             elif habilidades[identificador_hab].origem == 'subespecie':
-                subespecie = self.__subespecie_DAO.cache[identificador_sub]
+                subespecie = self.__subespecie_DAO.get(identificador_sub)
                 if habilidades[identificador_hab].nome in [hab.nome for hab in subespecie.habilidades]:
                     raise HabilidadeJahExiste(habilidades[identificador_hab].nome)
                 subespecie.add_hab_sub(habilidades[identificador_hab])
@@ -311,7 +311,7 @@ class ControladorEspecies:
             self.listar_especies()
             cod_valido_esp = list(self.__especie_DAO.get_keys()) + [0]
             identificador_esp = self.__tela_especies.selecionar_obj_por_cod('especie', cod_valido_esp)
-            especie = self.__especie_DAO.cache[identificador_esp]
+            especie = self.__especie_DAO.get(identificador_esp)
             if identificador_esp == 0:
                 return False
             else:
@@ -341,7 +341,7 @@ class ControladorEspecies:
                 return False
             else:
                 habilidade = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
-                subespecie = self.__subespecie_DAO.cache[identificador_sub]
+                subespecie = self.__subespecie_DAO.get(identificador_sub)
                 cod_validos_hab = list(habilidade.keys())
                 self.__controlador_sistema.controlador_habilidades.listar_habilidades('subespecie')
                 identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)

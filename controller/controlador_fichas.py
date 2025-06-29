@@ -129,7 +129,7 @@ class ControladorFichas:
                     if identificador == 0:
                         return False
                     else:
-                        ficha = self.__ficha_dao.cache[identificador]
+                        ficha = self.__ficha_dao.get(identificador)
                         self.__tela_fichas.mostra_ficha_inteira(
                             {
                                 'nome': ficha.nome,
@@ -196,7 +196,7 @@ class ControladorFichas:
                 if identificador_item == 0:
                     return False
                 else:
-                    ficha = self.__ficha_dao.cache[identificador_ficha]
+                    ficha = self.__ficha_dao.get(identificador_ficha)
                     ficha.add_item_inventario(item[identificador_item])
                     self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Item adicionado ao inventário!')
@@ -223,7 +223,7 @@ class ControladorFichas:
                 if identificador_magia == 0:
                     return False
                 else:
-                    ficha = self.__ficha_dao.cache[identificador_ficha]
+                    ficha = self.__ficha_dao.get(identificador_ficha)
                     ficha.add_magia(magias[identificador_magia])
                     self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Magia adicionada ao inventário!')
@@ -243,7 +243,7 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.__ficha_dao.cache[identificador_ficha]
+                ficha = self.__ficha_dao.get(identificador_ficha)
                 itens = self.__controlador_sistema.controlador_itens.item_DAO.cache
                 self.__controlador_sistema.controlador_itens.listar_itens()
                 codigos_validos_item = list(itens.keys()) + [0]
@@ -273,7 +273,7 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.__ficha_dao.cache[identificador_ficha]
+                ficha = self.__ficha_dao.get(identificador_ficha)
                 magias = self.__controlador_sistema.controlador_magias.magia_DAO.cache
                 self.__controlador_sistema.controlador_magias.listar_magias()
                 codigos_validos_magia = list(magias.keys()) + [0]
@@ -301,7 +301,7 @@ class ControladorFichas:
             if identificador_ficha == 0:
                 return False
             else:
-                ficha = self.__ficha_dao.cache[identificador_ficha]
+                ficha = self.__ficha_dao.get(identificador_ficha)
                 if ficha.nivel == 2:
                     infos = {'nomes_sub': [sub.nome for sub in ficha.classe.subclasses],
                             'habilidades_sub': [[hab.nome for hab in sub.hab_especificas] for sub in ficha.classe.subclasses]}
@@ -321,7 +321,7 @@ class ControladorFichas:
         if identificador_ficha == 0:
             return False
         else:
-            ficha = self.__ficha_dao.cache[identificador_ficha]
+            ficha = self.__ficha_dao.get(identificador_ficha)
             valor = self.__tela_fichas.ler_vida_alterada()
             vida_antiga = ficha.vida_atual
             ficha.vida_atual += valor

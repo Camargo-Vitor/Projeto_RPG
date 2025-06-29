@@ -106,7 +106,7 @@ class ControladorPessoas:
             if identificador == 0:
                 return False
             else:
-                jogador = self.__pesssoa_dao.cache[identificador]
+                jogador = self.__pesssoa_dao.get(identificador)
                 dados_novos = self.__tela_pessoas.pegar_dados_pessoa()
                 j = self.pega_pessoa_por_nome(dados_novos['nome'])
                 if j is None:
@@ -145,7 +145,7 @@ class ControladorPessoas:
                 if identificador_ficha == 0:
                     return False
                 else:
-                    jogador = self.__pesssoa_dao.cache[identificador]
+                    jogador = self.__pesssoa_dao.get(identificador)
                     if fichas[identificador_ficha].nome in [fic.nome for fic in jogador.personagens]:
                         raise FichaJahExisteException(fichas[identificador_ficha].nome)
                     jogador.add_ficha(fichas[identificador_ficha])
@@ -169,7 +169,7 @@ class ControladorPessoas:
             if identificador == 0:
                 return False
             else:
-                jogador = self.__pesssoa_dao.cache[identificador]
+                jogador = self.__pesssoa_dao.get(identificador)
                 fichas = self.__controlador_sistema.controlador_fichas.ficha_dao.cache
                 self.__controlador_sistema.controlador_fichas.listar_fichas(selecao=False)
                 cod_validos_fichas = list(fichas.keys()) + [0]

@@ -95,7 +95,7 @@ class ControladorItens:
             identificador = self.__tela_itens.selecionar_obj_por_cod('item', cod_validos)
             if identificador == 0: 
                 return False
-            item = self.__item_Dao.cache[identificador]
+            item = self.__item_Dao.get(identificador)
             dados_novos = self.__tela_itens.pegar_dados_item()
             if dados_novos == 0:
                 return False
