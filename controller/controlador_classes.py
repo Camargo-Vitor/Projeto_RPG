@@ -88,7 +88,6 @@ class ControladorClasses:
 
                 HEADER = ["cod", "Nome", "1ª Subclasse", "2ª Subclassse", "3ª Subclasse", 'hab 1ª', 'hab 2ª', 'hab 3ª']
                 self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Subclasse')
-
             else:
                 raise DictVazioException()
         except DictVazioException as e:
@@ -121,12 +120,14 @@ class ControladorClasses:
             if identificador == 0:
                 return False
             else:
-                classe = self.__classe_DAO.get(identificador)
                 dados_novos = self.__tela_classes.pegar_dados_classes()
                 e = self.pega_classe_por_nome(dados_novos['nome'])
                 if e is None:
-                    classe.nome = dados_novos['nome']
-                    classe.dado_vida = dados_novos['dado']
+                    classe = Classe(
+                        dados_novos['nome'],
+                        dados_novos['dado'],
+                        dados_novos['nomes_sub']
+                        )
                     self.__classe_DAO.update(identificador, classe)
                     self.__tela_classes.mensagem(f'Classe de código {identificador} alterada com sucesso!')
                 else:

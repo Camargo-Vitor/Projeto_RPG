@@ -354,8 +354,8 @@ class ControladorFichas:
                 personagem_maior_vida = ficha
             if ficha.classe.dado_vida > personagem_com_maior_dado_de_vida.classe.dado_vida:
                 personagem_com_maior_dado_de_vida = ficha
-            if len(self.selecionar_habilidades_ativas_em_ficha(personagem_com_mais_hab)) > \
-                len(self.selecionar_habilidades_ativas_em_ficha(ficha)):
+            if len(self.selecionar_habilidades_ativas_em_ficha(ficha)) > \
+                len(self.selecionar_habilidades_ativas_em_ficha(personagem_com_mais_hab)):
                 personagem_com_mais_hab = ficha
 
             total_magias += len(self.selecionar_magias_ativas_em_ficha(ficha))
