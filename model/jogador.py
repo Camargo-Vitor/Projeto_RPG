@@ -18,13 +18,14 @@ class Jogador(Pessoa):
         return self.__personagens
     
     def add_ficha(self, ficha: Ficha):
-        if isinstance(ficha, Ficha) and ficha not in self.__personagens:
+        if isinstance(ficha, Ficha) and not sum([ficha.nome == ficha_lista.nome for ficha_lista in self.__personagens]):
             self.__personagens.append(ficha)
         else:
             raise KeyError ("[ERRO] Ficha já está associada.")
 
     def rm_ficha(self, ficha: Ficha):
-        if ficha in self.__personagens:
-            self.__personagens.remove(ficha)
-        else:
-            raise KeyError("[ERRO] Ficha não encontrada")
+        for ficha_lista in self.__personagens:
+            if ficha.nome == ficha_lista.nome:
+                self.__personagens.remove(ficha_lista)
+                return True
+        raise KeyError("Ficha não encontrada")
