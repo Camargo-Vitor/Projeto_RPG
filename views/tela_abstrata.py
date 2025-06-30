@@ -61,23 +61,25 @@ class TelaAbstrata(ABC):
     def selecionar_obj_por_cod(self, obj: str, total_codigos: list):
         layout = [
             [sg.Text(f'Digite o ID do(a) {obj} desejado(a)')],
-            [sg.Text('ID: ', size=(15, 1)), sg.InputText('', key='codigo')],
-            [sg.Submit('Confirmar'), sg.Cancel('Cancelar')]
+            [sg.Text('ID: ', size=(15, 1)), sg.InputText(key='codigo', enable_events=True)],
+            [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
-        self.__window = sg.Window('Seleção de Magia').Layout(layout)
-        button, values = self.__window.Read()
-        try:
-            values['codigo'] = int(values['codigo'])
-            if values['codigo'] not in total_codigos:
-                raise Exception()
-        except Exception as e:
-            self.close()
-            if button in (sg.WIN_CLOSED, 'Cancelar') :
+
+        self.init_components('Seleciona objeto por código', layout, crud=False)
+
+        while True:
+            button, values = self.open()
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
+                self.close()
                 return 0
+            elif values['codigo'].isnumeric() and int(values['codigo']) in total_codigos:
+                self.__window['Confirmar'].update(disabled=False)
             else:
-                print(f'[ERRO INESPERADO] Erro ao selecionar entidade por código: {e}')
-        self.close()
-        return values['codigo']
+                self.__window['Confirmar'].update(disabled=True)
+            if button == 'Confirmar':
+                self.close()
+                return int(values['codigo'])
+
 
     def exibir_tabela(self, cabecalho: list, dados: list[list], nome_objeto: str):
         layout = [
