@@ -80,14 +80,15 @@ class ControladorClasses:
                         classe.subclasses[0].nome, 
                         classe.subclasses[1].nome,
                         classe.subclasses[2].nome,
-                        [hab.nome for hab in classe.subclasses[0].hab_especificas],
-                        [hab.nome for hab in classe.subclasses[1].hab_especificas],
-                        [hab.nome for hab in classe.subclasses[2].hab_especificas]
+                        ", ".join([hab.nome for hab in classe.subclasses[0].hab_especificas]),
+                        ", ".join([hab.nome for hab in classe.subclasses[1].hab_especificas]),
+                        ", ".join([hab.nome for hab in classe.subclasses[2].hab_especificas])
                     ]
                     dados.append(linha)
 
                 HEADER = ["cod", "Nome", "1ª Subclasse", "2ª Subclassse", "3ª Subclasse", 'hab 1ª', 'hab 2ª', 'hab 3ª']
                 self.__tela_classes.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Subclasse')
+
             else:
                 raise DictVazioException()
         except DictVazioException as e:

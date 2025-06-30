@@ -91,7 +91,7 @@ class TelaAbstrata(ABC):
                     num_rows=min(10, len(dados)),
                     key='tabela',
                     enable_events=True)],
-            [sg.Text("Selecionar coluna:"), sg.Combo(cabecalho, default_value=cabecalho[-1], key='coluna')],
+            [sg.Text("Selecionar coluna:"), sg.Combo(cabecalho, default_value=cabecalho[-1], key='coluna', readonly=True)],
             [sg.Button("Ver Detalhes da Coluna Selecionada"), sg.Button("OK")]
         ]
 
