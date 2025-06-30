@@ -32,6 +32,7 @@ class TelaHabilidades(TelaAbstrata):
                 self.close()
                 values['nome'] = values['nome'].title().strip()
                 return values
+            
             check_nome = values['nome'].title().strip() != ''
             check_nivel = values['nivel'] != ''
             check_pagina = values['pagina'] != ''

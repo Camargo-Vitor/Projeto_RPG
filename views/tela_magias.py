@@ -33,6 +33,7 @@ class TelaMagias(TelaAbstrata):
                 values['nome'] = values['nome'].title().strip() 
                 values['nivel'] = int(values['nivel'])
                 values['pagina'] = int(values['pagina'])
+                return values
             
             check_nome = values['nome'].title().strip() != ''
             check_nivel = values['nivel'] != ''
