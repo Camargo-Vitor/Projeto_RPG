@@ -251,9 +251,6 @@ class ControladorFichas:
                 if identificador_magia == 0:
                     return False
                 else:
-                    print(magias)
-                    print(magias[identificador_magia])
-                    print(ficha.lista_magias)
                     ficha.rm_magia(magias[identificador_magia])
                     self.__ficha_dao.update(identificador_ficha, ficha)
                     self.__tela_fichas.mensagem('Magia removida!')
@@ -274,6 +271,7 @@ class ControladorFichas:
             else:
                 ficha = self.__ficha_dao.get(identificador_ficha)
                 if ficha.nivel == 2:
+                    self.__tela_fichas.mensagem(f'A classe de {ficha.nome} é: {ficha.classe.nome}')
                     self.__controlador_sistema.controlador_classes.listar_classes_e_sub_classe()
                     subclasse_ecolhida = self.__controlador_sistema.controlador_classes.tela_classes.ler_subclasse()
                     if subclasse_ecolhida == 0:
@@ -389,10 +387,12 @@ class ControladorFichas:
 
         # Maior atributo bruto
         maior_atributo = 0
+        ficha_maior_atributo = None
         for ficha in fichas:
             for valor in ficha.atributos.values():
                 if valor > maior_atributo:
                     maior_atributo = valor
+                    ficha_maior_atributo = ficha
 
         media_magias = total_magias / total_fichas
 
@@ -422,9 +422,9 @@ class ControladorFichas:
             ["Maior Dado de Vida", personagem_com_maior_dado_de_vida.nome, personagem_com_maior_dado_de_vida.classe.dado_vida],
             ["Classe Mais Comum", classe_mais_comum, qtd_classe_mais_comum],
             ["Perícia Mais Comum", pericia_mais_comum, qtd_pericia_mais_comum],
-            ["Maior Atributo", '-', maior_atributo],
+            ["Maior Atributo", ficha_maior_atributo.nome, maior_atributo],
             ["Média de Magias", "-", round(media_magias, 2)],
-            ["Mais Habilidades", personagem_com_mais_hab.nome, len(self.selecionar_habilidades_ativas_em_ficha(ficha))]
+            ["Mais Habilidades", personagem_com_mais_hab.nome, len(self.selecionar_habilidades_ativas_em_ficha(personagem_com_mais_hab))]
         ]
 
         self.__tela_fichas.exibir_tabela(cabecalho=HEADER, dados=dados, nome_objeto='Relatório de Fichas')

@@ -193,7 +193,7 @@ class Ficha:
         self.__vida_atual = nova_vida
 
     def add_item_inventario(self, item: Item):
-        if isinstance(item, Magia) and not sum([item.nome == item_lista.nome for item_lista in self.__inventario]):
+        if isinstance(item, Item) and not sum([item.nome == item_lista.nome for item_lista in self.__inventario]):
             self.__inventario.append(item)
 
     def rm_item_inventario(self, item: Item):
