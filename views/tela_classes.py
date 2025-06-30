@@ -57,7 +57,7 @@ class TelaClasses(TelaAbstrata):
                 return dados
             
             check_nome = values['nome'].title().strip() != ''
-            check_dado = values['dado'] != ''
+            check_dado = str(values['dado']) != ''
             check_nome_sub1 = values['nome_sub1'].title().strip() != ''
             check_nome_sub2 = values['nome_sub2'].title().strip() != ''
             check_nome_sub3 = values['nome_sub3'].title().strip() != ''
