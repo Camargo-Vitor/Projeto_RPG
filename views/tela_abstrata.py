@@ -85,17 +85,29 @@ class TelaAbstrata(ABC):
         layout = [
             [sg.Text(f"Lista de {nome_objeto}", font=("Arial", 16))],
             [sg.Table(values=dados,
-                      headings=cabecalho,
-                      auto_size_columns=True,
-                      display_row_numbers=False,
-                      justification='center',
-                      num_rows=min(10, len(dados)),
-                      key='-TABELA-')],
-            [sg.Button("OK")]
+                    headings=cabecalho,
+                    auto_size_columns=True,
+                    justification='center',
+                    num_rows=min(10, len(dados)),
+                    key='tabela',
+                    enable_events=True)],
+            [sg.Button("Ver Detalhes da Última Coluna"), sg.Button("OK")]
         ]
-        self.__window = sg.Window(f"{nome_objeto} Cadastrados", layout)
-        button, _ = self.open()
-        self.__window.close()
+
+        self.init_components(f"{nome_objeto} Cadastrados", layout, crud=False)
+
+        while True:
+            button, values = self.open()
+            if button in (sg.WIN_CLOSED, "OK"):
+                break
+            elif button == "Ver Detalhes da Última Coluna":
+                if values['tabela']:
+                    linha = values['tabela'][0]
+                    ultima_coluna = dados[linha][-1]
+                    sg.popup_scrolled(f"{cabecalho[-1]}:\n\n{ultima_coluna}", title="Detalhes", size=(60, 20), )
+
+        self.close()
+
 
     def mensagem(self, msg):
         sg.popup("", msg)
