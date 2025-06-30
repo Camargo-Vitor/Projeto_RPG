@@ -91,7 +91,8 @@ class TelaAbstrata(ABC):
                     num_rows=min(10, len(dados)),
                     key='tabela',
                     enable_events=True)],
-            [sg.Button("Ver Detalhes da Última Coluna"), sg.Button("OK")]
+            [sg.Text("Selecionar coluna:"), sg.Combo(cabecalho, default_value=cabecalho[-1], key='coluna')],
+            [sg.Button("Ver Detalhes da Coluna Selecionada"), sg.Button("OK")]
         ]
 
         self.init_components(f"{nome_objeto} Cadastrados", layout, crud=False)
@@ -100,14 +101,18 @@ class TelaAbstrata(ABC):
             button, values = self.open()
             if button in (sg.WIN_CLOSED, "OK"):
                 break
-            elif button == "Ver Detalhes da Última Coluna":
+            elif button == "Ver Detalhes da Coluna Selecionada":
                 if values['tabela']:
                     linha = values['tabela'][0]
-                    ultima_coluna = dados[linha][-1]
-                    sg.popup_scrolled(f"{cabecalho[-1]}:\n\n{ultima_coluna}", title="Detalhes", size=(60, 20), )
+                    coluna_escolhida = values['coluna']
+                    if coluna_escolhida in cabecalho:
+                        indice_coluna = cabecalho.index(coluna_escolhida)
+                        conteudo = dados[linha][indice_coluna]
+                        sg.popup_scrolled(f"{coluna_escolhida}:\n\n{conteudo}",
+                                        title="Detalhes",
+                                        size=(60, 20))
 
         self.close()
-
 
     def mensagem(self, msg):
         sg.popup("", msg)
