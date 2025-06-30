@@ -22,7 +22,7 @@ class TelaHabilidades(TelaAbstrata):
             [sg.Submit('Confirmar', disabled=True), sg.Cancel('Cancelar')]
         ]
 
-        self.init_components('Nova Habilidade', layout, crud=False)
+        super().init_components('Nova Habilidade', layout, crud=False)
         while True:
             button, values = self.open()
             if button in (sg.WIN_CLOSED, 'Cancelar'):

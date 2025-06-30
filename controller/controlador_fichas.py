@@ -50,6 +50,8 @@ class ControladorFichas:
                 [classe.nome for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all()],
                 [especie.nome for especie in self.__controlador_sistema.controlador_especies.subespecie_DAO.get_all()]
             )
+            if dados == 0:
+                return
             for classe in self.__controlador_sistema.controlador_classes.classe_DAO.get_all():
                 if classe.nome == dados['classe']:
                     classe_ficha = classe

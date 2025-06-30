@@ -37,9 +37,9 @@ class TelaPessoas(TelaAbstrata):
                 [sg.Button("Alterar"), sg.Button("Cancelar")]
             ]
 
-            self.init_components('Dados Mestre', layout, crud=False)
+            super().init_components('Dados Mestre', layout, crud=False)
             button, values = self.open()
-            if button == 'Cancelar':
+            if button in (sg.WINDOW_CLOSED, 'Cancelar'):
                 self.close()
                 return False
             if button == 'Alterar':
@@ -67,11 +67,18 @@ class TelaPessoas(TelaAbstrata):
         while True:
             button, values = self.open()
 
-            if button in (sg.WIN_CLOSED, 'Confirmar'):
-                break
-            elif button == 'Cancelar':
+            if button in (sg.WIN_CLOSED, 'Cancelar'):
                 self.close()
                 return 0
+            elif button == 'Confirmar':
+                self.close()
+                values['nome'] = values['nome'].title().strip()
+                values['telefone'] = int(values['telefone'])
+                values['cidade'] = values['cidade'].title().strip()
+                values['bairro'] = values['bairro'].title().strip()
+                values['numero'] = int(values['numero'])
+                values['cep'] = int(values['cep'])
+                return values
 
             check_nome = values['nome'].title().strip() != ''
             check_telefone = values['telefone'] != ''
@@ -85,12 +92,4 @@ class TelaPessoas(TelaAbstrata):
             else:
                 self.window['Confirmar'].update(disabled=True)
 
-        self.close()
 
-        values['nome'] = values['nome'].title().strip()
-        values['telefone'] = int(values['telefone'])
-        values['cidade'] = values['cidade'].title().strip()
-        values['bairro'] = values['bairro'].title().strip()
-        values['numero'] = int(values['numero'])
-        values['cep'] = int(values['cep'])
-        return values
