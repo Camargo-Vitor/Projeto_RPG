@@ -276,11 +276,11 @@ class ControladorEspecies:
     def add_habilidade_subespecie(self):
         try:
             self.listar_subespecies()
-            cod_validos_sub = list(self.__especie_DAO.get_keys()) + [0]
+            cod_validos_sub = list(self.__subespecie_DAO.get_keys()) + [0]
             identificador_sub = self.__tela_especies.selecionar_obj_por_cod('subespecie', cod_validos_sub)
             if identificador_sub == 0:
                 return False
-            habilidades = self.__controlador_sistema.controlador_habilidades.habilidade_DAO.cache
+            habilidades = self.__controlador_sistema.controlador_habilidadezs.habilidade_DAO.cache
             cod_validos_hab = list(habilidades.keys()) + [0]
             self.__controlador_sistema.controlador_habilidades.listar_habilidades('subespecie')
             identificador_hab = self.__tela_especies.selecionar_obj_por_cod('habilidade', cod_validos_hab)
