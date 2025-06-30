@@ -24,14 +24,14 @@ class Endereco:
     @cidade.setter
     def cidade(self, cidade: str):
         if isinstance(cidade, str):
-            self.__cidade = cidade.strip().title()
+            self.__cidade = cidade
         else:
             raise ValueError("[ERRO] Cidade não alterada, valor inválido")
 
     @bairro.setter
     def bairro(self, bairro: str):
         if isinstance(bairro, str):
-            self.__bairro = bairro.strip().title()
+            self.__bairro = bairro
         else:
             raise ValueError("[ERRO] Bairro não alterado, valor inválido")
 

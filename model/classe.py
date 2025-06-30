@@ -30,7 +30,7 @@ class Classe():
     @nome.setter
     def nome(self, nome):
         if isinstance(nome, str):
-            self.__nome= nome.strip().lower()
+            self.__nome= nome
         else:
             raise ValueError("[ERRO] Nome não alterado, valor inválido")
 
