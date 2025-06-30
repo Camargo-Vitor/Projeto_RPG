@@ -79,10 +79,9 @@ class ControladorFichas:
 
     def listar_fichas(self, selecao=True):
         try:
-            cod_valido_ficha = list(self.__ficha_dao.get_keys()) + [0]
-
-            dados = []
             if self.__ficha_dao.cache:
+                cod_valido_ficha = list(self.__ficha_dao.get_keys()) + [0]
+                dados = []
                 for key, ficha in self.__ficha_dao.cache.items():
                     linha = [
                         key,
